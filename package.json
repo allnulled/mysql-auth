@@ -1,0 +1,25 @@
+{
+  "name": "mysql-auth",
+  "version": "0.0.1",
+  "description": "Auth system for MySQL and Node.js: users, communities and privileges",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon -x 'npm run test' -w .",
+    "test": "mocha test/**/*.test.js --bail --sort",
+    "cover": "nyc --reporter=html npm run dev"
+  },
+  "keywords": ["mysql","authentication","authorization"],
+  "author": "",
+  "license": "WTFPL",
+  "dependencies": {
+    "bcrypt": "^4.0.1",
+    "debug": "^4.1.1",
+    "mysql": "^2.18.1"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^7.1.1",
+    "nodemon": "^2.0.2",
+    "nyc": "^15.0.0"
+  }
+}
