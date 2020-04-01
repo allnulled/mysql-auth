@@ -1,0 +1,33 @@
+<%
+
+if(args.length === 0) {
+	throw new Error("Argument 1 is required to <registerPrivilege>");
+}
+if(typeof args[0] !== "object") {
+	throw new Error("Argument 1 must be an object to <registerPrivilege>");
+}
+
+
+let rows = [], fields = [];
+
+if(Array.isArray(args[0]) && args[0].length > 0 && typeof args[0] === "object") {
+	fields = Object.keys(args[0][0]);
+	rows = args[0];
+} else if(typeof args[0] === "object" && Object.keys(args[0]).length > 0) {
+	fields = Object.keys(args[0]);
+	rows = [args[0]];
+} else {
+	throw new Error("Argument 1 must be an array of objects or an object (with 1 property minimum) to <registerPrivilege>");
+}
+
+%>
+
+INSERT INTO $auth$privilege (
+	<%-fields.map(property => SQL.escapeId(property)).join(", ")%>
+) VALUES (
+	<%-Object.values(rows).map(row => {
+		return Object.keys(row).map(property => {
+			return SQL.escape(row[property]);
+		}).join(", ");
+	}).join("), (")%>
+);

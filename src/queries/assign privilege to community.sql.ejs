@@ -1,0 +1,29 @@
+<%
+if(args.length === 0) {
+	throw new Error("Argument 1 is required to <assignPrivilegeToCommunity>");
+}
+if(typeof args[0] !== "object") {
+	throw new Error("Argument 1 must be an object to <assignPrivilegeToCommunity>");
+}
+if(typeof Object.keys(args[0]).length === 0) {
+	throw new Error("Argument 1 must must have some key to <assignPrivilegeToCommunity>");
+}
+const [ wherePrivilege, whereCommunity ] = args;
+const wherePrivilegeSQL = utils.whereToSQL(wherePrivilege);
+const whereCommunitySQL = utils.whereToSQL(whereCommunity);
+%>
+
+INSERT INTO $auth$community_and_privilege
+( 
+	id_privilege,
+	id_community
+) 
+(
+	SELECT
+		$auth$privilege.id as 'id_privilege',
+		$auth$community.id as 'id_community'
+	FROM $auth$privilege
+	JOIN $auth$community ON <%- whereCommunitySQL %>
+	WHERE <%- wherePrivilegeSQL %>
+	LIMIT 1
+);

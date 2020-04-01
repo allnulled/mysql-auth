@@ -1,0 +1,29 @@
+<%
+if(args.length === 0) {
+	throw new Error("Argument 1 is required to <assignUserToCommunity>");
+}
+if(typeof args[0] !== "object") {
+	throw new Error("Argument 1 must be an object to <assignUserToCommunity>");
+}
+if(typeof Object.keys(args[0]).length === 0) {
+	throw new Error("Argument 1 must must have some key to <assignUserToCommunity>");
+}
+const [ whereUser, whereCommunity ] = args;
+const whereUserSQL = utils.whereToSQL(whereUser);
+const whereCommunitySQL = utils.whereToSQL(whereCommunity);
+%>
+
+INSERT INTO $auth$user_and_community
+( 
+	id_user,
+	id_community
+) 
+(
+	SELECT
+		$auth$user.id as 'id_user',
+		$auth$community.id as 'id_community'
+	FROM $auth$user
+	JOIN $auth$community ON <%- whereCommunitySQL %>
+	WHERE <%- whereUserSQL %>
+	LIMIT 1
+);

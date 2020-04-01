@@ -1,0 +1,14 @@
+<%
+
+if(typeof args !== "object") {
+	throw new Error("Argument 1 must be an object to <findCommunity>");
+}
+if(Object.keys(args).length === 0) {
+	throw new Error("Argument 1 must have 1 property minimum to <findCommunity>");
+}
+
+const whereCommunitySQL = utils.whereToSQL(args[0]);
+
+%>
+
+SELECT * FROM $auth$community WHERE <%- whereCommunitySQL %>;

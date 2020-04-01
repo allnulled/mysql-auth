@@ -1,0 +1,25 @@
+<%
+if(args.length === 0) {
+	throw new Error("Argument 1 is required to <insertUnconfirmedUser>");
+}
+if(typeof args[0] !== "object") {
+	throw new Error("Argument 1 must be an object to <insertUnconfirmedUser>");
+}
+if(typeof args[0].name !== "string") {
+	throw new Error("Property <name> of argument 1 must be a string to <insertUnconfirmedUser>");
+}
+if(typeof args[0].password !== "string") {
+	throw new Error("Property <password> of argument 1 must be a string to <insertUnconfirmedUser>");
+}
+if(typeof args[0].email !== "string") {
+	throw new Error("Property <email> of argument 1 must be a string to <insertUnconfirmedUser>");
+}
+const { name, password, email, description = "" } = args[0];
+%>
+
+INSERT INTO $auth$unconfirmed_user (name, password, email, description) VALUES (
+	<%-SQL.escape(name)%>,
+	<%-SQL.escape(password)%>,
+	<%-SQL.escape(email)%>,
+	<%-SQL.escape(description)%>
+);

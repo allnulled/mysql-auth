@@ -1,0 +1,41 @@
+<%
+if(args.length === 0) {
+	throw new Error("Argument 1 is required to <login>");
+}
+if(typeof args[0] !== "object") {
+	throw new Error("Argument 1 must be an object to <login>");
+}
+
+const [userData={}, sessionData={}] = args;
+const hasName = typeof userData.name === "string";
+const hasEmail = typeof userData.email === "string";
+const hasPassword = typeof userData.password === "string";
+const hasToken = typeof userData.token === "string";
+const hasSessionToken = typeof sessionData.token === "string";
+const hasSecretSessionToken = typeof sessionData.secret_token === "string";
+
+if((!hasToken) && !(hasPassword && (hasEmail || hasName))) {
+	throw new Error("Argument 1 must have one of: <token | (password & (user | email))> as strings to <login>");
+}
+if((!hasSessionToken) || (!hasSecretSessionToken)) {
+	throw new Error("Argument 2 must have: <token && secret_token> as strings to <login>");
+}
+
+%>
+
+INSERT INTO $auth$session (
+	id_user,
+	token,
+	secret_token
+)
+SELECT $auth$user.id, <%-SQL.escape(sessionData.token)%>, <%-SQL.escape(sessionData.secret_token)%>
+	FROM $auth$user
+	WHERE <%
+		if(hasName) {
+			%>$auth$user.name = <%-SQL.escape(userData.name)%><%
+		} else {
+			%>$auth$user.email = <%-SQL.escape(userData.email)%><%
+		}
+	%>
+		AND $auth$user.password = <%-SQL.escape(userData.password)%>
+	LIMIT 1;

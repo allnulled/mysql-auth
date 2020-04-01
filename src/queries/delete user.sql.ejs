@@ -1,0 +1,16 @@
+<%
+
+if(args.length === 0) {
+	throw new Error("Argument 1 is required to <deleteUser>");
+}
+if(typeof args[0] !== "object") {
+	throw new Error("Argument 1 must be an object to <deleteUser>");
+}
+
+const whereUserSQL = utils.whereToSQL(args[0]);
+
+%>
+
+DELETE
+	FROM $auth$user
+	WHERE $auth$user.id = <%-whereUserSQL%>;

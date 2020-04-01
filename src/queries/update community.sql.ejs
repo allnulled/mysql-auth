@@ -1,0 +1,25 @@
+<%
+
+if(args.length === 0) {
+	throw new Error("Argument 1 is required to <updateCommunity>");
+}
+if(typeof args[0] !== "object") {
+	throw new Error("Argument 1 must be an object to <updateCommunity>");
+}
+if(args.length <= 1) {
+	throw new Error("Argument 2 is required to <updateCommunity>");
+}
+if(typeof args[1] !== "object") {
+	throw new Error("Argument 2 must be an object to <updateCommunity>");
+}
+if(Object.keys(args[1]).length === 0) {
+	throw new Error("Argument 2 must have 1 property minimum to <updateCommunity>");
+}
+
+%>
+
+UPDATE $auth$community
+	SET <%-Object.keys(args[1]).map(property => {
+		return "$auth$community." + SQL.escapeId(property) + " = " + SQL.escape(args[1][property]);
+	}).join(", ")%>
+	WHERE <%-utils.whereToSQL(args[0])%>

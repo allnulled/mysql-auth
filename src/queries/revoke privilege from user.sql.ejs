@@ -1,0 +1,25 @@
+<%
+
+if(args.length === 0) {
+	throw new Error("Argument 1 is required to <revokePrivilegeFromUser>");
+}
+if(args.length <= 1) {
+	throw new Error("Argument 2 is required to <revokePrivilegeFromUser>");
+}
+if(typeof args[0] !== "object") {
+	throw new Error("Argument 1 must be an object to <revokePrivilegeFromUser>");
+}
+if(typeof args[1] !== "object") {
+	throw new Error("Argument 2 must be an object to <revokePrivilegeFromUser>");
+}
+
+const wherePrivilegeSQL = utils.whereToSQL(args[0]);
+const whereUserSQL = utils.whereToSQL(args[1], true);
+
+%>
+
+DELETE $auth$user_and_privilege
+	FROM $auth$user_and_privilege
+	LEFT JOIN $auth$privilege ON $auth$user_and_privilege.id_privilege = $auth$privilege.id
+	LEFT JOIN $auth$user ON $auth$user_and_privilege.id_user = $auth$user.id
+	WHERE <%- wherePrivilegeSQL %><%- whereUserSQL %>;

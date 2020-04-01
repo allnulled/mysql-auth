@@ -1,0 +1,18 @@
+<%
+
+if(args.length === 0) {
+	throw new Error("Argument 1 is required to <unregisterCommunity>");
+}
+if(typeof args[0] !== "object") {
+	throw new Error("Argument 1 must be an object to <unregisterCommunity>");
+}
+
+const whereCommunitySQL = utils.whereToSQL(args[0]);
+
+%>
+
+DELETE $auth$user_and_community, $auth$community_and_privilege
+	FROM $auth$community
+		LEFT JOIN $auth$user_and_community ON $auth$user_and_community.id_community = $auth$community.id
+		LEFT JOIN $auth$community_and_privilege ON $auth$community_and_privilege.id_community = $auth$community.id
+	WHERE <%-whereCommunitySQL%>;

@@ -1,0 +1,20 @@
+<%
+
+if(args.length === 0) {
+	throw new Error("Argument 1 is required to <unregisterUser>");
+}
+const arrayed = [].concat(args);
+if(typeof arrayed[0] !== "object") {
+	throw new Error("Argument 1 [, item 1] must be an object to <unregisterUser>");
+}
+
+const whereUserSQL = utils.whereToSQL(arrayed);
+
+%>
+
+DELETE $auth$user_and_privilege, $auth$user_and_community, $auth$session
+	FROM $auth$user
+		LEFT JOIN $auth$session ON $auth$session.id_user = $auth$user.id
+		LEFT JOIN $auth$user_and_privilege ON $auth$user_and_privilege.id_user = $auth$user.id
+		LEFT JOIN $auth$user_and_community ON $auth$user_and_community.id_user = $auth$user.id
+	WHERE <%-whereUserSQL%>;

@@ -1,0 +1,14 @@
+<%
+if(args.length === 0) {
+	throw new Error("Argument 1 is required to <logout>");
+}
+if(typeof args[0] !== "object") {
+	throw new Error("Argument 1 must be an object to <logout>");
+}
+if(typeof args[0].token !== "string") {
+	throw new Error("Property <token> of argument 1 must be a string to <logout>");
+}
+%>
+
+DELETE FROM $auth$session
+	WHERE $auth$session.token = <%-SQL.escape(args[0].token)%>;

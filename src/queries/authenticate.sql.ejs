@@ -1,0 +1,69 @@
+<%
+
+if(args.length === 0) {
+	throw new Error("Argument 1 is required to <authenticate>");
+}
+if(typeof args[0] !== "object") {
+	throw new Error("Argument 1 must be an object to <authenticate>");
+}
+
+const sessionData = args[0];
+const hasSessionToken = typeof sessionData.token === "string";
+
+if(!hasSessionToken) {
+	throw new Error("Argument 1 must have <token> as string to <authenticate>");
+}
+
+%>
+
+SELECT 
+ 	$auth$user.id as 'user.id',
+ 	$auth$user.name as 'user.name',
+ 	$auth$user.password as 'user.password',
+ 	$auth$user.email as 'user.email',
+ 	$auth$user.description as 'user.description',
+ 	$auth$user.created_at as 'user.created_at',
+ 	$auth$user.updated_at as 'user.updated_at',
+ 	$auth$community.id as 'community.id',
+ 	$auth$community.name as 'community.name',
+ 	$auth$community.description as 'community.description',
+ 	$auth$community.created_at as 'community.created_at',
+ 	$auth$community.updated_at as 'community.updated_at',
+ 	$auth$privilege.id as 'privilege.id',
+ 	$auth$privilege.name as 'privilege.name',
+ 	$auth$privilege.description as 'privilege.description',
+ 	$auth$privilege.created_at as 'privilege.created_at',
+ 	$auth$privilege.updated_at as 'privilege.updated_at',
+ 	# $auth$user_and_community.id as 'user_and_community.id',
+ 	# $auth$user_and_community.id_user as 'user_and_community.id_user',
+ 	# $auth$user_and_community.id_community as 'user_and_community.id_community',
+ 	# $auth$user_and_community.created_at as 'user_and_community.created_at',
+ 	# $auth$user_and_community.updated_at as 'user_and_community.updated_at',
+ 	# $auth$user_and_privilege.id as 'user_and_privilege.id',
+ 	# $auth$user_and_privilege.id_user as 'user_and_privilege.id_user',
+ 	# $auth$user_and_privilege.id_privilege as 'user_and_privilege.id_privilege',
+ 	# $auth$user_and_privilege.created_at as 'user_and_privilege.created_at',
+ 	# $auth$user_and_privilege.updated_at as 'user_and_privilege.updated_at',
+ 	# $auth$community_and_privilege.id as 'community_and_privilege.id',
+ 	# $auth$community_and_privilege.id_community as 'community_and_privilege.id_community',
+ 	# $auth$community_and_privilege.id_privilege as 'community_and_privilege.id_privilege',
+ 	# $auth$community_and_privilege.created_at as 'community_and_privilege.created_at',
+ 	# $auth$community_and_privilege.updated_at as 'community_and_privilege.updated_at',
+ 	$auth$session.id as 'session.id',
+ 	$auth$session.id_user as 'session.id_user',
+ 	$auth$session.token as 'session.token',
+ 	$auth$session.secret_token as 'session.secret_token',
+ 	$auth$session.data as 'session.data',
+ 	$auth$session.created_at as 'session.created_at',
+ 	$auth$session.updated_at as 'session.updated_at'
+ FROM $auth$user
+	LEFT JOIN $auth$session ON $auth$session.id_user = $auth$user.id
+    LEFT JOIN $auth$user_and_privilege ON $auth$user_and_privilege.id_user = $auth$user.id
+    LEFT JOIN $auth$user_and_community ON $auth$user_and_community.id_user = $auth$user.id
+    LEFT JOIN $auth$community_and_privilege ON $auth$community_and_privilege.id_community = $auth$user_and_community.id_community
+    LEFT JOIN $auth$community ON $auth$community.id = $auth$user_and_community.id_community
+    LEFT JOIN $auth$privilege ON $auth$privilege.id IN (
+		$auth$user_and_privilege.id_privilege,
+        $auth$community_and_privilege.id_privilege
+	)
+ WHERE $auth$session.token = <%-SQL.escape(sessionData.token)%>;

@@ -1,0 +1,25 @@
+<%
+
+if(args.length === 0) {
+	throw new Error("Argument 1 is required to <refresh>");
+}
+if(typeof args[0] !== "object") {
+	throw new Error("Argument 1 must be an object to <refresh>");
+}
+if(typeof args[0].token !== "string") {
+	console.log(args[0]);
+	throw new Error("Argument 1 must have property <token> to <refresh>");
+}
+if(args.length <= 1) {
+	throw new Error("Argument 2 is required to <refresh>");
+}
+if(typeof args[1] !== "object") {
+	throw new Error("Argument 2 must be an object to <refresh>");
+}
+
+%>
+
+UPDATE $auth$session
+	SET $auth$session.token = <%-SQL.escape(args[1].token)%>,
+		$auth$session.secret_token = <%-SQL.escape(args[1].secret_token)%>
+	WHERE $auth$session.token = <%-SQL.escape(args[0].token)%>;

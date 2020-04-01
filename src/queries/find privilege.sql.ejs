@@ -1,0 +1,14 @@
+<%
+
+if(typeof args !== "object") {
+	throw new Error("Argument 1 must be an object to <findPrivilege>");
+}
+if(Object.keys(args).length === 0) {
+	throw new Error("Argument 1 must have 1 property minimum to <findPrivilege>");
+}
+
+const wherePrivilegeSQL = utils.whereToSQL(args[0]);
+
+%>
+
+SELECT * FROM $auth$privilege WHERE <%- wherePrivilegeSQL %>;

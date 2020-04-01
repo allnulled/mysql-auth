@@ -1,0 +1,77 @@
+CREATE TABLE IF NOT EXISTS `$auth$unconfirmed_user`(
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(64) NOT NULL UNIQUE,
+  password VARCHAR(64) NOT NULL,
+  email VARCHAR(255) UNIQUE,
+  description VARCHAR(510) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS `$auth$user` (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(64) NOT NULL UNIQUE,
+  password VARCHAR(64) NOT NULL,
+  email VARCHAR(255) UNIQUE,
+  description VARCHAR(510) NOT NULL,
+  created_at DATETIME DEFAULT NOW(),
+  updated_at DATETIME DEFAULT NOW() ON UPDATE NOW()
+);
+
+CREATE TABLE IF NOT EXISTS `$auth$community` (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(64) NOT NULL UNIQUE,
+  description VARCHAR(510) NOT NULL,
+  created_at DATETIME DEFAULT NOW(),
+  updated_at DATETIME DEFAULT NOW() ON UPDATE NOW()
+);
+
+CREATE TABLE IF NOT EXISTS `$auth$privilege` (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(64) NOT NULL UNIQUE,
+  description VARCHAR(510) NOT NULL,
+  created_at DATETIME DEFAULT NOW(),
+  updated_at DATETIME DEFAULT NOW() ON UPDATE NOW()
+);
+
+CREATE TABLE IF NOT EXISTS `$auth$user_and_community` (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  id_user INT NOT NULL,
+  id_community INT NOT NULL,
+  created_at DATETIME DEFAULT NOW(),
+  updated_at DATETIME DEFAULT NOW() ON UPDATE NOW(),
+  FOREIGN KEY (id_user) REFERENCES `$auth$user`(id),
+  FOREIGN KEY (id_community) REFERENCES `$auth$community`(id),
+  UNIQUE KEY `unique_community_per_user` (`id_user`,`id_community`)
+);
+
+CREATE TABLE IF NOT EXISTS `$auth$user_and_privilege` (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  id_user INT NOT NULL,
+  id_privilege INT NOT NULL,
+  created_at DATETIME DEFAULT NOW(),
+  updated_at DATETIME DEFAULT NOW() ON UPDATE NOW(),
+  FOREIGN KEY (id_user) REFERENCES `$auth$user`(id),
+  FOREIGN KEY (id_privilege) REFERENCES `$auth$privilege`(id),
+  UNIQUE KEY `unique_privilege_per_user` (`id_user`,`id_privilege`)
+);
+
+CREATE TABLE IF NOT EXISTS `$auth$community_and_privilege` (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  id_community INT NOT NULL,
+  id_privilege INT NOT NULL,
+  created_at DATETIME DEFAULT NOW(),
+  updated_at DATETIME DEFAULT NOW() ON UPDATE NOW(),
+  FOREIGN KEY (id_community) REFERENCES `$auth$community`(id),
+  FOREIGN KEY (id_privilege) REFERENCES `$auth$privilege`(id),
+  UNIQUE KEY `unique_privilege_per_community` (`id_community`,`id_privilege`)
+);
+
+CREATE TABLE IF NOT EXISTS `$auth$session` (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  id_user INT NOT NULL UNIQUE,
+  token VARCHAR(1024),
+  secret_token VARCHAR(1024),
+  data TEXT,
+  created_at DATETIME DEFAULT NOW(),
+  updated_at DATETIME DEFAULT NOW() ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (id_user) REFERENCES `$auth$user`(id)
+);

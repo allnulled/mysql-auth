@@ -1,0 +1,29 @@
+<%
+if(args.length === 0) {
+	throw new Error("Argument 1 is required to <assignPrivilegeToUser>");
+}
+if(typeof args[0] !== "object") {
+	throw new Error("Argument 1 must be an object to <assignPrivilegeToUser>");
+}
+if(typeof Object.keys(args[0]).length === 0) {
+	throw new Error("Argument 1 must must have some key to <assignPrivilegeToUser>");
+}
+const [ wherePrivilege, whereUser ] = args;
+const wherePrivilegeSQL = utils.whereToSQL(wherePrivilege);
+const whereUserSQL = utils.whereToSQL(whereUser);
+%>
+
+INSERT INTO $auth$user_and_privilege
+( 
+	id_privilege,
+	id_user
+) 
+(
+	SELECT
+		$auth$privilege.id as 'id_privilege',
+		$auth$user.id as 'id_user'
+	FROM $auth$privilege
+	JOIN $auth$user ON <%- whereUserSQL %>
+	WHERE <%- wherePrivilegeSQL %>
+	LIMIT 1
+);

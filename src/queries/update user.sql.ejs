@@ -1,0 +1,25 @@
+<%
+
+if(args.length === 0) {
+	throw new Error("Argument 1 is required to <updateUser>");
+}
+if(typeof args[0] !== "object") {
+	throw new Error("Argument 1 must be an object to <updateUser>");
+}
+if(args.length <= 1) {
+	throw new Error("Argument 2 is required to <updateUser>");
+}
+if(typeof args[1] !== "object") {
+	throw new Error("Argument 2 must be an object to <updateUser>");
+}
+if(Object.keys(args[1]).length === 0) {
+	throw new Error("Argument 2 must have 1 property minimum to <updateUser>");
+}
+
+%>
+
+UPDATE $auth$user
+	SET <%-Object.keys(args[1]).map(property => {
+		return "$auth$user." + SQL.escapeId(property) + " = " + SQL.escape(args[1][property]);
+	}).join(", ")%>
+	WHERE <%-utils.whereToSQL(args[0])%>

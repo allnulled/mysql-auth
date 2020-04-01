@@ -1,0 +1,19 @@
+<%
+
+if(args.length === 0) {
+	throw new Error("Argument 1 is required to <unregisterPrivilege>");
+}
+if(typeof args[0] !== "object") {
+	throw new Error("Argument 1 must be an object to <unregisterPrivilege>");
+}
+
+const wherePrivilegeSQL = utils.whereToSQL(args[0]);
+
+%>
+
+DELETE $auth$user_and_privilege, $auth$community_and_privilege
+	FROM $auth$privilege
+		LEFT JOIN $auth$session ON $auth$session.id_user = $auth$user.id
+		LEFT JOIN $auth$user_and_privilege ON $auth$user_and_privilege.id_user = $auth$user.id
+		LEFT JOIN $auth$user_and_community ON $auth$user_and_community.id_user = $auth$user.id
+	WHERE <%-wherePrivilegeSQL%>;

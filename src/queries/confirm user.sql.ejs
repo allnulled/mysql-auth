@@ -1,0 +1,31 @@
+<%
+if(args.length === 0) {
+	throw new Error("Argument 1 is required to <confirmUser>");
+}
+if(typeof args[0] !== "object") {
+	throw new Error("Argument 1 must be an object to <confirmUser>");
+}
+if(typeof Object.keys(args[0]).length === 0) {
+	throw new Error("Argument 1 must must have some key to <confirmUser>");
+}
+const [ whereConditions ] = args;
+const whereSQL = utils.whereToSQL(whereConditions);
+%>
+
+INSERT INTO $auth$user
+( 
+	name,
+	password,
+	email,
+	description
+) 
+SELECT
+	name,
+	password,
+	email,
+	description
+FROM $auth$unconfirmed_user
+WHERE <%- whereSQL %>
+LIMIT 1;
+
+DELETE FROM $auth$unconfirmed_user WHERE <%- whereSQL %> LIMIT 1;

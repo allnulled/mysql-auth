@@ -1,0 +1,16 @@
+<%
+
+if(args.length === 0) {
+	throw new Error("Argument 1 is required to <deleteCommunity>");
+}
+if(typeof args[0] !== "object") {
+	throw new Error("Argument 1 must be an object to <deleteCommunity>");
+}
+
+const whereCommunitySQL = utils.whereToSQL(args[0]);
+
+%>
+
+DELETE
+	FROM $auth$community
+	WHERE $auth$community.id = <%-whereCommunitySQL%>;
