@@ -11,6 +11,5 @@ const wherePrivilegeSQL = utils.whereToSQL(args[0]);
 
 %>
 
-DELETE
-	FROM $auth$privilege
-	WHERE $auth$privilege.id = <%-wherePrivilegeSQL%>;
+DELETE FROM $auth$privilege
+	WHERE <%-wherePrivilegeSQL%>;

@@ -4,11 +4,12 @@
   "description": "Authentication and authorization framework for Node.js and MySQL.",
   "main": "src/index.js",
   "scripts": {
-    "dev": "nodemon -w ./src -w ./src/queries -w ./test/*.test.js --ext '.js,.ejs' -x 'npm run test'",
+    "dev": "nodemon -w ./src -w ./src/queries -w ./test --ext '.js,.ejs' -x 'npm run test'",
     "build": "npm run docs && sudo npm link && npm shrinkwrap",
     "upload": "npm run build && npm run test && git add . && git commit && git push",
     "docs": "javadoc -i src/*.js -o docs/README.api.md -f markdown && concat docs/README.ini.md docs/README.api.md docs/README.end.md -o README.md",
-    "test": "mocha --sort --bail --debug-brk test/**/*.test.js"
+    "test": "mocha --sort --bail test/**/*.test.js",
+    "cover": "nyc --reporter=html mocha --sort --bail test/**/*.test.js"
   },
   "keywords": [
     "authentication",
@@ -19,6 +20,7 @@
   "author": "allnulled",
   "license": "WTFPL",
   "dependencies": {
+    "bcrypt": "^4.0.1",
     "debug": "^4.1.1",
     "ejs": "^3.0.1",
     "mysql": "^2.18.1",
@@ -34,6 +36,15 @@
     "nyc": "^15.0.0"
   },
   "directories": {
+    "doc": "docs",
     "test": "test"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/allnulled/mysql-auth.git"
+  },
+  "bugs": {
+    "url": "https://github.com/allnulled/mysql-auth/issues"
+  },
+  "homepage": "https://github.com/allnulled/mysql-auth#readme"
 }

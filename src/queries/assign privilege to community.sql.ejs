@@ -9,8 +9,8 @@ if(typeof Object.keys(args[0]).length === 0) {
 	throw new Error("Argument 1 must must have some key to <assignPrivilegeToCommunity>");
 }
 const [ wherePrivilege, whereCommunity ] = args;
-const wherePrivilegeSQL = utils.whereToSQL(wherePrivilege);
-const whereCommunitySQL = utils.whereToSQL(whereCommunity);
+const wherePrivilegeSQL = utils.whereToSQL(wherePrivilege, false, "$auth$privilege");
+const whereCommunitySQL = utils.whereToSQL(whereCommunity, false, "$auth$community");
 %>
 
 INSERT INTO $auth$community_and_privilege

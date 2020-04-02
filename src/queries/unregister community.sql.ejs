@@ -7,7 +7,7 @@ if(typeof args[0] !== "object") {
 	throw new Error("Argument 1 must be an object to <unregisterCommunity>");
 }
 
-const whereCommunitySQL = utils.whereToSQL(args[0]);
+const whereCommunitySQL = utils.whereToSQL(args[0], false, "$auth$community");
 
 %>
 

@@ -13,4 +13,4 @@ const whereUserSQL = utils.whereToSQL(args[0]);
 
 DELETE
 	FROM $auth$user
-	WHERE $auth$user.id = <%-whereUserSQL%>;
+	WHERE <%-whereUserSQL%>;

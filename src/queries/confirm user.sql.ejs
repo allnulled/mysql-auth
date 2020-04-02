@@ -9,7 +9,7 @@ if(typeof Object.keys(args[0]).length === 0) {
 	throw new Error("Argument 1 must must have some key to <confirmUser>");
 }
 const [ whereConditions ] = args;
-const whereSQL = utils.whereToSQL(whereConditions);
+const whereSQL = utils.whereToSQL(whereConditions, false, "$auth$unconfirmed_user");
 %>
 
 INSERT INTO $auth$user

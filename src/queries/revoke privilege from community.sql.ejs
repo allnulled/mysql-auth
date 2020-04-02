@@ -13,8 +13,8 @@ if(typeof args[1] !== "object") {
 	throw new Error("Argument 2 must be an object to <revokePrivilegeFromCommunity>");
 }
 
-const wherePrivilegeSQL = utils.whereToSQL(args[0]);
-const whereCommunitySQL = utils.whereToSQL(args[1], true);
+const wherePrivilegeSQL = utils.whereToSQL(args[0], false, "$auth$privilege");
+const whereCommunitySQL = utils.whereToSQL(args[1], true, "$auth$community");
 
 %>
 

@@ -11,6 +11,11 @@ const OPERATORS_SQL = [
 	"like",
 	"not like",
 ];
+const getPropertiesSQL = (propertyItemsString, tableName = false) => {
+	const propertyItems = propertyItemsString.split(".");
+	return (propertyItems.length < 2 && tableName ? (SQL.escapeId(tableName) + ".") : "") + propertyItems.map(property => SQL.escapeId(property)).join(".")
+};
+
 
 module.exports = {
 
@@ -46,7 +51,7 @@ module.exports = {
 		return objs;
 	},
 
-	whereToSQL(whereConditionsParameter = [], prefixAnd = false) {
+	whereToSQL(whereConditionsParameter = [], prefixAnd = false, tableName = false) {
 		let sql = "";
 		if(prefixAnd) {
 			sql += " AND ";
@@ -64,17 +69,17 @@ module.exports = {
 				if(whereCondition.length < 2) {
 					throw new Error("Parameters <whereCondition> must have 2 items minimum");
 				} else if(whereCondition.length === 2) {
-					const propertySlot = whereCondition[0];
-					const propertyItems = propertySlot.split(".");
+					const property = getPropertiesSQL(whereCondition[0], tableName);
 					const value = whereCondition[1];
-					sql += propertyItems.map(property => SQL.escapeId(property)).join(".") + " = " + SQL.escape(value);
+					sql += property + " = " + SQL.escape(value);
 				} else if(whereCondition.length === 3) {
-					const operator = whereCondition[0];
-					const value = whereCondition[1];
+					const property = getPropertiesSQL(whereCondition[0], tableName);
+					const operator = whereCondition[1];
+					const value = whereCondition[2];
 					if(OPERATORS_SQL.indexOf(operator) === -1) {
 						throw new Error("Argument 2 of a <whereCondition> must be one of: " + OPERATORS_SQL.join(" | "));
 					}
-					sql += SQL.escapeId(property) + " " + operator + " ";
+					sql += property + " " + operator + " ";
 					if((operator === "in" || operator === "not in") && Array.isArray(value)) {
 						sql += "(";
 						value.forEach((subvalue, index) => {
@@ -83,7 +88,7 @@ module.exports = {
 							} else {
 								sql += SQL.escape(subvalue);
 							}
-						});
+						}); 
 						sql += ")";
 					} else {
 						SQL.escape(value);
@@ -92,8 +97,9 @@ module.exports = {
 					throw new Error("Parameters <whereCondition> must have 3 items maximum");
 				}
 			} else if(typeof whereCondition === "object") {
-				Object.keys(whereCondition).forEach(prop => {
-					sql += SQL.escapeId(prop) + " = " + SQL.escape(whereCondition[prop]);
+				Object.keys(whereCondition).forEach(propertySlot => {
+					const property = getPropertiesSQL(propertySlot, tableName);
+					sql += property + " = " + SQL.escape(whereCondition[prop]);
 				});
 			} else {
 				throw new Error("Required <whereCondition> to be an array or an object instead of: " + typeof whereCondition);

@@ -11,6 +11,5 @@ const whereCommunitySQL = utils.whereToSQL(args[0]);
 
 %>
 
-DELETE
-	FROM $auth$community
-	WHERE $auth$community.id = <%-whereCommunitySQL%>;
+DELETE FROM $auth$community
+	WHERE <%-whereCommunitySQL%>;

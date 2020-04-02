@@ -2,12 +2,14 @@ const Debug = require("debug");
 const debug = Debug("mysql-auth");
 const SQL = require("sqlstring");
 const mysql = require("mysql");
+const bcrypt = require("bcrypt");
 const ejs = require("ejs");
 const fs = require("fs");
 const path = require("path");
 const AuthClient = require(__dirname + "/auth-client.js");
 const utils = require(__dirname + "/utils.js");
 const debugError = Debug("mysql-auth:error");
+const trace = Debug("mysql-auth:trace");
 
 global.dd = function(...args) {
 	console.log(...args)
@@ -15,8 +17,21 @@ global.dd = function(...args) {
 	process.exit(0);
 }
 
+/**
+ * 
+ * ### const AuthSystem = require("mysql-auth");
+ * 
+ * 
+ * 
+ */
 class AuthSystem {
 
+	/**
+	 * 
+	 * ### `const authSystem = AuthSystem.create(...)`
+	 * 
+	 * 
+	 */
 	static create(...args) {
 		return new this(...args);
 	}
@@ -50,28 +65,8 @@ class AuthSystem {
 		return {};
 	}
 
-	/**
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 */
 	static get DEFAULT_QUERY_TEMPLATES() {
 		return {
-			/*
-			"createTables": __dirname + "/queries/create tables.sql.ejs",
-			"insertUnconfirmedUser": __dirname + "/queries/insert unconfirmed user.sql.ejs",
-			"confirmUser": __dirname + "/queries/confirm user.sql.ejs",
-			"deleteUnconfirmedUser": __dirname + "/queries/delete unconfirmed user.sql.ejs",
-			"login": __dirname + "/queries/login.sql.ejs",
-			"logout": __dirname + "/queries/logout.sql.ejs",
-			"refresh": __dirname + "/queries/refresh.sql.ejs",
-			"authenticate": __dirname + "/queries/authenticate.sql.ejs",
-			"deleteTables": __dirname + "/queries/delete tables.sql.ejs",
-			//*/
 			"assignPrivilegeToCommunity": __dirname + "/queries/assign privilege to community.sql.ejs",
 			"assignPrivilegeToUser": __dirname + "/queries/assign privilege to user.sql.ejs",
 			"assignUserToCommunity": __dirname + "/queries/assign user to community.sql.ejs",
@@ -88,12 +83,12 @@ class AuthSystem {
 			"findPrivilege": __dirname + "/queries/find privilege.sql.ejs",
 			"findUser": __dirname + "/queries/find user.sql.ejs",
 			"findUnconfirmedUser": __dirname + "/queries/find unconfirmed user.sql.ejs",
-			"insertUnconfirmedUser": __dirname + "/queries/insert unconfirmed user.sql.ejs",
 			"login": __dirname + "/queries/login.sql.ejs",
 			"logout": __dirname + "/queries/logout.sql.ejs",
 			"refresh": __dirname + "/queries/refresh.sql.ejs",
 			"registerCommunity": __dirname + "/queries/register community.sql.ejs",
 			"registerPrivilege": __dirname + "/queries/register privilege.sql.ejs",
+			"registerUnconfirmedUser": __dirname + "/queries/register unconfirmed user.sql.ejs",
 			"revokePrivilegeFromCommunity": __dirname + "/queries/revoke privilege from community.sql.ejs",
 			"revokePrivilegeFromUser": __dirname + "/queries/revoke privilege from user.sql.ejs",
 			"revokeUserFromCommunity": __dirname + "/queries/revoke user from community.sql.ejs",
@@ -106,16 +101,27 @@ class AuthSystem {
 		};
 	}
 
+	encryptPassword(password, salts, callback) {
+		return new Promise((ok, fail) => {
+			bcrypt.hash(password, salts, (error, hash) => {
+				if(error) {
+					return fail(error);
+				}
+				return ok(hash);
+			});
+		});
+	}
+
 	constructor(options = {}) {
 		Object.assign(this, this.constructor.DEFAULT_OPTIONS, options);
 		if(this.debug) {
-			Debug.enable("mysql-auth,mysql-auth:error");
+			Debug.enable("mysql-auth,mysql-auth:error,mysql-auth:trace");
 		} else if(this.silence === false) {
 			Debug.enable("mysql-auth:error");
 		}
 		this.connectionSettings = Object.assign({}, this.constructor.DEFAULT_CONNECTION_SETTINGS, options.connectionSettings || {});
 		this.queryTemplates = Object.assign({}, this.constructor.DEFAULT_QUERY_TEMPLATES, options.queryTemplates || {});
-		debug("connection settings:", this.connectionSettings);
+		debug("Connection settings:", this.connectionSettings);
 	}
 
 	createClient(options = {}) {
@@ -125,7 +131,14 @@ class AuthSystem {
 		}, options));
 	}
 
+	/**
+	 * 
+	 * ### `authSystem.initialize()`
+	 * 
+	 * 
+	 */
 	initialize() {
+		trace("initialize");
 		this.connection = mysql.createPool(this.connectionSettings);
 		this.queries = Object.keys(this.queryTemplates).reduce((output, method) => {
 			const filename = this.queryTemplates[method];
@@ -144,16 +157,18 @@ class AuthSystem {
 		return this;
 	}
 
-	formatParametersByTemplate(template, parameters, settingsargs, settings) {
-		const methodName = "formatParametersFor" + template.substr(0,1).toUpperCase() + template.substr(1);
+	formatInByTemplate(template, parameters, settings) {
+		trace("format_parameters_by_template", template);
+		const methodName = "formatInFor" + template.substr(0,1).toUpperCase() + template.substr(1);
 		if(!(methodName in this)) {
 			throw new Error("Required method AuthSystem#<" + methodName + ">");
 		}
 		return this[methodName](parameters, settings);
 	}
 
-	formatResultByTemplate(template, result, parameters, settings) {
-		const methodName = "formatResultFor" + template.substr(0,1).toUpperCase() + template.substr(1);
+	formatOutByTemplate(template, result, parameters, settings) {
+		trace("format_result_by_template", template);
+		const methodName = "formatOutFor" + template.substr(0,1).toUpperCase() + template.substr(1);
 		if(!(methodName in this)) {
 			throw new Error("Required method AuthSystem#<" + methodName + ">");
 		}
@@ -161,6 +176,7 @@ class AuthSystem {
 	}
 
 	createStandardTemplateParameters(parameters) {
+		trace("create_standard_template_parameters");
 		return {
 			authSystem: this,
 			require: require,
@@ -175,6 +191,7 @@ class AuthSystem {
 	}
 
 	$query(query) {
+		trace("$query");
 		debug("[SQL] " + query);
 		return new Promise((ok, fail) => {
 			this.connection.query(query, (error, data, fields) => {
@@ -187,11 +204,13 @@ class AuthSystem {
 	}
 
 	gotFromCache(template, parameters, settings) {
+		trace("got_from_cache");
 		// @TODO: make cache system work
 		return;
 	}
 
 	async queryByTemplate(template, parameters, settings) {
+		trace("query_by_template", template);
 		try {
 			// get from cache, if any!
 			const hasCached = await this.gotFromCache(template, parameters, settings);
@@ -202,7 +221,7 @@ class AuthSystem {
 			if(typeof queryTemplate !== "string") {
 				throw new Error("Query MySQLAuth#queries.<" + queryTemplate + "> is of type " + typeof(queryTemplate) + " instead of <string>");
 			}
-			const queryParameters = await this.formatParametersByTemplate(template, parameters, settings);
+			const queryParameters = await this.formatInByTemplate(template, parameters, settings);
 			//await nodelive.editor({ auth:this, template, queryTemplate, queryParameters });
 			let querySource;
 			try {
@@ -212,7 +231,7 @@ class AuthSystem {
 				throw error;
 			}
 			const result = await this.$query(querySource);
-			const formattedResult = await this.formatResultByTemplate(template, result, parameters, settings);
+			const formattedResult = await this.formatOutByTemplate(template, result, parameters, settings);
 			return formattedResult;
 		} catch(error) {
 			debugError("Error querying <" + template + ">:", error);
@@ -220,18 +239,38 @@ class AuthSystem {
 		}
 	}
 
+	/**
+	 * 
+	 * ### `authSystem.assignPrivilegeToCommunity(...)`
+	 * 
+	 */
 	assignPrivilegeToCommunity(...args) {
 		return this.queryByTemplate("assignPrivilegeToCommunity", args);
 	}
 
+	/**
+	 * 
+	 * ### `authSystem.assignPrivilegeToUser(...)`
+	 * 
+	 */
 	assignPrivilegeToUser(...args) {
 		return this.queryByTemplate("assignPrivilegeToUser", args);
 	}
 
+	/**
+	 * 
+	 * ### `authSystem.assignUserToCommunity(...)`
+	 * 
+	 */
 	assignUserToCommunity(...args) {
 		return this.queryByTemplate("assignUserToCommunity", args);
 	}
 
+	/**
+	 * 
+	 * ### `authSystem.authenticate(...)`
+	 * 
+	 */
 	authenticate(...args) {
 		return this.queryByTemplate("authenticate", args);
 	}
@@ -256,75 +295,174 @@ class AuthSystem {
 		return this.queryByTemplate("changePassword", args);
 	}
 
+	/**
+	 * 
+	 * ### `authSystem.checkUserUnicity(...)`
+	 * 
+	 */
 	checkUserUnicity(...args) {
 		return this.queryByTemplate("checkUserUnicity", args);
 	}
 
+	/**
+	 * 
+	 * ### `authSystem.confirmUser(...)`
+	 * 
+	 */
 	confirmUser(...args) {
 		return this.queryByTemplate("confirmUser", args);
 	}
 
+	/**
+	 * 
+	 * ### `authSystem.createTables(...)`
+	 * 
+	 */
 	createTables(...args) {
 		return this.queryByTemplate("createTables", args);
 	}
 
+	/**
+	 * 
+	 * ### `authSystem.deleteCommunity(...)`
+	 * 
+	 */
 	deleteCommunity(...args) {
 		return this.queryByTemplate("deleteCommunity", args);
 	}
 
+	/**
+	 * 
+	 * ### `authSystem.deleteUser(...)`
+	 * 
+	 */
 	deleteUser(...args) {
 		return this.queryByTemplate("deleteUser", args);
 	}
 
+	/**
+	 * 
+	 * ### `authSystem.deletePrivilege(...)`
+	 * 
+	 */
 	deletePrivilege(...args) {
 		return this.queryByTemplate("deletePrivilege", args);
 	}
 
+	/**
+	 * 
+	 * ### `authSystem.deleteTables(...)`
+	 * 
+	 */
 	deleteTables(...args) {
 		return this.queryByTemplate("deleteTables", args);
 	}
 
+	/**
+	 * 
+	 * ### `authSystem.deleteUnconfirmedUser(...)`
+	 * 
+	 */
 	deleteUnconfirmedUser(...args) {
 		return this.queryByTemplate("deleteUnconfirmedUser", args);
 	}
 
+	/**
+	 * 
+	 * ### `authSystem.findUnconfirmedUser(...)`
+	 * 
+	 */
 	findUnconfirmedUser(...args) {
 		return this.queryByTemplate("findUnconfirmedUser", args);
 	}
 
+	/**
+	 * 
+	 * ### `authSystem.findCommunity(...)`
+	 * 
+	 */
 	findCommunity(...args) {
 		return this.queryByTemplate("findCommunity", args);
 	}
 
+	/**
+	 * 
+	 * ### `authSystem.findPrivilege(...)`
+	 * 
+	 */
 	findPrivilege(...args) {
 		return this.queryByTemplate("findPrivilege", args);
 	}
 
+	/**
+	 * 
+	 * ### `authSystem.findUser(...)`
+	 * 
+	 */
 	findUser(...args) {
 		return this.queryByTemplate("findUser", args);
 	}
 
-	insertUnconfirmedUser(...args) {
-		return this.queryByTemplate("insertUnconfirmedUser", args);
+	/**
+	 * 
+	 * ### `authSystem.registerUnconfirmedUser(...)`
+	 * 
+	 */
+	registerUnconfirmedUser(...args) {
+		return this.queryByTemplate("registerUnconfirmedUser", args);
 	}
 
+	/**
+	 * 
+	 * ### `authSystem.async login(...)`
+	 * 
+	 */
 	async login(userData) {
 		try {
+			const userDataInput = Object.assign({}, userData);
+			delete userDataInput.password;
+			const { data: foundUsers } = await this.findUser(userDataInput);
+			if(foundUsers.length !== 1) {
+				throw new Error("Login error: no <user> found by specified properties");
+			}
+			const foundUser = foundUsers[0];
+			const { password } = userData;
+			await new Promise((ok, fail) => {
+				bcrypt.compare(password, foundUser.password, (error, isEqual) => {
+					if(error) {
+						return fail(error);
+					}
+					if(!isEqual) {
+						return fail(new Error("Login error: property <password> is not correct"));
+					}
+					return ok(true);
+				});
+			});
 			const sessionData = {
 				token: utils.generateToken(),
 				secret_token: utils.generateToken()
 			};
-			await this.queryByTemplate("login", [userData, sessionData]);
+			await this.queryByTemplate("login", [{id: foundUser.id}, sessionData]);
 			return await this.authenticate(sessionData);
 		} catch(error) {
 			debugError("Error on login", error);
 		}
 	}
 
+	/**
+	 * 
+	 * ### `authSystem.logout(...)`
+	 * 
+	 */
 	logout(...args) {
 		return this.queryByTemplate("logout", args);
 	}
 
+	/**
+	 * 
+	 * ### `authSystem.async refresh(...)`
+	 * 
+	 */
 	async refresh(userData) {
 		try {
 			const sessionData = {
@@ -338,10 +476,20 @@ class AuthSystem {
 		}
 	}
 
+	/**
+	 * 
+	 * ### `authSystem.registerCommunity(...)`
+	 * 
+	 */
 	registerCommunity(...args) {
 		return this.queryByTemplate("registerCommunity", args);
 	}
 
+	/**
+	 * 
+	 * ### `authSystem.registerPrivilege(...)`
+	 * 
+	 */
 	registerPrivilege(...args) {
 		return this.queryByTemplate("registerPrivilege", args);
 	}
@@ -350,18 +498,38 @@ class AuthSystem {
 		return this.queryByTemplate("resetSchema", args);
 	}
 
+	/**
+	 * 
+	 * ### `authSystem.revokePrivilegeFromCommunity(...)`
+	 * 
+	 */
 	revokePrivilegeFromCommunity(...args) {
 		return this.queryByTemplate("revokePrivilegeFromCommunity", args);
 	}
 
+	/**
+	 * 
+	 * ### `authSystem.revokePrivilegeFromUser(...)`
+	 * 
+	 */
 	revokePrivilegeFromUser(...args) {
 		return this.queryByTemplate("revokePrivilegeFromUser", args);
 	}
 
+	/**
+	 * 
+	 * ### `authSystem.revokeUserFromCommunity(...)`
+	 * 
+	 */
 	revokeUserFromCommunity(...args) {
 		return this.queryByTemplate("revokeUserFromCommunity", args);
 	}
 
+	/**
+	 * 
+	 * ### `authSystem.async unregisterCommunity(...)`
+	 * 
+	 */
 	async unregisterCommunity(communityDetails) {
 		try {
 			let id = undefined;
@@ -378,19 +546,24 @@ class AuthSystem {
 				throw new Error("Property <id> of argument 1 must be a valid ID");
 			}
 			let output = [];
-			output.push(await this.queryByTemplate("unregisterCommunity", [{ "$auth$community.id": id }]));
-			output.push(await this.queryByTemplate("deleteCommunity", [{ "$auth$community.id": id }]));
+			output.push(await this.queryByTemplate("unregisterCommunity", [{ id }]));
+			output.push(await this.queryByTemplate("deleteCommunity", [{ id }]));
 			return output;
 		} catch(error) {
 			debugError("Error on unregisterCommunity:", error);
 		}
 	}
 
+	/**
+	 * 
+	 * ### `authSystem.async unregisterPrivilege(...)`
+	 * 
+	 */
 	async unregisterPrivilege(privilegeDetails) {
 		try {
 			let id = undefined;
 			if(!("id" in privilegeDetails)) {
-				privilegesData = await this.findPrivilege(privilegeDetails);
+				const privilegesData = await this.findPrivilege(privilegeDetails);
 				const { data: matched } = privilegesData;
 				if(matched.length === 0) {
 					throw new Error("Required 1 match minimum to <unregisterPrivilege>");
@@ -403,14 +576,19 @@ class AuthSystem {
 				throw new Error("Property <id> of argument 1 must be a valid ID");
 			}
 			let output = [];
-			output.push(await this.queryByTemplate("unregisterPrivilege", [{ "$auth$privilege.id": id }]));
-			output.push(await this.queryByTemplate("deletePrivilege", [{ "$auth$privilege.id": id }]));
+			output.push(await this.queryByTemplate("unregisterPrivilege", [{ id }]));
+			output.push(await this.queryByTemplate("deletePrivilege", [{ id }]));
 			return output;
 		} catch(error) {
 			debugError("Error on unregisterPrivilege:", error);
 		}
 	}
 
+	/**
+	 * 
+	 * ### `authSystem.async unregisterUser(...)`
+	 * 
+	 */
 	async unregisterUser(userDetails) {
 		try {
 			let id = undefined;
@@ -427,193 +605,217 @@ class AuthSystem {
 				throw new Error("Property <id> of argument 1 must be a valid ID");
 			}
 			let output = [];
-			output.push(await this.queryByTemplate("unregisterUser", [{ "$auth$user.id": id }]));
-			output.push(await this.queryByTemplate("deleteUser", [{ "$auth$user.id": id }]));
+			output.push(await this.queryByTemplate("unregisterUser", [{ id }]));
+			output.push(await this.queryByTemplate("deleteUser", [{ id }]));
 			return output;
 		} catch(error) {
 			debugError("Error on unregisterUser:", error);
 		}
 	}
 
+	/**
+	 * 
+	 * ### `authSystem.updateCommunity(...)`
+	 * 
+	 */
 	updateCommunity(...args) {
 		return this.queryByTemplate("updateCommunity", args);
 	}
 
+	/**
+	 * 
+	 * ### `authSystem.updatePrivilege(...)`
+	 * 
+	 */
 	updatePrivilege(...args) {
 		return this.queryByTemplate("updatePrivilege", args);
 	}
 
+	/**
+	 * 
+	 * ### `authSystem.updateUser(...)`
+	 * 
+	 */
 	updateUser(...args) {
 		return this.queryByTemplate("updateUser", args);
 	}
 
-	formatParametersForAssignPrivilegeToCommunity(args, settings) {
+	formatInForAssignPrivilegeToCommunity(args, settings) {
 		return this.createStandardTemplateParameters({ args });
 	}
 
-	formatParametersForAssignPrivilegeToUser(args, settings) {
+	formatInForAssignPrivilegeToUser(args, settings) {
 		return this.createStandardTemplateParameters({ args });
 	}
 
-	formatParametersForAssignUserToCommunity(args, settings) {
+	formatInForAssignUserToCommunity(args, settings) {
 		return this.createStandardTemplateParameters({ args });
 	}
 
-	formatParametersForAuthenticate(args, settings) {
+	formatInForAuthenticate(args, settings) {
 		return this.createStandardTemplateParameters({ args });
 	}
 
-	formatParametersForCan(args, settings) {
+	formatInForCan(args, settings) {
 		return this.createStandardTemplateParameters({ args });
 	}
 
-	formatParametersForCannot(args, settings) {
+	formatInForCannot(args, settings) {
 		return this.createStandardTemplateParameters({ args });
 	}
 
-	formatParametersForCanMultiple(args, settings) {
+	formatInForCanMultiple(args, settings) {
 		return this.createStandardTemplateParameters({ args });
 	}
 
-	formatParametersForCannotMultiple(args, settings) {
+	formatInForCannotMultiple(args, settings) {
 		return this.createStandardTemplateParameters({ args });
 	}
 
-	formatParametersForChangePassword(args, settings) {
+	formatInForChangePassword(args, settings) {
 		return this.createStandardTemplateParameters({ args });
 	}
 
-	formatParametersForCheckUserUnicity(args, settings) {
+	formatInForCheckUserUnicity(args, settings) {
 		return this.createStandardTemplateParameters({ args });
 	}
 
-	formatParametersForConfirmUser(args, settings) {
+	formatInForConfirmUser(args, settings) {
 		return this.createStandardTemplateParameters({ args });
 	}
 
-	formatParametersForCreateTables(args, settings) {
+	formatInForCreateTables(args, settings) {
 		return this.createStandardTemplateParameters({ args });
 	}
 
-	formatParametersForDeleteTables(args, settings) {
+	formatInForDeleteTables(args, settings) {
 		return this.createStandardTemplateParameters({ args });
 	}
 
-	formatParametersForDeleteUser(args, settings) {
+	formatInForDeleteUser(args, settings) {
 		return this.createStandardTemplateParameters({ args });
 	}
 
-	formatParametersForDeleteCommunity(args, settings) {
+	formatInForDeleteCommunity(args, settings) {
 		return this.createStandardTemplateParameters({ args });
 	}
 
-	formatParametersForDeletePrivilege(args, settings) {
+	formatInForDeletePrivilege(args, settings) {
 		return this.createStandardTemplateParameters({ args });
 	}
 
-	formatParametersForDeleteUnconfirmedUser(args, settings) {
+	formatInForDeleteUnconfirmedUser(args, settings) {
 		return this.createStandardTemplateParameters({ args });
 	}
 
-	formatParametersForFindUnconfirmedUser(args, settings) {
+	formatInForFindUnconfirmedUser(args, settings) {
 		return this.createStandardTemplateParameters({ args });
 	}
 
-	formatParametersForFindUser(args, settings) {
+	formatInForFindUser(args, settings) {
 		return this.createStandardTemplateParameters({ args });
 	}
 
-	formatParametersForFindCommunity(args, settings) {
+	formatInForFindCommunity(args, settings) {
 		return this.createStandardTemplateParameters({ args });
 	}
 
-	formatParametersForFindPrivilege(args, settings) {
+	formatInForFindPrivilege(args, settings) {
 		return this.createStandardTemplateParameters({ args });
 	}
 
-	formatParametersForInsertUnconfirmedUser(args, settings) {
-		return this.createStandardTemplateParameters({ args });
-	}
-
-	formatParametersForLogin(args, settings) {
-		return this.createStandardTemplateParameters({ args });
-	}
-
-	formatParametersForLogout(args, settings) {
-		return this.createStandardTemplateParameters({ args });
-	}
-
-	formatParametersForRefresh(args, settings) {
-		return this.createStandardTemplateParameters({ args });
-	}
-
-	formatParametersForRegisterCommunity(args, settings) {
-		return this.createStandardTemplateParameters({ args });
-	}
-
-	formatParametersForRegisterPrivilege(args, settings) {
-		return this.createStandardTemplateParameters({ args });
-	}
-
-	formatParametersForResetSchema(args, settings) {
-		return this.createStandardTemplateParameters({ args });
-	}
-
-	formatParametersForRevokePrivilegeFromCommunity(args, settings) {
-		return this.createStandardTemplateParameters({ args });
-	}
-
-	formatParametersForRevokePrivilegeFromUser(args, settings) {
-		return this.createStandardTemplateParameters({ args });
-	}
-
-	formatParametersForRevokeUserFromCommunity(args, settings) {
-		return this.createStandardTemplateParameters({ args });
-	}
-
-	formatParametersForUnregisterCommunity(args, settings) {
-		return this.createStandardTemplateParameters({ args });
-	}
-
-	formatParametersForUnregisterPrivilege(args, settings) {
-		return this.createStandardTemplateParameters({ args });
-	}
-
-	formatParametersForUnregisterUser(args, settings) {
-		return this.createStandardTemplateParameters({ args });
-	}
-
-	formatParametersForUpdateCommunity(args, settings) {
-		return this.createStandardTemplateParameters({ args });
-	}
-
-	formatParametersForUpdatePrivilege(args, settings) {
-		return this.createStandardTemplateParameters({ args });
-	}
-
-	formatParametersForUpdateUser(args, settings) {
-		return this.createStandardTemplateParameters({ args });
-	}
-
-	formatResultForAssignPrivilegeToCommunity(result, settings) {
-		return result;
-	}
-
-	formatResultForAssignPrivilegeToUser(result, settings) {
-		return result;
-	}
-
-	formatResultForAssignUserToCommunity(result, settings) {
-		return result;
-	}
-
-	formatResultForAuthenticate(result, settings) {
-		if(Array.isArray(result)) {
-			throw new Error("Parameters <result> must be an array to <authenticate>");
+	async formatInForRegisterUnconfirmedUser(args, settings) {
+		const [userDetails] = args;
+		if(!("password" in userDetails)) {
+			throw new Error("Required property <password> in argument 1 to <formatInForRegisterUnconfirmedUser>");
 		}
-		if(result.length === 0) {
-			throw new Error("Parameters <result> must be have at leat 1 item to <authenticate>");
+		if(typeof(userDetails.password) !== "string") {
+			throw new Error("Required property <password> in argument 1 to be a string to <formatInForRegisterUnconfirmedUser>");
 		}
+		if(userDetails.password.length < 6) {
+			throw new Error("Required property <password> in argument 1 to be a string of 6 characters minimum to <formatInForRegisterUnconfirmedUser>");
+		}
+		if(userDetails.password.length > 20) {
+			console.log(userDetails.password.length);
+			throw new Error("Required property <password> in argument 1 to be a string of 20 characters maximum to <formatInForRegisterUnconfirmedUser>");
+		}
+		args[0].password = await this.encryptPassword(userDetails.password, 10);
+		return this.createStandardTemplateParameters({ args });
+	}
+
+	async formatInForLogin(args, settings) {
+		return this.createStandardTemplateParameters({ args });
+	}
+
+	formatInForLogout(args, settings) {
+		return this.createStandardTemplateParameters({ args });
+	}
+
+	formatInForRefresh(args, settings) {
+		return this.createStandardTemplateParameters({ args });
+	}
+
+	formatInForRegisterCommunity(args, settings) {
+		return this.createStandardTemplateParameters({ args });
+	}
+
+	formatInForRegisterPrivilege(args, settings) {
+		return this.createStandardTemplateParameters({ args });
+	}
+
+	formatInForResetSchema(args, settings) {
+		return this.createStandardTemplateParameters({ args });
+	}
+
+	formatInForRevokePrivilegeFromCommunity(args, settings) {
+		return this.createStandardTemplateParameters({ args });
+	}
+
+	formatInForRevokePrivilegeFromUser(args, settings) {
+		return this.createStandardTemplateParameters({ args });
+	}
+
+	formatInForRevokeUserFromCommunity(args, settings) {
+		return this.createStandardTemplateParameters({ args });
+	}
+
+	formatInForUnregisterCommunity(args, settings) {
+		return this.createStandardTemplateParameters({ args });
+	}
+
+	formatInForUnregisterPrivilege(args, settings) {
+		return this.createStandardTemplateParameters({ args });
+	}
+
+	formatInForUnregisterUser(args, settings) {
+		return this.createStandardTemplateParameters({ args });
+	}
+
+	formatInForUpdateCommunity(args, settings) {
+		return this.createStandardTemplateParameters({ args });
+	}
+
+	formatInForUpdatePrivilege(args, settings) {
+		return this.createStandardTemplateParameters({ args });
+	}
+
+	formatInForUpdateUser(args, settings) {
+		return this.createStandardTemplateParameters({ args });
+	}
+
+	formatOutForAssignPrivilegeToCommunity(result, settings) {
+		return result;
+	}
+
+	formatOutForAssignPrivilegeToUser(result, settings) {
+		return result;
+	}
+
+	formatOutForAssignUserToCommunity(result, settings) {
+		return result;
+	}
+
+	formatOutForAuthenticate(result, settings) {
 		const queryData = result.data;
 		if(queryData === null || queryData.length === 0) {
 			throw new Error("Authentication error: provided credentials were not matched");
@@ -635,59 +837,59 @@ class AuthSystem {
 		return { data: sessionData, originalData: result, fields: result.fields };
 	}
 
-	formatResultForCan(result, settings) {
+	formatOutForCan(result, settings) {
 		return result;
 	}
 
-	formatResultForCannot(result, settings) {
+	formatOutForCannot(result, settings) {
 		return result;
 	}
 
-	formatResultForCanMultiple(result, settings) {
+	formatOutForCanMultiple(result, settings) {
 		return result;
 	}
 
-	formatResultForCannotMultiple(result, settings) {
+	formatOutForCannotMultiple(result, settings) {
 		return result;
 	}
 
-	formatResultForChangePassword(result, settings) {
+	formatOutForChangePassword(result, settings) {
 		return result;
 	}
 
-	formatResultForCheckUserUnicity(result, settings) {
+	formatOutForCheckUserUnicity(result, settings) {
 		return result;
 	}
 
-	formatResultForConfirmUser(result, settings) {
+	formatOutForConfirmUser(result, settings) {
 		return result;
 	}
 
-	formatResultForCreateTables(result, settings) {
+	formatOutForCreateTables(result, settings) {
 		return result;
 	}
 
-	formatResultForDeleteTables(result, settings) {
+	formatOutForDeleteTables(result, settings) {
 		return result;
 	}
 
-	formatResultForDeleteUser(result, settings) {
+	formatOutForDeleteUser(result, settings) {
 		return result;
 	}
 
-	formatResultForDeletePrivilege(result, settings) {
+	formatOutForDeletePrivilege(result, settings) {
 		return result;
 	}
 
-	formatResultForDeleteCommunity(result, settings) {
+	formatOutForDeleteCommunity(result, settings) {
 		return result;
 	}
 
-	formatResultForDeleteUnconfirmedUser(result, settings) {
+	formatOutForDeleteUnconfirmedUser(result, settings) {
 		return result;
 	}
 
-	formatResultForFindUnconfirmedUser(result, settings) {
+	formatOutForFindUnconfirmedUser(result, settings) {
 		if(result.length === 0) {
 			throw new Error("No unconfirmed user found");
 		} else {
@@ -695,79 +897,79 @@ class AuthSystem {
 		}
 	}
 
-	formatResultForFindUser(result, settings) {
+	formatOutForFindUser(result, settings) {
 		return result;
 	}
 
-	formatResultForFindCommunity(result, settings) {
+	formatOutForFindCommunity(result, settings) {
 		return result;
 	}
 
-	formatResultForFindPrivilege(result, settings) {
+	formatOutForFindPrivilege(result, settings) {
 		return result;
 	}
 
-	formatResultForInsertUnconfirmedUser(result, settings) {
+	formatOutForRegisterUnconfirmedUser(result, settings) {
 		return result;
 	}
 
-	formatResultForLogin(result, settings) {
+	formatOutForLogin(result, settings) {
 		return result;
 	}
 
-	formatResultForLogout(result, settings) {
+	formatOutForLogout(result, settings) {
 		return result;
 	}
 
-	formatResultForRefresh(result, settings) {
+	formatOutForRefresh(result, settings) {
 		return result;
 	}
 
-	formatResultForRegisterCommunity(result, settings) {
+	formatOutForRegisterCommunity(result, settings) {
 		return result;
 	}
 
-	formatResultForRegisterPrivilege(result, settings) {
+	formatOutForRegisterPrivilege(result, settings) {
 		return result;
 	}
 
-	formatResultForResetSchema(result, settings) {
+	formatOutForResetSchema(result, settings) {
 		return result;
 	}
 
-	formatResultForRevokePrivilegeFromCommunity(result, settings) {
+	formatOutForRevokePrivilegeFromCommunity(result, settings) {
 		return result;
 	}
 
-	formatResultForRevokePrivilegeFromUser(result, settings) {
+	formatOutForRevokePrivilegeFromUser(result, settings) {
 		return result;
 	}
 
-	formatResultForRevokeUserFromCommunity(result, settings) {
+	formatOutForRevokeUserFromCommunity(result, settings) {
 		return result;
 	}
 
-	formatResultForUnregisterCommunity(result, settings) {
+	formatOutForUnregisterCommunity(result, settings) {
 		return result;
 	}
 
-	formatResultForUnregisterPrivilege(result, settings) {
+	formatOutForUnregisterPrivilege(result, settings) {
 		return result;
 	}
 
-	formatResultForUnregisterUser(result, settings) {
+	formatOutForUnregisterUser(result, settings) {
 		return result;
 	}
 
-	formatResultForUpdateCommunity(result, settings) {
+	formatOutForUpdateCommunity(result, settings) {
 		return result;
 	}
 
-	formatResultForUpdatePrivilege(result, settings) {
+	formatOutForUpdatePrivilege(result, settings) {
 		return result;
 	}
 
-	formatResultForUpdateUser(result, settings) {
+	formatOutForUpdateUser(result, settings) {
 		return result;
 	}
 

@@ -3,12 +3,11 @@
 if(args.length === 0) {
 	throw new Error("Argument 1 is required to <unregisterUser>");
 }
-const arrayed = [].concat(args);
-if(typeof arrayed[0] !== "object") {
-	throw new Error("Argument 1 [, item 1] must be an object to <unregisterUser>");
+if(typeof args[0] !== "object") {
+	throw new Error("Argument 1 must be an object to <unregisterUser>");
 }
 
-const whereUserSQL = utils.whereToSQL(arrayed);
+const whereUserSQL = utils.whereToSQL(args[0], false, "$auth$user");
 
 %>
 

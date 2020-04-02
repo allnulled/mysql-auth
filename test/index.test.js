@@ -1,6 +1,7 @@
 const { expect } = require("chai");
 const MySQLAuth = require(__dirname + "/../src/index.js");
 const nodelive = require("nodelive");
+const bcrypt = require("bcrypt");
 
 describe("AuthClient class", function() {
 
@@ -9,7 +10,7 @@ describe("AuthClient class", function() {
 
 	before(function(done) {
 		authSystem = MySQLAuth.create({
-			debug: true,
+			debug: false,
 			connectionSettings: {
 				user: "test",
 				password: "test",
@@ -34,61 +35,35 @@ describe("AuthClient class", function() {
 		await authClient.createTables();
 	});
 
-/*
-// checkUserUnicity
-insertUnconfirmedUser
-confirmUser
-// findUnconfirmedUser
-// deleteUnconfirmedUser
-login
-refresh
-logout
-changePassword
-assignPrivilegeToCommunity
-assignPrivilegeToUser
-assignUserToCommunity
-registerCommunity
-registerPrivilege
-revokePrivilegeFromCommunity
-revokePrivilegeFromUser
-revokeUserFromCommunity
-unregisterCommunity
-unregisterPrivilege
-unregisterUser
-updateCommunity
-updatePrivilege
-updateUser
-//*/
-
 	it("can complete all auth common operations", async function() {
 		this.timeout(100 * 1000);
 		try {
-			const userData = {
+			const userDataOriginal = {
 				name: "username1",
 				password: "password1",
 				email: "username1@email.com",
 				description: "a person",
 			};
+			const userData = Object.assign({}, userDataOriginal);
 			// 1. INSERT UNCONFIRMED USER
-			const unconfirmedUserResponse = await authClient.insertUnconfirmedUser(userData);
+			const unconfirmedUserResponse = await authClient.registerUnconfirmedUser(userData);
 			const { data: [unconfirmedUser] } = await authClient.system.$query("SELECT * FROM $auth$unconfirmed_user WHERE name = 'username1';");
-			describe("can create unconfirmed user", function() {
-				expect(unconfirmedUser.name).to.equal("username1");
-				expect(unconfirmedUser.password).to.equal("password1");
-				expect(unconfirmedUser.email).to.equal("username1@email.com");
-				expect(unconfirmedUser.description).to.equal("a person");
-			});
+			expect(unconfirmedUser.name).to.equal("username1");
+			expect(unconfirmedUser.password).to.not.equal("password1");
+			expect(unconfirmedUser.email).to.equal("username1@email.com");
+			expect(unconfirmedUser.description).to.equal("a person");
 			// 2. CONFIRM USER
 			const userConfirmationResponse = await authClient.confirmUser({ id: unconfirmedUser.id });
 			const { data: [unconfirmedUser2 = null] } = await authClient.system.$query("SELECT * FROM $auth$unconfirmed_user WHERE name = 'username1';");
 			expect(unconfirmedUser2).to.equal(null);
 			const { data: [confirmedUser] } = await authClient.system.$query("SELECT * FROM $auth$user WHERE name = 'username1';");
 			expect(confirmedUser.name).to.equal("username1");
-			expect(confirmedUser.password).to.equal("password1");
+			expect(confirmedUser.password).to.not.equal("password1");
 			expect(confirmedUser.email).to.equal("username1@email.com");
 			expect(confirmedUser.description).to.equal("a person");
 			// 3. LOGIN
-			const { data: sessionData } = await authClient.login({ name: userData.name, password: userData.password });
+			// @TOFIX:
+			const { data: sessionData } = await authClient.login({ name: userData.name, password: userDataOriginal.password });
 			expect(typeof sessionData.user).to.equal("object");
 			expect(Object.keys(sessionData.user)).to.deep.equal(["id","name","password","email","description","created_at","updated_at"]);
 			expect(typeof sessionData.community).to.equal("object");
@@ -187,71 +162,86 @@ updateUser
 			expect(allPrivileges[8].description).to.equal("this one is privilege9");
 			expect(allPrivileges[9].description).to.equal("this one is privilege10");
 			// 12. ASSIGN PRIVILEGE TO COMMUNITY
-			await authClient.assignPrivilegeToCommunity({ "$auth$privilege.id": 1 }, { "$auth$community.id": 1 });
+			await authClient.assignPrivilegeToCommunity({ "$auth$privilege.id": 1 }, { id: 1 });
 			// 13. ASSIGN PRIVILEGE TO USER
-			await authClient.assignPrivilegeToUser({ "$auth$privilege.id": 2 }, { "$auth$user.id": 1 });
+			await authClient.assignPrivilegeToUser({ id: 2 }, { id: 1 });
 			// 14. ASSIGN USER TO COMMUNITY
-			await authClient.assignUserToCommunity({ "$auth$user.id": 1 }, { "$auth$community.id": 1 });
+			await authClient.assignUserToCommunity({ id: 1 }, { id: 1 });
 			const { data: sessionData3 } = await authClient.login({ name: "username1", password: "password1" });
 			expect(sessionData3.privilege.length).to.equal(2);
 			expect(sessionData3.privilege[0].id).to.equal(1);
 			expect(sessionData3.privilege[1].id).to.equal(2);
 			// 12. REVOKE PRIVILEGE FROM COMMUNITY
-			await authClient.revokePrivilegeFromCommunity({ "$auth$privilege.id": 1 }, { "$auth$community.id": 1 });
+			await authClient.revokePrivilegeFromCommunity({ id: 1 }, { id: 1 });
 			const { data: sessionData4 } = await authClient.authenticate({ token: sessionData3.session.token });
 			expect(sessionData4.privilege.length).to.equal(1);
 			expect(sessionData4.privilege[0].id).to.equal(2);
 			// 13. REVOKE PRIVILEGE FROM USER
-			await authClient.revokePrivilegeFromUser({ "$auth$privilege.id": 2 }, { "$auth$user.id": 1 });
+			await authClient.revokePrivilegeFromUser({ id: 2 }, { id: 1 });
 			const { data: sessionData5 } = await authClient.authenticate({ token: sessionData3.session.token });
 			expect(sessionData5.privilege.length).to.equal(0);
 			// 14. REVOKE USER FROM COMMUNITY
-			await authClient.assignPrivilegeToCommunity({ "$auth$privilege.id": 1 }, { "$auth$community.id": 2 });
-			await authClient.assignUserToCommunity({ "$auth$user.id": 1 }, { "$auth$community.id": 2 });
+			await authClient.assignPrivilegeToCommunity({ id: 1 }, { id: 2 });
+			await authClient.assignUserToCommunity({ id: 1 }, { id: 2 });
 			const { data: sessionData6 } = await authClient.authenticate({ token: sessionData3.session.token });
 			expect(sessionData6.privilege.length).to.equal(1);
-			await authClient.revokeUserFromCommunity({ "$auth$user.id": 1 }, { "$auth$community.id": 2 });
+			await authClient.revokeUserFromCommunity({ id: 1 }, { id: 2 });
 			const { data: sessionData7 } = await authClient.authenticate({ token: sessionData3.session.token });
 			expect(sessionData7.privilege.length).to.equal(0);
 			// 15. UNREGISTER USER
 			const { data: [{ total: totalOfUsers1 }] } = await authClient.system.$query("SELECT COUNT(*) AS 'total' FROM $auth$user WHERE $auth$user.id = 1;");
 			expect(totalOfUsers1).to.equal(1);
-			await authClient.unregisterUser({ "$auth$user.id": 1 });
+			await authClient.unregisterUser({ id: 1 });
 			const { data: [{ total: totalOfUsers2 }] } = await authClient.system.$query("SELECT COUNT(*) AS 'total' FROM $auth$user WHERE $auth$user.id = 1;");
 			expect(totalOfUsers2).to.equal(0);
 			// 16. UNREGISTER COMMUNITY
 			const { data: [{ total: totalOfCommunities1 }] } = await authClient.system.$query("SELECT COUNT(*) AS 'total' FROM $auth$community WHERE $auth$community.id = 1;");
-			await authClient.unregisterCommunity({ "$auth$community.id": 1 });
+			await authClient.unregisterCommunity({ id: 1 });
 			const { data: [{ total: totalOfCommunities2 }] } = await authClient.system.$query("SELECT COUNT(*) AS 'total' FROM $auth$community WHERE $auth$community.id = 1;");
 			expect(totalOfCommunities1 - 1).to.equal(totalOfCommunities2);
 			// 17. UNREGISTER PRIVILEGE
 			const { data: [{ total: totalOfPrivileges1 }] } = await authClient.system.$query("SELECT COUNT(*) AS 'total' FROM $auth$privilege WHERE $auth$privilege.id = 1;");
-			await authClient.unregisterPrivilege({ "$auth$privilege.id": 1 });
+			await authClient.unregisterPrivilege({ id: 1 });
 			const { data: [{ total: totalOfPrivileges2 }] } = await authClient.system.$query("SELECT COUNT(*) AS 'total' FROM $auth$privilege WHERE $auth$privilege.id = 1;");
 			expect(totalOfPrivileges1 - 1).to.equal(totalOfPrivileges2);
-
-			/*
-			const refreshResponse = await authClient.refresh({ token: loginResponse.session.token });
-			const logoutResponse = await authClient.logout({ token: refreshResponse.session.token });
-			const changePasswordResponse = await authClient.changePassword({ id: loginResponse.user.id }, "second.password");
-			const registerCommunityResponse = await authClient.registerCommunity();
-			const registerPrivilegeResponse = await authClient.registerPrivilege();
-			const updateUserResponse = await authClient.updateUser();
-			const updateCommunityResponse = await authClient.updateCommunity();
-			const updatePrivilegeResponse = await authClient.updatePrivilege();
-			const assignPrivilegeToCommunityResponse = await authClient.assignPrivilegeToCommunity();
-			const assignPrivilegeToUserResponse = await authClient.assignPrivilegeToUser();
-			const assignUserToCommunityResponse = await authClient.assignUserToCommunity();
-			const revokePrivilegeFromCommunityResponse = await authClient.revokePrivilegeFromCommunity();
-			const revokePrivilegeFromUserResponse = await authClient.revokePrivilegeFromUser();
-			const revokeUserFromCommunityResponse = await authClient.revokeUserFromCommunity();
-			const unregisterCommunityResponse = await authClient.unregisterCommunity();
-			const unregisterPrivilegeResponse = await authClient.unregisterPrivilege();
-			const unregisterUserResponse = await authClient.unregisterUser();
-			//*/
 		} catch(error) {
 			console.log(error);
 			throw error;
+		}
+	});
+
+	it("creates new users", async () => {
+		try {
+			const { data: [numberOfUsers1] } = await authClient.system.$query("SELECT COUNT(*) AS 'total' FROM $auth$user WHERE name = 'user1';");
+			expect(numberOfUsers1.total).to.equal(0);
+			await authClient.registerUnconfirmedUser({ name: "user1", password: "password1", email: "email1@domain.com" });
+			const { data: [numberOfUsers2] } = await authClient.system.$query("SELECT COUNT(*) AS 'total' FROM $auth$user WHERE name = 'user1';");
+			expect(numberOfUsers2.total).to.equal(0);
+			await authClient.confirmUser({ name: "user1" });
+			const { data: [numberOfUsers3] } = await authClient.system.$query("SELECT COUNT(*) AS 'total' FROM $auth$user WHERE name = 'user1';");
+			expect(numberOfUsers3.total).to.equal(1);
+		} catch(error) {
+			console.log(error);
+		}
+	});
+
+	it("encrypts users passwords", async () => {
+		try {
+			const { data: [{ password }] } = await authClient.system.$query("SELECT password FROM $auth$user WHERE name = 'user1';");
+			const isPassword = await new Promise((ok, fail) => {
+				bcrypt.compare("password1", password, (error, isEqual) => {
+					if(error) {
+						return fail(error);
+					}
+					if(!isEqual) {
+						return fail(isEqual);
+					}
+					return ok(isEqual);
+				});
+			});
+			expect(isPassword).to.equal(true);
+		} catch(error) {
+			console.log(error);
 		}
 	});
 
