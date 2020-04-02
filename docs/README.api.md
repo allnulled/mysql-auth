@@ -12,163 +12,174 @@
 
 
 
-### `authSystem.initialize()`
+### `authSystem.initialize():Promise<?>`
 
 
 
+**Description**:  Initializes the `auth` system:
 
+  - creates a pool connection
+  - caches the query templates
 
-### `authSystem.assignPrivilegeToCommunity(...)`
 
 
 
+### `authSystem.assignPrivilegeToCommunity(wherePrivilege:Object, whereCommunity:Object):Promise<?>`
 
-### `authSystem.assignPrivilegeToUser(...)`
 
 
 
+### `authSystem.assignPrivilegeToUser(wherePrivilege:Object, whereUser:Object):Promise<?>`
 
-### `authSystem.assignUserToCommunity(...)`
 
 
 
+### `authSystem.assignUserToCommunity(whereUser:Object, whereCommunity:Object):Promise<?>`
 
-### `authSystem.authenticate(...)`
 
 
 
+### `authSystem.authenticate(token:String):Promise<?>`
 
-### `authSystem.checkUserUnicity(...)`
 
 
 
+### `authSystem.checkUserUnicity(...):Promise<?>`
 
-### `authSystem.confirmUser(...)`
 
 
 
+### `authSystem.confirmUser(whereUser:Object):Promise<?>`
 
-### `authSystem.createTables(...)`
 
 
 
+### `authSystem.createTables():Promise<?>`
 
-### `authSystem.deleteCommunity(...)`
 
 
 
+### `authSystem.deleteCommunity(whereCommunity:Object):Promise<?>`
 
-### `authSystem.deleteUser(...)`
 
 
 
+### `authSystem.deleteUser(whereUser:Object):Promise<?>`
 
-### `authSystem.deletePrivilege(...)`
 
 
 
+### `authSystem.deletePrivilege(wherePrivilege:Object):Promise<?>`
 
-### `authSystem.deleteTables(...)`
 
 
 
+### `authSystem.deleteTables():Promise<?>`
 
-### `authSystem.deleteUnconfirmedUser(...)`
 
 
 
+### `authSystem.deleteUnconfirmedUser(whereUnconfirmedUser:Object):Promise<?>`
 
-### `authSystem.findUnconfirmedUser(...)`
 
 
 
+### `authSystem.findUnconfirmedUser(whereUnconfirmedUser:Object):Promise<?>`
 
-### `authSystem.findCommunity(...)`
 
 
 
+### `authSystem.findCommunity(whereCommunity:Object):Promise<?>`
 
-### `authSystem.findPrivilege(...)`
 
 
 
+### `authSystem.findPrivilege(wherePrivilege:Object):Promise<?>`
 
-### `authSystem.findUser(...)`
 
 
 
+### `authSystem.findUser(whereUser:Object):Promise<?>`
 
-### `authSystem.registerUnconfirmedUser(...)`
 
 
 
+### `authSystem.registerUnconfirmedUser(user:Object):Promise<?>`
 
-### `authSystem.async login(...)`
 
 
 
+### `authSystem.login(user:Object):Promise<?>`
 
-### `authSystem.logout(...)`
 
 
 
+### `authSystem.logout(token:String):Promise<?>`
 
-### `authSystem.async refresh(...)`
 
 
 
+### `authSystem.refresh(whereSession:String):Promise<?>`
 
-### `authSystem.registerCommunity(...)`
 
 
 
+### `authSystem.refresh(whereUser:String):Promise<?>`
 
-### `authSystem.registerPrivilege(...)`
 
 
 
+### `authSystem.registerCommunity(community:Object):Promise<?>`
 
-### `authSystem.revokePrivilegeFromCommunity(...)`
 
 
 
+### `authSystem.registerPrivilege(privilege:Object):Promise<?>`
 
-### `authSystem.revokePrivilegeFromUser(...)`
 
 
 
+### `authSystem.revokePrivilegeFromCommunity(wherePrivilege:Object, whereCommunity:Object):Promise<?>`
 
-### `authSystem.revokeUserFromCommunity(...)`
 
 
 
+### `authSystem.revokePrivilegeFromUser(wherePrivilege:Object, whereUser:Object):Promise<?>`
 
-### `authSystem.async unregisterCommunity(...)`
 
 
 
+### `authSystem.revokeUserFromCommunity(whereUser:Object, whereCommunity:Object):Promise<?>`
 
-### `authSystem.async unregisterPrivilege(...)`
 
 
 
+### `authSystem.unregisterCommunity(whereCommunity:Object):Promise<?>`
 
-### `authSystem.async unregisterUser(...)`
 
 
 
+### `authSystem.unregisterPrivilege(wherePrivilege:Object):Promise<?>`
 
-### `authSystem.updateCommunity(...)`
 
 
 
+### `authSystem.unregisterUser(whereUser:Object):Promise<?>`
 
-### `authSystem.updatePrivilege(...)`
 
 
 
+### `authSystem.updateCommunity(whereCommunity:Object, values:Object):Promise<?>`
 
-### `authSystem.updateUser(...)`
+
+
+
+### `authSystem.updatePrivilege(wherePrivilege:Object, values:Object):Promise<?>`
+
+
+
+
+### `authSystem.updateUser(whereUser:Object, values:Object):Promise<?>`
 
 
 

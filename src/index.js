@@ -57,11 +57,11 @@ class AuthSystem {
 			database: "test",
 			host: "127.0.0.1",
 			port: 3306,
-			multipleStatements: true
+			multipleStatements: true,
 		}
 	}
 
-	static get NOT_CACHED() {
+	static get SESSION_CACHE() {
 		return {};
 	}
 
@@ -71,6 +71,10 @@ class AuthSystem {
 			"assignPrivilegeToUser": __dirname + "/queries/assign privilege to user.sql.ejs",
 			"assignUserToCommunity": __dirname + "/queries/assign user to community.sql.ejs",
 			"authenticate": __dirname + "/queries/authenticate.sql.ejs",
+			"can": __dirname + "/queries/can.sql.ejs",
+			"cannot": __dirname + "/queries/cannot.sql.ejs",
+			"canMultiple": __dirname + "/queries/can multiple.sql.ejs",
+			"cannotMultiple": __dirname + "/queries/cannot multiple.sql.ejs",
 			"checkUserUnicity": __dirname + "/queries/check user unicity.sql.ejs",
 			"confirmUser": __dirname + "/queries/confirm user.sql.ejs",
 			"createTables": __dirname + "/queries/create tables.sql.ejs",
@@ -104,7 +108,7 @@ class AuthSystem {
 	encryptPassword(password, salts, callback) {
 		return new Promise((ok, fail) => {
 			bcrypt.hash(password, salts, (error, hash) => {
-				if(error) {
+				if (error) {
 					return fail(error);
 				}
 				return ok(hash);
@@ -114,9 +118,9 @@ class AuthSystem {
 
 	constructor(options = {}) {
 		Object.assign(this, this.constructor.DEFAULT_OPTIONS, options);
-		if(this.debug) {
+		if (this.debug) {
 			Debug.enable("mysql-auth,mysql-auth:error,mysql-auth:trace");
-		} else if(this.silence === false) {
+		} else if (this.silence === false) {
 			Debug.enable("mysql-auth:error");
 		}
 		this.connectionSettings = Object.assign({}, this.constructor.DEFAULT_CONNECTION_SETTINGS, options.connectionSettings || {});
@@ -133,8 +137,12 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.initialize()`
+	 * ### `authSystem.initialize():Promise<?>`
 	 * 
+	 * @description Initializes the `auth` system:
+	 * 
+	 *   - creates a pool connection
+	 *   - caches the query templates
 	 * 
 	 */
 	initialize() {
@@ -142,12 +150,12 @@ class AuthSystem {
 		this.connection = mysql.createPool(this.connectionSettings);
 		this.queries = Object.keys(this.queryTemplates).reduce((output, method) => {
 			const filename = this.queryTemplates[method];
-			if(typeof filename !== "string") {
+			if (typeof filename !== "string") {
 				throw new Error("")
 				throw new Error("Property AuthSystem#queryTemplates.<" + method + "> should exist");
 			}
 			const filepath = path.resolve(filename);
-			if(!fs.existsSync(filepath)) {
+			if (!fs.existsSync(filepath)) {
 				throw new Error("Property AuthSystem#queryTemplates.<" + method + "> should be an existing file");
 			}
 			const contents = fs.readFileSync(filepath).toString();
@@ -159,8 +167,8 @@ class AuthSystem {
 
 	formatInByTemplate(template, parameters, settings) {
 		trace("format_parameters_by_template", template);
-		const methodName = "formatInFor" + template.substr(0,1).toUpperCase() + template.substr(1);
-		if(!(methodName in this)) {
+		const methodName = "formatInFor" + template.substr(0, 1).toUpperCase() + template.substr(1);
+		if (!(methodName in this)) {
 			throw new Error("Required method AuthSystem#<" + methodName + ">");
 		}
 		return this[methodName](parameters, settings);
@@ -168,8 +176,8 @@ class AuthSystem {
 
 	formatOutByTemplate(template, result, parameters, settings) {
 		trace("format_result_by_template", template);
-		const methodName = "formatOutFor" + template.substr(0,1).toUpperCase() + template.substr(1);
-		if(!(methodName in this)) {
+		const methodName = "formatOutFor" + template.substr(0, 1).toUpperCase() + template.substr(1);
+		if (!(methodName in this)) {
 			throw new Error("Required method AuthSystem#<" + methodName + ">");
 		}
 		return this[methodName](result, parameters, settings);
@@ -195,10 +203,13 @@ class AuthSystem {
 		debug("[SQL] " + query);
 		return new Promise((ok, fail) => {
 			this.connection.query(query, (error, data, fields) => {
-				if(error) {
+				if (error) {
 					return fail(error);
 				}
-				return ok({ data, fields });
+				return ok({
+					data,
+					fields
+				});
 			});
 		});
 	}
@@ -214,11 +225,11 @@ class AuthSystem {
 		try {
 			// get from cache, if any!
 			const hasCached = await this.gotFromCache(template, parameters, settings);
-			if(typeof hasCached !== "undefined") {
+			if (typeof hasCached !== "undefined") {
 				return hasCached;
 			}
 			const queryTemplate = this.queries[template];
-			if(typeof queryTemplate !== "string") {
+			if (typeof queryTemplate !== "string") {
 				throw new Error("Query MySQLAuth#queries.<" + queryTemplate + "> is of type " + typeof(queryTemplate) + " instead of <string>");
 			}
 			const queryParameters = await this.formatInByTemplate(template, parameters, settings);
@@ -226,14 +237,14 @@ class AuthSystem {
 			let querySource;
 			try {
 				querySource = ejs.render(queryTemplate, queryParameters, {});
-			} catch(error) {
+			} catch (error) {
 				debugError("Error rendering <" + template + ">:", error);
 				throw error;
 			}
 			const result = await this.$query(querySource);
 			const formattedResult = await this.formatOutByTemplate(template, result, parameters, settings);
 			return formattedResult;
-		} catch(error) {
+		} catch (error) {
 			debugError("Error querying <" + template + ">:", error);
 			throw error;
 		}
@@ -241,7 +252,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.assignPrivilegeToCommunity(...)`
+	 * ### `authSystem.assignPrivilegeToCommunity(wherePrivilege:Object, whereCommunity:Object):Promise<?>`
 	 * 
 	 */
 	assignPrivilegeToCommunity(...args) {
@@ -250,7 +261,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.assignPrivilegeToUser(...)`
+	 * ### `authSystem.assignPrivilegeToUser(wherePrivilege:Object, whereUser:Object):Promise<?>`
 	 * 
 	 */
 	assignPrivilegeToUser(...args) {
@@ -259,7 +270,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.assignUserToCommunity(...)`
+	 * ### `authSystem.assignUserToCommunity(whereUser:Object, whereCommunity:Object):Promise<?>`
 	 * 
 	 */
 	assignUserToCommunity(...args) {
@@ -268,27 +279,27 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.authenticate(...)`
+	 * ### `authSystem.authenticate(token:String):Promise<?>`
 	 * 
 	 */
 	authenticate(...args) {
 		return this.queryByTemplate("authenticate", args);
 	}
 
-	can(...args) {
-		return this.queryByTemplate("can", args);
+	async can(token, wherePrivilege) {
+
 	}
 
-	cannot(...args) {
-		return this.queryByTemplate("cannot", args);
+	async cannot(token, wherePrivilege) {
+
 	}
 
-	canMultiple(...args) {
-		return this.queryByTemplate("canMultiple", args);
+	async canMultiple(token, wherePrivilege) {
+
 	}
 
-	cannotMultiple(...args) {
-		return this.queryByTemplate("cannotMultiple", args);
+	async cannotMultiple(token, wherePrivilege) {
+
 	}
 
 	changePassword(...args) {
@@ -297,7 +308,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.checkUserUnicity(...)`
+	 * ### `authSystem.checkUserUnicity(...):Promise<?>`
 	 * 
 	 */
 	checkUserUnicity(...args) {
@@ -306,7 +317,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.confirmUser(...)`
+	 * ### `authSystem.confirmUser(whereUser:Object):Promise<?>`
 	 * 
 	 */
 	confirmUser(...args) {
@@ -315,7 +326,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.createTables(...)`
+	 * ### `authSystem.createTables():Promise<?>`
 	 * 
 	 */
 	createTables(...args) {
@@ -324,7 +335,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.deleteCommunity(...)`
+	 * ### `authSystem.deleteCommunity(whereCommunity:Object):Promise<?>`
 	 * 
 	 */
 	deleteCommunity(...args) {
@@ -333,7 +344,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.deleteUser(...)`
+	 * ### `authSystem.deleteUser(whereUser:Object):Promise<?>`
 	 * 
 	 */
 	deleteUser(...args) {
@@ -342,7 +353,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.deletePrivilege(...)`
+	 * ### `authSystem.deletePrivilege(wherePrivilege:Object):Promise<?>`
 	 * 
 	 */
 	deletePrivilege(...args) {
@@ -351,7 +362,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.deleteTables(...)`
+	 * ### `authSystem.deleteTables():Promise<?>`
 	 * 
 	 */
 	deleteTables(...args) {
@@ -360,7 +371,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.deleteUnconfirmedUser(...)`
+	 * ### `authSystem.deleteUnconfirmedUser(whereUnconfirmedUser:Object):Promise<?>`
 	 * 
 	 */
 	deleteUnconfirmedUser(...args) {
@@ -369,7 +380,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.findUnconfirmedUser(...)`
+	 * ### `authSystem.findUnconfirmedUser(whereUnconfirmedUser:Object):Promise<?>`
 	 * 
 	 */
 	findUnconfirmedUser(...args) {
@@ -378,7 +389,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.findCommunity(...)`
+	 * ### `authSystem.findCommunity(whereCommunity:Object):Promise<?>`
 	 * 
 	 */
 	findCommunity(...args) {
@@ -387,7 +398,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.findPrivilege(...)`
+	 * ### `authSystem.findPrivilege(wherePrivilege:Object):Promise<?>`
 	 * 
 	 */
 	findPrivilege(...args) {
@@ -396,7 +407,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.findUser(...)`
+	 * ### `authSystem.findUser(whereUser:Object):Promise<?>`
 	 * 
 	 */
 	findUser(...args) {
@@ -405,7 +416,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.registerUnconfirmedUser(...)`
+	 * ### `authSystem.registerUnconfirmedUser(user:Object):Promise<?>`
 	 * 
 	 */
 	registerUnconfirmedUser(...args) {
@@ -414,26 +425,30 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.async login(...)`
+	 * ### `authSystem.login(user:Object):Promise<?>`
 	 * 
 	 */
 	async login(userData) {
 		try {
 			const userDataInput = Object.assign({}, userData);
 			delete userDataInput.password;
-			const { data: foundUsers } = await this.findUser(userDataInput);
-			if(foundUsers.length !== 1) {
-				throw new Error("Login error: no <user> found by specified properties");
+			const {
+				data: foundUsers
+			} = await this.findUser(userDataInput);
+			if (foundUsers.length !== 1) {
+				throw new Error("Login error: No <user> found by specified properties");
 			}
 			const foundUser = foundUsers[0];
-			const { password } = userData;
+			const {
+				password
+			} = userData;
 			await new Promise((ok, fail) => {
 				bcrypt.compare(password, foundUser.password, (error, isEqual) => {
-					if(error) {
+					if (error) {
 						return fail(error);
 					}
-					if(!isEqual) {
-						return fail(new Error("Login error: property <password> is not correct"));
+					if (!isEqual) {
+						return fail(new Error("Login error: <password> is not correct for <" + password + ">"));
 					}
 					return ok(true);
 				});
@@ -442,16 +457,18 @@ class AuthSystem {
 				token: utils.generateToken(),
 				secret_token: utils.generateToken()
 			};
-			await this.queryByTemplate("login", [{id: foundUser.id}, sessionData]);
+			await this.queryByTemplate("login", [{
+				id: foundUser.id
+			}, sessionData]);
 			return await this.authenticate(sessionData);
-		} catch(error) {
+		} catch (error) {
 			debugError("Error on login", error);
 		}
 	}
 
 	/**
 	 * 
-	 * ### `authSystem.logout(...)`
+	 * ### `authSystem.logout(token:String):Promise<?>`
 	 * 
 	 */
 	logout(...args) {
@@ -460,25 +477,43 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.async refresh(...)`
+	 * ### `authSystem.refresh(whereSession:String):Promise<?>`
 	 * 
 	 */
-	async refresh(userData) {
+	async refresh(sessionData) {
 		try {
-			const sessionData = {
+			const newSessionData = {
 				token: utils.generateToken(),
 				secret_token: utils.generateToken()
 			};
-			await this.queryByTemplate("refresh", [userData, sessionData]);
-			return await this.authenticate(sessionData);
-		} catch(error) {
+			await this.queryByTemplate("refresh", [sessionData, newSessionData]);
+			return await this.authenticate(newSessionData);
+		} catch (error) {
 			debugError("Error on login", error);
 		}
 	}
 
 	/**
 	 * 
-	 * ### `authSystem.registerCommunity(...)`
+	 * ### `authSystem.refresh(whereUser:String):Promise<?>`
+	 * 
+	 */
+	async refreshByUser(whereUser) {
+		try {
+			const sessionData = {
+				token: utils.generateToken(),
+				secret_token: utils.generateToken()
+			};
+			await this.queryByTemplate("refreshByUser", [whereUser, sessionData]);
+			return await this.authenticate(sessionData);
+		} catch (error) {
+			debugError("Error on login", error);
+		}
+	}
+
+	/**
+	 * 
+	 * ### `authSystem.registerCommunity(community:Object):Promise<?>`
 	 * 
 	 */
 	registerCommunity(...args) {
@@ -487,7 +522,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.registerPrivilege(...)`
+	 * ### `authSystem.registerPrivilege(privilege:Object):Promise<?>`
 	 * 
 	 */
 	registerPrivilege(...args) {
@@ -500,7 +535,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.revokePrivilegeFromCommunity(...)`
+	 * ### `authSystem.revokePrivilegeFromCommunity(wherePrivilege:Object, whereCommunity:Object):Promise<?>`
 	 * 
 	 */
 	revokePrivilegeFromCommunity(...args) {
@@ -509,7 +544,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.revokePrivilegeFromUser(...)`
+	 * ### `authSystem.revokePrivilegeFromUser(wherePrivilege:Object, whereUser:Object):Promise<?>`
 	 * 
 	 */
 	revokePrivilegeFromUser(...args) {
@@ -518,7 +553,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.revokeUserFromCommunity(...)`
+	 * ### `authSystem.revokeUserFromCommunity(whereUser:Object, whereCommunity:Object):Promise<?>`
 	 * 
 	 */
 	revokeUserFromCommunity(...args) {
@@ -527,95 +562,113 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.async unregisterCommunity(...)`
+	 * ### `authSystem.unregisterCommunity(whereCommunity:Object):Promise<?>`
 	 * 
 	 */
 	async unregisterCommunity(communityDetails) {
 		try {
 			let id = undefined;
-			if(!("id" in communityDetails)) {
-				const { data: matched } = await this.findCommunity(communityDetails);
-				if(matched.length === 0) {
+			if (!("id" in communityDetails)) {
+				const {
+					data: matched
+				} = await this.findCommunity(communityDetails);
+				if (matched.length === 0) {
 					throw new Error("Required 1 match minimum to <unregisterCommunity>");
 				}
 				id = matched[0].id;
 			} else {
 				id = communityDetails.id;
 			}
-			if(typeof id === "undefined") {
+			if (typeof id === "undefined") {
 				throw new Error("Property <id> of argument 1 must be a valid ID");
 			}
 			let output = [];
-			output.push(await this.queryByTemplate("unregisterCommunity", [{ id }]));
-			output.push(await this.queryByTemplate("deleteCommunity", [{ id }]));
+			output.push(await this.queryByTemplate("unregisterCommunity", [{
+				id
+			}]));
+			output.push(await this.queryByTemplate("deleteCommunity", [{
+				id
+			}]));
 			return output;
-		} catch(error) {
+		} catch (error) {
 			debugError("Error on unregisterCommunity:", error);
 		}
 	}
 
 	/**
 	 * 
-	 * ### `authSystem.async unregisterPrivilege(...)`
+	 * ### `authSystem.unregisterPrivilege(wherePrivilege:Object):Promise<?>`
 	 * 
 	 */
 	async unregisterPrivilege(privilegeDetails) {
 		try {
 			let id = undefined;
-			if(!("id" in privilegeDetails)) {
+			if (!("id" in privilegeDetails)) {
 				const privilegesData = await this.findPrivilege(privilegeDetails);
-				const { data: matched } = privilegesData;
-				if(matched.length === 0) {
+				const {
+					data: matched
+				} = privilegesData;
+				if (matched.length === 0) {
 					throw new Error("Required 1 match minimum to <unregisterPrivilege>");
 				}
 				id = matched[0].id;
 			} else {
 				id = privilegeDetails.id;
 			}
-			if(typeof id === "undefined") {
+			if (typeof id === "undefined") {
 				throw new Error("Property <id> of argument 1 must be a valid ID");
 			}
 			let output = [];
-			output.push(await this.queryByTemplate("unregisterPrivilege", [{ id }]));
-			output.push(await this.queryByTemplate("deletePrivilege", [{ id }]));
+			output.push(await this.queryByTemplate("unregisterPrivilege", [{
+				id
+			}]));
+			output.push(await this.queryByTemplate("deletePrivilege", [{
+				id
+			}]));
 			return output;
-		} catch(error) {
+		} catch (error) {
 			debugError("Error on unregisterPrivilege:", error);
 		}
 	}
 
 	/**
 	 * 
-	 * ### `authSystem.async unregisterUser(...)`
+	 * ### `authSystem.unregisterUser(whereUser:Object):Promise<?>`
 	 * 
 	 */
 	async unregisterUser(userDetails) {
 		try {
 			let id = undefined;
-			if(!("id" in userDetails)) {
-				const { data: matched } = await this.findUser(userDetails);
-				if(matched.length === 0) {
+			if (!("id" in userDetails)) {
+				const {
+					data: matched
+				} = await this.findUser(userDetails);
+				if (matched.length === 0) {
 					throw new Error("Required 1 match minimum to <unregisterUser>");
 				}
 				id = matched[0].id;
 			} else {
 				id = userDetails.id;
 			}
-			if(typeof id === "undefined") {
+			if (typeof id === "undefined") {
 				throw new Error("Property <id> of argument 1 must be a valid ID");
 			}
 			let output = [];
-			output.push(await this.queryByTemplate("unregisterUser", [{ id }]));
-			output.push(await this.queryByTemplate("deleteUser", [{ id }]));
+			output.push(await this.queryByTemplate("unregisterUser", [{
+				id
+			}]));
+			output.push(await this.queryByTemplate("deleteUser", [{
+				id
+			}]));
 			return output;
-		} catch(error) {
+		} catch (error) {
 			debugError("Error on unregisterUser:", error);
 		}
 	}
 
 	/**
 	 * 
-	 * ### `authSystem.updateCommunity(...)`
+	 * ### `authSystem.updateCommunity(whereCommunity:Object, values:Object):Promise<?>`
 	 * 
 	 */
 	updateCommunity(...args) {
@@ -624,7 +677,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.updatePrivilege(...)`
+	 * ### `authSystem.updatePrivilege(wherePrivilege:Object, values:Object):Promise<?>`
 	 * 
 	 */
 	updatePrivilege(...args) {
@@ -633,7 +686,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.updateUser(...)`
+	 * ### `authSystem.updateUser(whereUser:Object, values:Object):Promise<?>`
 	 * 
 	 */
 	updateUser(...args) {
@@ -641,166 +694,255 @@ class AuthSystem {
 	}
 
 	formatInForAssignPrivilegeToCommunity(args, settings) {
-		return this.createStandardTemplateParameters({ args });
+		return this.createStandardTemplateParameters({
+			args
+		});
 	}
 
 	formatInForAssignPrivilegeToUser(args, settings) {
-		return this.createStandardTemplateParameters({ args });
+		return this.createStandardTemplateParameters({
+			args
+		});
 	}
 
 	formatInForAssignUserToCommunity(args, settings) {
-		return this.createStandardTemplateParameters({ args });
+		return this.createStandardTemplateParameters({
+			args
+		});
 	}
 
 	formatInForAuthenticate(args, settings) {
-		return this.createStandardTemplateParameters({ args });
+		return this.createStandardTemplateParameters({
+			args
+		});
 	}
 
 	formatInForCan(args, settings) {
-		return this.createStandardTemplateParameters({ args });
+		return this.createStandardTemplateParameters({
+			args
+		});
 	}
 
 	formatInForCannot(args, settings) {
-		return this.createStandardTemplateParameters({ args });
+		return this.createStandardTemplateParameters({
+			args
+		});
 	}
 
 	formatInForCanMultiple(args, settings) {
-		return this.createStandardTemplateParameters({ args });
+		return this.createStandardTemplateParameters({
+			args
+		});
 	}
 
 	formatInForCannotMultiple(args, settings) {
-		return this.createStandardTemplateParameters({ args });
+		return this.createStandardTemplateParameters({
+			args
+		});
 	}
 
 	formatInForChangePassword(args, settings) {
-		return this.createStandardTemplateParameters({ args });
+		return this.createStandardTemplateParameters({
+			args
+		});
 	}
 
 	formatInForCheckUserUnicity(args, settings) {
-		return this.createStandardTemplateParameters({ args });
+		return this.createStandardTemplateParameters({
+			args
+		});
 	}
 
 	formatInForConfirmUser(args, settings) {
-		return this.createStandardTemplateParameters({ args });
+		return this.createStandardTemplateParameters({
+			args
+		});
 	}
 
 	formatInForCreateTables(args, settings) {
-		return this.createStandardTemplateParameters({ args });
+		return this.createStandardTemplateParameters({
+			args
+		});
 	}
 
 	formatInForDeleteTables(args, settings) {
-		return this.createStandardTemplateParameters({ args });
+		return this.createStandardTemplateParameters({
+			args
+		});
 	}
 
 	formatInForDeleteUser(args, settings) {
-		return this.createStandardTemplateParameters({ args });
+		return this.createStandardTemplateParameters({
+			args
+		});
 	}
 
 	formatInForDeleteCommunity(args, settings) {
-		return this.createStandardTemplateParameters({ args });
+		return this.createStandardTemplateParameters({
+			args
+		});
 	}
 
 	formatInForDeletePrivilege(args, settings) {
-		return this.createStandardTemplateParameters({ args });
+		return this.createStandardTemplateParameters({
+			args
+		});
 	}
 
 	formatInForDeleteUnconfirmedUser(args, settings) {
-		return this.createStandardTemplateParameters({ args });
+		return this.createStandardTemplateParameters({
+			args
+		});
 	}
 
 	formatInForFindUnconfirmedUser(args, settings) {
-		return this.createStandardTemplateParameters({ args });
+		return this.createStandardTemplateParameters({
+			args
+		});
 	}
 
 	formatInForFindUser(args, settings) {
-		return this.createStandardTemplateParameters({ args });
+		return this.createStandardTemplateParameters({
+			args
+		});
 	}
 
 	formatInForFindCommunity(args, settings) {
-		return this.createStandardTemplateParameters({ args });
+		return this.createStandardTemplateParameters({
+			args
+		});
 	}
 
 	formatInForFindPrivilege(args, settings) {
-		return this.createStandardTemplateParameters({ args });
+		return this.createStandardTemplateParameters({
+			args
+		});
 	}
 
 	async formatInForRegisterUnconfirmedUser(args, settings) {
-		const [userDetails] = args;
-		if(!("password" in userDetails)) {
-			throw new Error("Required property <password> in argument 1 to <formatInForRegisterUnconfirmedUser>");
+		try {
+			const [userDetails] = args;
+			if (!("password" in userDetails)) {
+				throw new Error("Required property <password> in argument 1 to <formatInForRegisterUnconfirmedUser>");
+			}
+			if (typeof(userDetails.password) !== "string") {
+				throw new Error("Required property <password> in argument 1 to be a string to <formatInForRegisterUnconfirmedUser>");
+			}
+			if (userDetails.password.length < 6) {
+				throw new Error("Required property <password> in argument 1 to be a string of 6 characters minimum to <formatInForRegisterUnconfirmedUser>");
+			}
+			if (userDetails.password.length > 20) {
+				console.log(userDetails.password.length);
+				throw new Error("Required property <password> in argument 1 to be a string of 20 characters maximum to <formatInForRegisterUnconfirmedUser>");
+			}
+			const {
+				data: [{
+					total: usernamesMatched
+				}]
+			} = await this.$query("SELECT COUNT(*) AS 'total' FROM $auth$user LEFT JOIN $auth$unconfirmed_user ON 1=1 WHERE $auth$user.name = " + SQL.escape(userDetails.name) + " OR $auth$unconfirmed_user.name = " + SQL.escape(userDetails.name) + ";");
+			if (usernamesMatched !== 0) {
+				throw new Error("Required property <name> to be unique to register a user");
+			}
+			const password = await this.encryptPassword(userDetails.password, 10);
+			return this.createStandardTemplateParameters({
+				args: [Object.assign({}, userDetails, {
+					password
+				})]
+			});
+		} catch (error) {
+			debugError("Error in <formatInForRegisterUnconfirmedUser>:", error);
+			throw error;
 		}
-		if(typeof(userDetails.password) !== "string") {
-			throw new Error("Required property <password> in argument 1 to be a string to <formatInForRegisterUnconfirmedUser>");
-		}
-		if(userDetails.password.length < 6) {
-			throw new Error("Required property <password> in argument 1 to be a string of 6 characters minimum to <formatInForRegisterUnconfirmedUser>");
-		}
-		if(userDetails.password.length > 20) {
-			console.log(userDetails.password.length);
-			throw new Error("Required property <password> in argument 1 to be a string of 20 characters maximum to <formatInForRegisterUnconfirmedUser>");
-		}
-		args[0].password = await this.encryptPassword(userDetails.password, 10);
-		return this.createStandardTemplateParameters({ args });
 	}
 
-	async formatInForLogin(args, settings) {
-		return this.createStandardTemplateParameters({ args });
+	formatInForLogin(args, settings) {
+		return this.createStandardTemplateParameters({
+			args
+		});
 	}
 
 	formatInForLogout(args, settings) {
-		return this.createStandardTemplateParameters({ args });
+		return this.createStandardTemplateParameters({
+			args
+		});
 	}
 
 	formatInForRefresh(args, settings) {
-		return this.createStandardTemplateParameters({ args });
+		return this.createStandardTemplateParameters({
+			args
+		});
 	}
 
 	formatInForRegisterCommunity(args, settings) {
-		return this.createStandardTemplateParameters({ args });
+		return this.createStandardTemplateParameters({
+			args
+		});
 	}
 
 	formatInForRegisterPrivilege(args, settings) {
-		return this.createStandardTemplateParameters({ args });
+		return this.createStandardTemplateParameters({
+			args
+		});
 	}
 
 	formatInForResetSchema(args, settings) {
-		return this.createStandardTemplateParameters({ args });
+		return this.createStandardTemplateParameters({
+			args
+		});
 	}
 
 	formatInForRevokePrivilegeFromCommunity(args, settings) {
-		return this.createStandardTemplateParameters({ args });
+		return this.createStandardTemplateParameters({
+			args
+		});
 	}
 
 	formatInForRevokePrivilegeFromUser(args, settings) {
-		return this.createStandardTemplateParameters({ args });
+		return this.createStandardTemplateParameters({
+			args
+		});
 	}
 
 	formatInForRevokeUserFromCommunity(args, settings) {
-		return this.createStandardTemplateParameters({ args });
+		return this.createStandardTemplateParameters({
+			args
+		});
 	}
 
 	formatInForUnregisterCommunity(args, settings) {
-		return this.createStandardTemplateParameters({ args });
+		return this.createStandardTemplateParameters({
+			args
+		});
 	}
 
 	formatInForUnregisterPrivilege(args, settings) {
-		return this.createStandardTemplateParameters({ args });
+		return this.createStandardTemplateParameters({
+			args
+		});
 	}
 
 	formatInForUnregisterUser(args, settings) {
-		return this.createStandardTemplateParameters({ args });
+		return this.createStandardTemplateParameters({
+			args
+		});
 	}
 
 	formatInForUpdateCommunity(args, settings) {
-		return this.createStandardTemplateParameters({ args });
+		return this.createStandardTemplateParameters({
+			args
+		});
 	}
 
 	formatInForUpdatePrivilege(args, settings) {
-		return this.createStandardTemplateParameters({ args });
+		return this.createStandardTemplateParameters({
+			args
+		});
 	}
 
 	formatInForUpdateUser(args, settings) {
-		return this.createStandardTemplateParameters({ args });
+		return this.createStandardTemplateParameters({
+			args
+		});
 	}
 
 	formatOutForAssignPrivilegeToCommunity(result, settings) {
@@ -817,7 +959,7 @@ class AuthSystem {
 
 	formatOutForAuthenticate(result, settings) {
 		const queryData = result.data;
-		if(queryData === null || queryData.length === 0) {
+		if (queryData === null || queryData.length === 0) {
 			throw new Error("Authentication error: provided credentials were not matched");
 		}
 		const sessionData = {
@@ -826,15 +968,19 @@ class AuthSystem {
 			privilege: utils.rowsToObject(queryData, "privilege", "id"),
 			session: utils.rowsToObject(queryData, "session", "id"),
 		};
-		if(sessionData.user.length !== 1) {
+		if (sessionData.user.length !== 1) {
 			throw new Error("Authentication error: no <user> found for provided credentials");
 		}
-		if(sessionData.session.length !== 1) {
+		if (sessionData.session.length !== 1) {
 			throw new Error("Authentication error: no <session> found for provided credentials");
 		}
 		sessionData.user = sessionData.user[0];
 		sessionData.session = sessionData.session[0];
-		return { data: sessionData, originalData: result, fields: result.fields };
+		return {
+			data: sessionData,
+			originalData: result,
+			fields: result.fields
+		};
 	}
 
 	formatOutForCan(result, settings) {
@@ -890,7 +1036,7 @@ class AuthSystem {
 	}
 
 	formatOutForFindUnconfirmedUser(result, settings) {
-		if(result.length === 0) {
+		if (result.length === 0) {
 			throw new Error("No unconfirmed user found");
 		} else {
 			return result[0];

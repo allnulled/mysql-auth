@@ -10,7 +10,7 @@ describe("AuthClient class", function() {
 
 	before(function(done) {
 		authSystem = MySQLAuth.create({
-			debug: false,
+			debug: true,
 			connectionSettings: {
 				user: "test",
 				password: "test",
@@ -26,7 +26,7 @@ describe("AuthClient class", function() {
 	});
 
 	after(function(done) {
-		authSystem.connection.end();
+		// authSystem.connection.end();
 		done();
 	})
 
@@ -242,6 +242,59 @@ describe("AuthClient class", function() {
 			expect(isPassword).to.equal(true);
 		} catch(error) {
 			console.log(error);
+		}
+	});
+
+	it("checks if a user has a privilege", async () => {
+		try {
+			const userData = { name: "user ten", password: "password10", email: "userten@domain.com" };
+			await authClient.registerUnconfirmedUser(userData);
+			await authClient.confirmUser({ name: userData.name });
+			const { data: sessionData } = await authClient.login({ name: userData.name, password: userData.password });
+			await authClient.registerPrivilege({ name: "run", description: "" });
+			await authClient.registerPrivilege({ name: "jump", description: "" });
+			await authClient.registerPrivilege({ name: "feel", description: "" });
+			await authClient.registerPrivilege({ name: "see", description: "" });
+			await authClient.registerPrivilege({ name: "hear", description: "" });
+			await authClient.registerPrivilege({ name: "speak", description: "" });
+			await authClient.assignPrivilegeToUser({name: "run"}, {id: sessionData.user.id});
+			await authClient.assignPrivilegeToUser({name: "jump"}, {id: sessionData.user.id});
+			await authClient.assignPrivilegeToUser({name: "feel"}, {id: sessionData.user.id});
+			await authClient.assignPrivilegeToCommunity({name: "see"}, {id: 5});
+			await authClient.assignPrivilegeToCommunity({name: "hear"}, {id: 6});
+			await authClient.assignPrivilegeToCommunity({name: "speak"}, {id: 7});
+			await authClient.assignUserToCommunity({ id: sessionData.user.id }, { id: 5 });
+			await authClient.assignUserToCommunity({ id: sessionData.user.id }, { id: 6 });
+			const canRun = await authClient.can(sessionData.session.token, "run");
+			const canJump = await authClient.can(sessionData.session.token, "jump");
+			const canFeel = await authClient.can(sessionData.session.token, "feel");
+			const canSee = await authClient.can(sessionData.session.token, "see");
+			const canHear = await authClient.can(sessionData.session.token, "hear");
+			const canSpeak = await authClient.can(sessionData.session.token, "speak");
+			// await nodelive.editor({ s: sessionData, a: authClient })
+			expect(canRun).to.equal(true);
+			expect(canJump).to.equal(true);
+			expect(canFeel).to.equal(true);
+			expect(canSee).to.equal(true);
+			expect(canHear).to.equal(true);
+			expect(canSpeak).to.equal(false);
+		} catch(error) {
+			throw error;
+		}
+	});
+
+	it.skip("(throws errors) will not register an unconfirmed user if the name already exists", async () => {
+		try {
+			await authClient.registerUnconfirmedUser({ name: "user one", password: "xxxxxxxx", email: "user_one@domain.com" });
+			await authClient.registerUnconfirmedUser({ name: "user two", password: "xxxxxxxx", email: "user_two@domain.com" });
+			await authClient.registerUnconfirmedUser({ name: "user three", password: "xxxxxxxx", email: "user_three@domain.com" });
+			try {
+				await authClient.registerUnconfirmedUser({ name: "user one", password: "xxxxxxxx", email: "user_one@domain.com" });
+			} catch(error) {
+				expect(error.message).to.equal("Required property <name> to be unique to register a user");
+			}
+		} catch(error) {
+			throw error;
 		}
 	});
 
