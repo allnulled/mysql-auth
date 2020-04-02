@@ -85,6 +85,8 @@ await auth1.assignPrivilegeToCommunity({ name: "vote" }, { name: "humans" });
 ```
 
 
+## Reference
+
 
 
 ##### `const AuthSystem = require("mysql-auth")`
