@@ -19,7 +19,7 @@ global.dd = function(...args) {
 
 /**
  * 
- * ### const AuthSystem = require("mysql-auth");
+ * ##### `const AuthSystem = require("mysql-auth")`
  * 
  * 
  * 
@@ -28,7 +28,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `const authSystem = AuthSystem.create(...)`
+	 * ##### `const authSystem = AuthSystem.create(...)`
 	 * 
 	 * 
 	 */
@@ -137,7 +137,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.initialize():Promise<?>`
+	 * ##### `authSystem.initialize():Promise<?>`
 	 * 
 	 * @description Initializes the `auth` system:
 	 * 
@@ -252,7 +252,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.assignPrivilegeToCommunity(wherePrivilege:Object, whereCommunity:Object):Promise<?>`
+	 * ##### `authSystem.assignPrivilegeToCommunity(wherePrivilege:Object, whereCommunity:Object):Promise<?>`
 	 * 
 	 */
 	assignPrivilegeToCommunity(...args) {
@@ -261,7 +261,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.assignPrivilegeToUser(wherePrivilege:Object, whereUser:Object):Promise<?>`
+	 * ##### `authSystem.assignPrivilegeToUser(wherePrivilege:Object, whereUser:Object):Promise<?>`
 	 * 
 	 */
 	assignPrivilegeToUser(...args) {
@@ -270,7 +270,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.assignUserToCommunity(whereUser:Object, whereCommunity:Object):Promise<?>`
+	 * ##### `authSystem.assignUserToCommunity(whereUser:Object, whereCommunity:Object):Promise<?>`
 	 * 
 	 */
 	assignUserToCommunity(...args) {
@@ -279,7 +279,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.authenticate(token:String):Promise<?>`
+	 * ##### `authSystem.authenticate(token:String):Promise<?>`
 	 * 
 	 */
 	authenticate(...args) {
@@ -308,7 +308,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.checkUserUnicity(...):Promise<?>`
+	 * ##### `authSystem.checkUserUnicity(...):Promise<?>`
 	 * 
 	 */
 	checkUserUnicity(...args) {
@@ -317,7 +317,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.confirmUser(whereUser:Object):Promise<?>`
+	 * ##### `authSystem.confirmUser(whereUser:Object):Promise<?>`
 	 * 
 	 */
 	confirmUser(...args) {
@@ -326,7 +326,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.createTables():Promise<?>`
+	 * ##### `authSystem.createTables():Promise<?>`
 	 * 
 	 */
 	createTables(...args) {
@@ -335,7 +335,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.deleteCommunity(whereCommunity:Object):Promise<?>`
+	 * ##### `authSystem.deleteCommunity(whereCommunity:Object):Promise<?>`
 	 * 
 	 */
 	deleteCommunity(...args) {
@@ -344,7 +344,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.deleteUser(whereUser:Object):Promise<?>`
+	 * ##### `authSystem.deleteUser(whereUser:Object):Promise<?>`
 	 * 
 	 */
 	deleteUser(...args) {
@@ -353,7 +353,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.deletePrivilege(wherePrivilege:Object):Promise<?>`
+	 * ##### `authSystem.deletePrivilege(wherePrivilege:Object):Promise<?>`
 	 * 
 	 */
 	deletePrivilege(...args) {
@@ -362,7 +362,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.deleteTables():Promise<?>`
+	 * ##### `authSystem.deleteTables():Promise<?>`
 	 * 
 	 */
 	deleteTables(...args) {
@@ -371,7 +371,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.deleteUnconfirmedUser(whereUnconfirmedUser:Object):Promise<?>`
+	 * ##### `authSystem.deleteUnconfirmedUser(whereUnconfirmedUser:Object):Promise<?>`
 	 * 
 	 */
 	deleteUnconfirmedUser(...args) {
@@ -380,7 +380,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.findUnconfirmedUser(whereUnconfirmedUser:Object):Promise<?>`
+	 * ##### `authSystem.findUnconfirmedUser(whereUnconfirmedUser:Object):Promise<?>`
 	 * 
 	 */
 	findUnconfirmedUser(...args) {
@@ -389,7 +389,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.findCommunity(whereCommunity:Object):Promise<?>`
+	 * ##### `authSystem.findCommunity(whereCommunity:Object):Promise<?>`
 	 * 
 	 */
 	findCommunity(...args) {
@@ -398,7 +398,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.findPrivilege(wherePrivilege:Object):Promise<?>`
+	 * ##### `authSystem.findPrivilege(wherePrivilege:Object):Promise<?>`
 	 * 
 	 */
 	findPrivilege(...args) {
@@ -407,7 +407,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.findUser(whereUser:Object):Promise<?>`
+	 * ##### `authSystem.findUser(whereUser:Object):Promise<?>`
 	 * 
 	 */
 	findUser(...args) {
@@ -416,7 +416,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.registerUnconfirmedUser(user:Object):Promise<?>`
+	 * ##### `authSystem.registerUnconfirmedUser(user:Object):Promise<?>`
 	 * 
 	 */
 	registerUnconfirmedUser(...args) {
@@ -425,7 +425,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.login(user:Object):Promise<?>`
+	 * ##### `authSystem.login(user:Object):Promise<?>`
 	 * 
 	 */
 	async login(userData) {
@@ -468,7 +468,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.logout(token:String):Promise<?>`
+	 * ##### `authSystem.logout(token:String):Promise<?>`
 	 * 
 	 */
 	logout(...args) {
@@ -477,7 +477,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.refresh(whereSession:String):Promise<?>`
+	 * ##### `authSystem.refresh(whereSession:String):Promise<?>`
 	 * 
 	 */
 	async refresh(sessionData) {
@@ -495,7 +495,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.refresh(whereUser:String):Promise<?>`
+	 * ##### `authSystem.refresh(whereUser:String):Promise<?>`
 	 * 
 	 */
 	async refreshByUser(whereUser) {
@@ -513,7 +513,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.registerCommunity(community:Object):Promise<?>`
+	 * ##### `authSystem.registerCommunity(community:Object):Promise<?>`
 	 * 
 	 */
 	registerCommunity(...args) {
@@ -522,7 +522,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.registerPrivilege(privilege:Object):Promise<?>`
+	 * ##### `authSystem.registerPrivilege(privilege:Object):Promise<?>`
 	 * 
 	 */
 	registerPrivilege(...args) {
@@ -535,7 +535,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.revokePrivilegeFromCommunity(wherePrivilege:Object, whereCommunity:Object):Promise<?>`
+	 * ##### `authSystem.revokePrivilegeFromCommunity(wherePrivilege:Object, whereCommunity:Object):Promise<?>`
 	 * 
 	 */
 	revokePrivilegeFromCommunity(...args) {
@@ -544,7 +544,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.revokePrivilegeFromUser(wherePrivilege:Object, whereUser:Object):Promise<?>`
+	 * ##### `authSystem.revokePrivilegeFromUser(wherePrivilege:Object, whereUser:Object):Promise<?>`
 	 * 
 	 */
 	revokePrivilegeFromUser(...args) {
@@ -553,7 +553,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.revokeUserFromCommunity(whereUser:Object, whereCommunity:Object):Promise<?>`
+	 * ##### `authSystem.revokeUserFromCommunity(whereUser:Object, whereCommunity:Object):Promise<?>`
 	 * 
 	 */
 	revokeUserFromCommunity(...args) {
@@ -562,7 +562,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.unregisterCommunity(whereCommunity:Object):Promise<?>`
+	 * ##### `authSystem.unregisterCommunity(whereCommunity:Object):Promise<?>`
 	 * 
 	 */
 	async unregisterCommunity(communityDetails) {
@@ -597,7 +597,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.unregisterPrivilege(wherePrivilege:Object):Promise<?>`
+	 * ##### `authSystem.unregisterPrivilege(wherePrivilege:Object):Promise<?>`
 	 * 
 	 */
 	async unregisterPrivilege(privilegeDetails) {
@@ -633,7 +633,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.unregisterUser(whereUser:Object):Promise<?>`
+	 * ##### `authSystem.unregisterUser(whereUser:Object):Promise<?>`
 	 * 
 	 */
 	async unregisterUser(userDetails) {
@@ -668,7 +668,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.updateCommunity(whereCommunity:Object, values:Object):Promise<?>`
+	 * ##### `authSystem.updateCommunity(whereCommunity:Object, values:Object):Promise<?>`
 	 * 
 	 */
 	updateCommunity(...args) {
@@ -677,7 +677,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.updatePrivilege(wherePrivilege:Object, values:Object):Promise<?>`
+	 * ##### `authSystem.updatePrivilege(wherePrivilege:Object, values:Object):Promise<?>`
 	 * 
 	 */
 	updatePrivilege(...args) {
@@ -686,7 +686,7 @@ class AuthSystem {
 
 	/**
 	 * 
-	 * ### `authSystem.updateUser(whereUser:Object, values:Object):Promise<?>`
+	 * ##### `authSystem.updateUser(whereUser:Object, values:Object):Promise<?>`
 	 * 
 	 */
 	updateUser(...args) {
