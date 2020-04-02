@@ -21,13 +21,6 @@ Still have to do some things.
 
 
 
-**Description**:  Initializes the `auth` system:
-
-  - creates a pool connection
-  - caches the query templates
-
-
-
 
 ##### `authSystem.assignPrivilegeToCommunity(wherePrivilege:Object, whereCommunity:Object):Promise<?>`
 
@@ -49,7 +42,32 @@ Still have to do some things.
 
 
 
-##### `authSystem.checkUserUnicity(...):Promise<?>`
+##### `authSystem.can(token:String, privilege:String):Promise<?>`
+
+
+
+
+##### `authSystem.cannot(token:String, privilege:String):Promise<?>`
+
+
+
+
+##### `authSystem.canMultiple(token:String, privilege:Array<String>):Promise<?>`
+
+
+
+
+##### `authSystem.cannotMultiple(token:String, privilege:Array<String>):Promise<?>`
+
+
+
+
+##### `authSystem.changePassword(oldPassword:String, newPassword:String):Promise<?>`
+
+
+
+
+##### `authSystem.checkUserUnicity(whereUser:Object):Promise<?>`
 
 
 

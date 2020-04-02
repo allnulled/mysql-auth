@@ -139,11 +139,6 @@ class AuthSystem {
 	 * 
 	 * ##### `authSystem.initialize():Promise<?>`
 	 * 
-	 * @description Initializes the `auth` system:
-	 * 
-	 *   - creates a pool connection
-	 *   - caches the query templates
-	 * 
 	 */
 	initialize() {
 		trace("initialize");
@@ -286,29 +281,54 @@ class AuthSystem {
 		return this.queryByTemplate("authenticate", args);
 	}
 
-	async can(token, wherePrivilege) {
+	/**
+	 * 
+	 * ##### `authSystem.can(token:String, privilege:String):Promise<?>`
+	 * 
+	 */
+	async can(token, privilege) {
 
 	}
 
-	async cannot(token, wherePrivilege) {
+	/**
+	 * 
+	 * ##### `authSystem.cannot(token:String, privilege:String):Promise<?>`
+	 * 
+	 */
+	async cannot(token, privilege) {
 
 	}
 
-	async canMultiple(token, wherePrivilege) {
+	/**
+	 * 
+	 * ##### `authSystem.canMultiple(token:String, privilege:Array<String>):Promise<?>`
+	 * 
+	 */
+	async canMultiple(token, privilege) {
 
 	}
 
-	async cannotMultiple(token, wherePrivilege) {
+	/**
+	 * 
+	 * ##### `authSystem.cannotMultiple(token:String, privilege:Array<String>):Promise<?>`
+	 * 
+	 */
+	async cannotMultiple(token, privilege) {
 
 	}
 
+	/**
+	 * 
+	 * ##### `authSystem.changePassword(oldPassword:String, newPassword:String):Promise<?>`
+	 * 
+	 */
 	changePassword(...args) {
 		return this.queryByTemplate("changePassword", args);
 	}
 
 	/**
 	 * 
-	 * ##### `authSystem.checkUserUnicity(...):Promise<?>`
+	 * ##### `authSystem.checkUserUnicity(whereUser:Object):Promise<?>`
 	 * 
 	 */
 	checkUserUnicity(...args) {
