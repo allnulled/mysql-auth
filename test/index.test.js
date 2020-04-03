@@ -48,6 +48,7 @@ describe("AuthClient class", function() {
 			// 1. INSERT UNCONFIRMED USER
 			const unconfirmedUserResponse = await authClient.registerUnconfirmedUser(userData);
 			const { data: [unconfirmedUser] } = await authClient.system.$query("SELECT * FROM $auth$unconfirmed_user WHERE name = 'username1';");
+			expect(typeof unconfirmedUser).to.equal("object");
 			expect(unconfirmedUser.name).to.equal("username1");
 			expect(unconfirmedUser.password).to.not.equal("password1");
 			expect(unconfirmedUser.email).to.equal("username1@email.com");
@@ -271,13 +272,14 @@ describe("AuthClient class", function() {
 			const canSee = await authClient.can(sessionData.session.token, "see");
 			const canHear = await authClient.can(sessionData.session.token, "hear");
 			const canSpeak = await authClient.can(sessionData.session.token, "speak");
-			// await nodelive.editor({ s: sessionData, a: authClient })
+			//await nodelive.editor({ s: sessionData, a: authClient })
 			expect(canRun).to.equal(true);
 			expect(canJump).to.equal(true);
 			expect(canFeel).to.equal(true);
 			expect(canSee).to.equal(true);
 			expect(canHear).to.equal(true);
 			expect(canSpeak).to.equal(false);
+
 		} catch(error) {
 			throw error;
 		}

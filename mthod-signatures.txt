@@ -1,0 +1,343 @@
+
+
+
+	/**
+	 * 
+	 * ##### `authSystem.assignPrivilegeToCommunity(wherePrivilege:Object, whereCommunity:Object):Promise<?>`
+	 * 
+	 */
+	assignPrivilegeToCommunity(...args) {
+		return this.onQuery("assignPrivilegeToCommunity", args);
+	}
+
+	/**
+	 * 
+	 * ##### `authSystem.assignPrivilegeToUser(wherePrivilege:Object, whereUser:Object):Promise<?>`
+	 * 
+	 */
+	assignPrivilegeToUser(...args) {
+		return this.onQuery("assignPrivilegeToUser", args);
+	}
+
+	/**
+	 * 
+	 * ##### `authSystem.assignUserToCommunity(whereUser:Object, whereCommunity:Object):Promise<?>`
+	 * 
+	 */
+	assignUserToCommunity(...args) {
+		return this.onQuery("assignUserToCommunity", args);
+	}
+
+	/**
+	 * 
+	 * ##### `authSystem.authenticate(token:String):Promise<?>`
+	 * 
+	 */
+	authenticate(...args) {
+		return this.onQuery("authenticate", args);
+	}
+
+	/**
+	 * 
+	 * ##### `authSystem.can(token:String, privilege:String):Promise<?>`
+	 * 
+	 */
+	async can(token, privilege) {
+		dd(this.sessionCache); // this.sessionCache[token]);
+		dd(token); // this.sessionCache[token]);
+	}
+
+	/**
+	 * 
+	 * ##### `authSystem.cannot(token:String, privilege:String):Promise<?>`
+	 * 
+	 */
+	async cannot(token, privilege) {
+
+	}
+
+	/**
+	 * 
+	 * ##### `authSystem.canMultiple(token:String, privilege:Array<String>):Promise<?>`
+	 * 
+	 */
+	async canMultiple(token, privilege) {
+
+	}
+
+	/**
+	 * 
+	 * ##### `authSystem.cannotMultiple(token:String, privilege:Array<String>):Promise<?>`
+	 * 
+	 */
+	async cannotMultiple(token, privilege) {
+
+	}
+
+	/**
+	 * 
+	 * ##### `authSystem.changePassword(oldPassword:String, newPassword:String):Promise<?>`
+	 * 
+	 */
+	changePassword(...args) {
+		return this.onQuery("changePassword", args);
+	}
+
+	/**
+	 * 
+	 * ##### `authSystem.checkUserUnicity(whereUser:Object):Promise<?>`
+	 * 
+	 */
+	checkUserUnicity(...args) {
+		return this.onQuery("checkUserUnicity", args);
+	}
+
+	/**
+	 * 
+	 * ##### `authSystem.confirmUser(whereUser:Object):Promise<?>`
+	 * 
+	 */
+	confirmUser(...args) {
+		return this.onQuery("confirmUser", args);
+	}
+
+	/**
+	 * 
+	 * ##### `authSystem.createTables():Promise<?>`
+	 * 
+	 */
+	createTables(...args) {
+		return this.onQuery("createTables", args);
+	}
+
+	/**
+	 * 
+	 * ##### `authSystem.deleteCommunity(whereCommunity:Object):Promise<?>`
+	 * 
+	 */
+	deleteCommunity(...args) {
+		return this.onQuery("deleteCommunity", args);
+	}
+
+	/**
+	 * 
+	 * ##### `authSystem.deleteUser(whereUser:Object):Promise<?>`
+	 * 
+	 */
+	deleteUser(...args) {
+		return this.onQuery("deleteUser", args);
+	}
+
+	/**
+	 * 
+	 * ##### `authSystem.deletePrivilege(wherePrivilege:Object):Promise<?>`
+	 * 
+	 */
+	deletePrivilege(...args) {
+		return this.onQuery("deletePrivilege", args);
+	}
+
+	/**
+	 * 
+	 * ##### `authSystem.deleteTables():Promise<?>`
+	 * 
+	 */
+	deleteTables(...args) {
+		return this.onQuery("deleteTables", args);
+	}
+
+	/**
+	 * 
+	 * ##### `authSystem.deleteUnconfirmedUser(whereUnconfirmedUser:Object):Promise<?>`
+	 * 
+	 */
+	deleteUnconfirmedUser(...args) {
+		return this.onQuery("deleteUnconfirmedUser", args);
+	}
+
+	/**
+	 * 
+	 * ##### `authSystem.findUnconfirmedUser(whereUnconfirmedUser:Object):Promise<?>`
+	 * 
+	 */
+	findUnconfirmedUser(...args) {
+		return this.onQuery("findUnconfirmedUser", args);
+	}
+
+	/**
+	 * 
+	 * ##### `authSystem.findCommunity(whereCommunity:Object):Promise<?>`
+	 * 
+	 */
+	findCommunity(...args) {
+		return this.onQuery("findCommunity", args);
+	}
+
+	/**
+	 * 
+	 * ##### `authSystem.findPrivilege(wherePrivilege:Object):Promise<?>`
+	 * 
+	 */
+	findPrivilege(...args) {
+		return this.onQuery("findPrivilege", args);
+	}
+
+	/**
+	 * 
+	 * ##### `authSystem.findUser(whereUser:Object):Promise<?>`
+	 * 
+	 */
+	findUser(...args) {
+		return this.onQuery("findUser", args);
+	}
+
+
+
+	/**
+	 * 
+	 * ##### `authSystem.login(user:Object):Promise<?>`
+	 * 
+	 */
+	async login(userData) {
+		
+	}
+
+	/**
+	 * 
+	 * ##### `authSystem.logout(token:String):Promise<?>`
+	 * 
+	 */
+	logout(...args) {
+		return this.onQuery("logout", args);
+	}
+
+	/**
+	 * 
+	 * ##### `authSystem.refresh(whereSession:String):Promise<?>`
+	 * 
+	 */
+	async refresh(sessionData) {
+
+	}
+
+	/**
+	 * 
+	 * ##### `authSystem.refresh(whereUser:String):Promise<?>`
+	 * 
+	 */
+	async refreshByUser(whereUser) {
+
+	}
+
+	/**
+	 * 
+	 * ##### `authSystem.registerCommunity(community:Object):Promise<?>`
+	 * 
+	 */
+	registerCommunity(...args) {
+		return this.onQuery("registerCommunity", args);
+	}
+
+	/**
+	 * 
+	 * ##### `authSystem.registerPrivilege(privilege:Object):Promise<?>`
+	 * 
+	 */
+	registerPrivilege(...args) {
+		return this.onQuery("registerPrivilege", args);
+	}
+
+	resetSchema(...args) {
+		return this.onQuery("resetSchema", args);
+	}
+
+	/**
+	 * 
+	 * ##### `authSystem.registerUnconfirmedUser(user:Object):Promise<?>`
+	 * 
+	 */
+	registerUnconfirmedUser(...args) {
+		return this.onQuery("registerUnconfirmedUser", args);
+	}
+
+	/**
+	 * 
+	 * ##### `authSystem.revokePrivilegeFromCommunity(wherePrivilege:Object, whereCommunity:Object):Promise<?>`
+	 * 
+	 */
+	revokePrivilegeFromCommunity(...args) {
+		return this.onQuery("revokePrivilegeFromCommunity", args);
+	}
+
+	/**
+	 * 
+	 * ##### `authSystem.revokePrivilegeFromUser(wherePrivilege:Object, whereUser:Object):Promise<?>`
+	 * 
+	 */
+	revokePrivilegeFromUser(...args) {
+		return this.onQuery("revokePrivilegeFromUser", args);
+	}
+
+	/**
+	 * 
+	 * ##### `authSystem.revokeUserFromCommunity(whereUser:Object, whereCommunity:Object):Promise<?>`
+	 * 
+	 */
+	revokeUserFromCommunity(...args) {
+		return this.onQuery("revokeUserFromCommunity", args);
+	}
+
+	/**
+	 * 
+	 * ##### `authSystem.unregisterCommunity(whereCommunity:Object):Promise<?>`
+	 * 
+	 */
+	async unregisterCommunity(communityDetails) {
+
+	}
+
+	/**
+	 * 
+	 * ##### `authSystem.unregisterPrivilege(wherePrivilege:Object):Promise<?>`
+	 * 
+	 */
+	async unregisterPrivilege(privilegeDetails) {
+
+	}
+
+	/**
+	 * 
+	 * ##### `authSystem.unregisterUser(whereUser:Object):Promise<?>`
+	 * 
+	 */
+	async unregisterUser(userDetails) {
+
+	}
+
+	/**
+	 * 
+	 * ##### `authSystem.updateCommunity(whereCommunity:Object, values:Object):Promise<?>`
+	 * 
+	 */
+	updateCommunity(...args) {
+		return this.onQuery("updateCommunity", args);
+	}
+
+	/**
+	 * 
+	 * ##### `authSystem.updatePrivilege(wherePrivilege:Object, values:Object):Promise<?>`
+	 * 
+	 */
+	updatePrivilege(...args) {
+		return this.onQuery("updatePrivilege", args);
+	}
+
+	/**
+	 * 
+	 * ##### `authSystem.updateUser(whereUser:Object, values:Object):Promise<?>`
+	 * 
+	 */
+	updateUser(...args) {
+		return this.onQuery("updateUser", args);
+	}
+
