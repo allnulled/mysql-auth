@@ -1,15 +1,8 @@
 /**
  * 
- * ##### `auth.updateCommunity()`
+ * -----
  * 
- * @class-method
- * @asynchronous
- * @parameter 
- * @parameter `one:String` - 
- * @parameter `two:String` - 
- * @throws `Error` - 
- * @returns `Promise<?>` - 
- * @description ...
+ * ##### `auth.updateCommunity()`
  * 
  */
 module.exports = function() {

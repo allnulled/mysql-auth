@@ -1,15 +1,8 @@
 /**
  * 
- * ##### `auth.findPrivilege()`
+ * -----
  * 
- * @class-method
- * @asynchronous
- * @parameter 
- * @parameter `one:String` - 
- * @parameter `two:String` - 
- * @throws `Error` - 
- * @returns `Promise<?>` - 
- * @description ...
+ * ##### `auth.findPrivilege()`
  * 
  */
 module.exports = function() {

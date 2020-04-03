@@ -1,15 +1,8 @@
 /**
  * 
- * ##### `auth.findUser()`
+ * -----
  * 
- * @class-method
- * @asynchronous
- * @parameter 
- * @parameter `one:String` - 
- * @parameter `two:String` - 
- * @throws `Error` - 
- * @returns `Promise<?>` - 
- * @description ...
+ * ##### `auth.findUser()`
  * 
  */
 module.exports = function() {

@@ -1,15 +1,8 @@
 /**
  * 
- * ##### `auth.checkUserUnicity()`
+ * -----
  * 
- * @class-method
- * @asynchronous
- * @parameter 
- * @parameter `one:String` - 
- * @parameter `two:String` - 
- * @throws `Error` - 
- * @returns `Promise<?>` - 
- * @description ...
+ * ##### `auth.checkUserUnicity()`
  * 
  */
 module.exports = function() {

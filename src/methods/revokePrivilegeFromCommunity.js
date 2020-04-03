@@ -1,15 +1,8 @@
 /**
  * 
- * ##### `auth.revokePrivilegeFromCommunity()`
+ * -----
  * 
- * @class-method
- * @asynchronous
- * @parameter 
- * @parameter `one:String` - 
- * @parameter `two:String` - 
- * @throws `Error` - 
- * @returns `Promise<?>` - 
- * @description ...
+ * ##### `auth.revokePrivilegeFromCommunity()`
  * 
  */
 module.exports = function() {

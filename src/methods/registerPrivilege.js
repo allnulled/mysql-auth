@@ -1,15 +1,8 @@
 /**
  * 
- * ##### `auth.registerPrivilege()`
+ * -----
  * 
- * @class-method
- * @asynchronous
- * @parameter 
- * @parameter `one:String` - 
- * @parameter `two:String` - 
- * @throws `Error` - 
- * @returns `Promise<?>` - 
- * @description ...
+ * ##### `auth.registerPrivilege()`
  * 
  */
 module.exports = function() {

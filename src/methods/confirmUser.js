@@ -1,15 +1,8 @@
 /**
  * 
- * ##### `auth.confirmUser()`
+ * -----
  * 
- * @class-method
- * @asynchronous
- * @parameter 
- * @parameter `one:String` - 
- * @parameter `two:String` - 
- * @throws `Error` - 
- * @returns `Promise<?>` - 
- * @description ...
+ * ##### `auth.confirmUser()`
  * 
  */
 module.exports = function() {

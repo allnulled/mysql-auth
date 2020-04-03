@@ -1,15 +1,8 @@
 /**
  * 
- * ##### `auth.logout()`
+ * -----
  * 
- * @class-method
- * @asynchronous
- * @parameter 
- * @parameter `one:String` - 
- * @parameter `two:String` - 
- * @throws `Error` - 
- * @returns `Promise<?>` - 
- * @description ...
+ * ##### `auth.logout()`
  * 
  */
 module.exports = function() {

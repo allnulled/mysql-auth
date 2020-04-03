@@ -1,15 +1,8 @@
 /**
  * 
- * ##### `auth.assignPrivilegeToCommunity()`
+ * -----
  * 
- * @class-method
- * @asynchronous
- * @parameter 
- * @parameter `one:String` - 
- * @parameter `two:String` - 
- * @throws `Error` - 
- * @returns `Promise<?>` - 
- * @description ...
+ * ##### `auth.assignPrivilegeToCommunity()`
  * 
  */
 module.exports = function() {

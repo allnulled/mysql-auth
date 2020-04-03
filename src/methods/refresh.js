@@ -1,15 +1,8 @@
 /**
  * 
- * ##### `auth.refresh()`
+ * -----
  * 
- * @class-method
- * @asynchronous
- * @parameter 
- * @parameter `one:String` - 
- * @parameter `two:String` - 
- * @throws `Error` - 
- * @returns `Promise<?>` - 
- * @description ...
+ * ##### `auth.refresh()`
  * 
  */
 const utils = require(__dirname + "/../utils.js");

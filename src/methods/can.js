@@ -1,15 +1,8 @@
 /**
  * 
- * ##### `auth.can()`
+ * -----
  * 
- * @class-method
- * @asynchronous
- * @parameter 
- * @parameter `one:String` - 
- * @parameter `two:String` - 
- * @throws `Error` - 
- * @returns `Promise<?>` - 
- * @description ...
+ * ##### `auth.can()`
  * 
  */
 module.exports = function() {

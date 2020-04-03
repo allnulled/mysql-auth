@@ -37,7 +37,30 @@ const generateCommentFor = function(method) {
  */`;
 }
 
+const updateContents = function(method, contents) {
+	return contents.replace(`/**
+ * 
+ * ##### \`auth.${method}()\`
+ * 
+ * @class-method
+ * @asynchronous
+ * @parameter 
+ * @parameter \`one:String\` - 
+ * @parameter \`two:String\` - 
+ * @throws \`Error\` - 
+ * @returns \`Promise<?>\` - 
+ * @description ...
+ * 
+ */`, `/**
+ * 
+ * -----
+ * 
+ * ##### \`auth.${method}()\`
+ * 
+ */`);
+}
+
 methods.forEach(method => {
 	const contents = fs.readFileSync(__dirname + "/../src/methods/" + method).toString();
-	fs.writeFileSync(__dirname + "/../src/methods/" + method, generateCommentFor(method) + "\n" + contents, "utf8");
+	fs.writeFileSync(__dirname + "/../src/methods/" + method, updateContents(method.replace(/\.js$/g, ""), contents), "utf8");
 });

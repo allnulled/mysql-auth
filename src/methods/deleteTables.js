@@ -1,15 +1,8 @@
 /**
  * 
- * ##### `auth.deleteTables()`
+ * -----
  * 
- * @class-method
- * @asynchronous
- * @parameter 
- * @parameter `one:String` - 
- * @parameter `two:String` - 
- * @throws `Error` - 
- * @returns `Promise<?>` - 
- * @description ...
+ * ##### `auth.deleteTables()`
  * 
  */
 module.exports = function() {

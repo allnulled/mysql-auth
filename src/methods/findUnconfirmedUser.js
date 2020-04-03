@@ -1,15 +1,8 @@
 /**
  * 
- * ##### `auth.findUnconfirmedUser()`
+ * -----
  * 
- * @class-method
- * @asynchronous
- * @parameter 
- * @parameter `one:String` - 
- * @parameter `two:String` - 
- * @throws `Error` - 
- * @returns `Promise<?>` - 
- * @description ...
+ * ##### `auth.findUnconfirmedUser()`
  * 
  */
 module.exports = function() {
