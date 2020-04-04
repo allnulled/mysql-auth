@@ -2,7 +2,7 @@
  * 
  * -----
  * 
- * ##### `auth.confirmUser()`
+ * ##### `auth.confirmUser(user:Object):Promise`
  * 
  */
 module.exports = function() {

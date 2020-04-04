@@ -2,7 +2,7 @@
  * 
  * -----
  * 
- * ##### `auth.assignPrivilegeToCommunity()`
+ * ##### `auth.assignPrivilegeToCommunity(wherePrivilege:Object, whereCommunity:Object):Promise`
  * 
  */
 module.exports = function() {

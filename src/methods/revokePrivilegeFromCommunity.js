@@ -2,7 +2,7 @@
  * 
  * -----
  * 
- * ##### `auth.revokePrivilegeFromCommunity()`
+ * ##### `auth.revokePrivilegeFromCommunity(wherePrivilege:Object, whereCommunity:Object):Promise`
  * 
  */
 module.exports = function() {

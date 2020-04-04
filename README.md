@@ -89,274 +89,284 @@ await auth1.assignPrivilegeToCommunity({ name: "vote" }, { name: "humans" });
 
 
 
+-----
+
 ##### `const AuthSystem = require("mysql-auth")`
 
 
 
 
-
+-----
 
 ##### `const authSystem = AuthSystem.create(...)`
 
 
 
 
-
 -----
 
-##### `auth.assignPrivilegeToCommunity()`
-
-
-
-
------
-
-##### `auth.assignPrivilegeToUser()`
+##### `auth.assignPrivilegeToUser(wherePrivilege:Object, whereUser:Object):Promise`
 
 
 
 
 -----
 
-##### `auth.assignUserToCommunity()`
+##### `auth.assignPrivilegeToCommunity(wherePrivilege:Object, whereCommunity:Object):Promise`
 
 
 
 
 -----
 
-##### `auth.authenticate()`
+##### `auth.assignUserToCommunity(whereUser:Object, whereCommunity:Object):Promise`
 
 
 
 
 -----
 
-##### `auth.can()`
+##### `auth.can(token:String, privilege:Object, defaultPolicy:Boolean):Promise`
 
 
 
 
 -----
 
-##### `auth.canMultiple()`
+##### `auth.authenticate(whereSession:Object, settings:Object):Promise`
 
 
 
 
 -----
 
-##### `auth.cannot()`
+##### `auth.canMultiple(token:String, canArgsList:Array<Object>):Promise`
 
 
 
 
 -----
 
-##### `auth.confirmUser()`
+##### `auth.cannot(token:String, privilege:Object, defaultPolicy:Boolean):Promise`
 
 
 
 
 -----
 
-##### `auth.createTables()`
+##### `auth.cannotMultiple(token:String, canArgsList:Array<Object>):Promise`
 
 
 
 
------
-
-##### `auth.checkUserUnicity()`
 
 
 
 
------
 
-##### `auth.deleteCommunity()`
 
 
 
 
 -----
 
-##### `auth.deletePrivilege()`
+##### `auth.confirmUser(user:Object):Promise`
 
 
 
 
 -----
 
-##### `auth.deleteTables()`
+##### `auth.createTables():Promise`
 
 
 
 
 -----
 
-##### `auth.deleteUnconfirmedUser()`
+##### `auth.deleteCommunity(whereCommunity:Object):Promise`
 
 
 
 
 -----
 
-##### `auth.deleteUser()`
+##### `auth.deletePrivilege(wherePrivilege:Object):Promise`
 
 
 
 
 -----
 
-##### `auth.findCommunity()`
+##### `auth.deleteTables():Promise`
 
 
 
 
 -----
 
-##### `auth.findPrivilege()`
+##### `auth.deleteUnconfirmedUser(whereUnconfirmedUser:Object):Promise`
 
 
 
 
 -----
 
-##### `auth.findUnconfirmedUser()`
+##### `auth.deleteUser(whereUser:Object):Promise`
 
 
 
 
 -----
 
-##### `auth.findUser()`
+##### `auth.findCommunity(whereCommunity:Object):Promise`
 
 
 
 
 -----
 
-##### `auth.changePassword()`
+##### `auth.findPrivilege(wherePrivilege:Object):Promise`
 
 
 
 
 -----
 
-##### `auth.logout()`
+##### `auth.findSessionByUser(whereUser:Object):Promise`
 
 
 
 
 -----
 
-##### `auth.refreshByUser()`
+##### `auth.findUnconfirmedUser(whereUnconfirmedUser:Object):Promise`
 
 
 
 
 -----
 
-##### `auth.registerCommunity()`
+##### `auth.findUser(whereUser:Object):Promise`
 
 
 
 
 -----
 
-##### `auth.refresh()`
+##### `auth.login(whereUser:Object):Promise`
 
 
 
 
 -----
 
-##### `auth.registerUnconfirmedUser()`
+##### `auth.logout(whereSession:Object):Promise`
 
 
 
 
 -----
 
-##### `auth.registerPrivilege()`
+##### `auth.logoutByUser(whereUser:Object):Promise`
 
 
 
 
 -----
 
-##### `auth.login()`
+##### `auth.refresh(whereSession:Object):Promise`
 
 
 
 
 -----
 
-##### `auth.revokePrivilegeFromCommunity()`
+##### `auth.refreshAll():Promise`
 
 
 
 
 -----
 
-##### `auth.revokePrivilegeFromUser()`
+##### `auth.registerCommunity(communityDetails:Object):Promise`
 
 
 
 
 -----
 
-##### `auth.unregisterCommunity()`
+##### `auth.registerPrivilege(privilegeDetails:Object):Promise`
 
 
 
 
 -----
 
-##### `auth.unregisterPrivilege()`
+##### `auth.registerUnconfirmedUser(userDetails:Object):Promise`
 
 
 
 
 -----
 
-##### `auth.revokeUserFromCommunity()`
+##### `auth.revokePrivilegeFromCommunity(wherePrivilege:Object, whereCommunity:Object):Promise`
 
 
 
 
 -----
 
-##### `auth.unregisterUser()`
+##### `auth.revokePrivilegeFromUser(wherePrivilege:Object, whereUser:Object):Promise`
 
 
 
 
 -----
 
-##### `auth.updateCommunity()`
+##### `auth.revokeUserFromCommunity(whereUser:Object, whereCommunity:Object):Promise`
 
 
 
 
 -----
 
-##### `auth.updatePrivilege()`
+##### `auth.unregisterCommunity(whereCommunity:Object):Promise`
 
 
 
 
 -----
 
-##### `auth.updateUser()`
+##### `auth.unregisterPrivilege(wherePrivilege:Object):Promise`
 
 
 
 
 -----
 
-##### `auth.cannotMultiple()`
+##### `auth.unregisterUser(whereUser:Object):Promise`
+
+
+
+
+-----
+
+##### `auth.updateCommunity(whereCommunity:Object):Promise`
+
+
+
+
+-----
+
+##### `auth.updatePrivilege(wherePrivilege:Object):Promise`
+
+
+
+
+-----
+
+##### `auth.updateUser(whereUser:Object):Promise`
 
 
 

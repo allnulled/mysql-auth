@@ -2,7 +2,7 @@
  * 
  * -----
  * 
- * ##### `auth.revokeUserFromCommunity()`
+ * ##### `auth.revokeUserFromCommunity(whereUser:Object, whereCommunity:Object):Promise`
  * 
  */
 module.exports = function() {

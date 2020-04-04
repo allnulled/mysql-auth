@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">81.82% </span>
+                <span class="strong">6.25% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>9/11</span>
+                <span class='fraction'>1/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">40% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>2/5</span>
+                <span class='fraction'>0/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>3/3</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">81.82% </span>
+                <span class="strong">6.25% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>9/11</span>
+                <span class='fraction'>1/16</span>
             </div>
         
             
@@ -55,7 +55,7 @@
             Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -80,48 +80,66 @@
 <a name='L21'></a><a href='#L21'>21</a>
 <a name='L22'></a><a href='#L22'>22</a>
 <a name='L23'></a><a href='#L23'>23</a>
-<a name='L24'></a><a href='#L24'>24</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L24'></a><a href='#L24'>24</a>
+<a name='L25'></a><a href='#L25'>25</a>
+<a name='L26'></a><a href='#L26'>26</a>
+<a name='L27'></a><a href='#L27'>27</a>
+<a name='L28'></a><a href='#L28'>28</a>
+<a name='L29'></a><a href='#L29'>29</a>
+<a name='L30'></a><a href='#L30'>30</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">93x</span>
-<span class="cline-any cline-yes">93x</span>
-<span class="cline-any cline-yes">93x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">93x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span></td><td class="text"><pre class="prettyprint lang-js">class AuthClient {
 &nbsp;
-	static get DEFAULT_OPTIONS() {
-		return {};
+<span class="fstat-no" title="function not covered" >	st</span>atic get DEFAULT_OPTIONS() {
+<span class="cstat-no" title="statement not covered" >		return {};</span>
 	}
 &nbsp;
-	constructor(options = <span class="branch-0 cbranch-no" title="branch not covered" >{})</span> {
-		Object.assign(this, this.constructor.DEFAULT_OPTIONS, options);
-		<span class="missing-if-branch" title="if path not taken" >I</span>if(!this.system) {
+<span class="fstat-no" title="function not covered" >	co</span>nstructor(options = <span class="branch-0 cbranch-no" title="branch not covered" >{})</span> {
+<span class="cstat-no" title="statement not covered" >		Object.assign(this, this.constructor.DEFAULT_OPTIONS, options);</span>
+<span class="cstat-no" title="statement not covered" >		if(!this.system) {</span>
 <span class="cstat-no" title="statement not covered" >			throw new Error("Property &lt;system&gt; is required");</span>
 		}
-		Object.keys(this.system.queryTemplates).forEach(methodName =&gt; {
-				const methodTemplate = this.system.queryTemplates[methodName];
-				const methodCallback = this.system[methodName];
-				<span class="missing-if-branch" title="if path not taken" >I</span>if(typeof methodCallback !== "function") {
+<span class="cstat-no" title="statement not covered" >		this.system.clients.push(this);</span>
+<span class="cstat-no" title="statement not covered" >		Object.keys(this.system.queryTemplates).forEach(<span class="fstat-no" title="function not covered" >me</span>thodName =&gt; {</span>
+				const methodTemplate = <span class="cstat-no" title="statement not covered" >this.system.queryTemplates[methodName];</span>
+				const methodCallback = <span class="cstat-no" title="statement not covered" >this.system[methodName];</span>
+<span class="cstat-no" title="statement not covered" >				if(typeof methodCallback !== "function") {</span>
 <span class="cstat-no" title="statement not covered" >					throw new Error("AuthSystem class must have method &lt;" + methodName + "&gt;");</span>
 				}
-				this[methodName] = methodCallback.bind(this.system);
+<span class="cstat-no" title="statement not covered" >				this[methodName] = methodCallback.bind(this.system);</span>
 		});
+<span class="cstat-no" title="statement not covered" >		this.system.sharedMethods.forEach(<span class="fstat-no" title="function not covered" >sh</span>aredMethodName =&gt; {</span>
+			const sharedMethod = <span class="cstat-no" title="statement not covered" >this.system[sharedMethodName];</span>
+<span class="cstat-no" title="statement not covered" >			this[sharedMethodName] = sharedMethod.bind(this.system);</span>
+		});
+<span class="cstat-no" title="statement not covered" >		this.registerMethod = this.system.registerMethod.bind(this);</span>
 	}
 &nbsp;
 }
@@ -133,7 +151,7 @@ module.exports = AuthClient;</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Thu Apr 02 2020 17:41:53 GMT+0200 (GMT+02:00)
+                at Sat Apr 04 2020 13:56:49 GMT+0200 (GMT+02:00)
             </div>
         </div>
         <script src="prettify.js"></script>

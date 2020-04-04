@@ -2,7 +2,7 @@
  * 
  * -----
  * 
- * ##### `auth.assignPrivilegeToUser()`
+ * ##### `auth.assignPrivilegeToUser(wherePrivilege:Object, whereUser:Object):Promise`
  * 
  */
 module.exports = function() {

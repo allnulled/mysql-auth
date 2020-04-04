@@ -2,21 +2,26 @@
  * 
  * -----
  * 
- * ##### `auth.cannot()`
+ * ##### `auth.cannot(token:String, privilege:Object, defaultPolicy:Boolean):Promise`
  * 
  */
 module.exports = function() {
 	
-	this.formatCannotInput = (args, settings) => {
-		return this.createStandardTemplateParameters({ args });
+//	this.formatCannotInput = (args, settings) => {
+//		return this.createStandardTemplateParameters({ args });
+//	};
+	
+	this.cannot = async (...args) => {
+		try {
+			return !await this.can(...args);
+		} catch(error) {
+			this.debugError("Error on <cannot>:", error);
+			throw error;
+		}
 	};
 	
-	this.cannot = (...args) => {
-		return this.onQuery("cannot", args);
-	};
-	
-	this.formatCannotOutput = (result, parameters, args, settings) => {
-		return result;
-	};
+//	this.formatCannotOutput = (result, parameters, args, settings) => {
+//		return result;
+//	};
 
 };

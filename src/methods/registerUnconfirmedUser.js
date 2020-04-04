@@ -2,7 +2,7 @@
  * 
  * -----
  * 
- * ##### `auth.registerUnconfirmedUser()`
+ * ##### `auth.registerUnconfirmedUser(userDetails:Object):Promise`
  * 
  */
 const SQL = require("sqlstring");
@@ -25,9 +25,7 @@ module.exports = function() {
 				throw new Error("Required property <password> in argument 1 to be a string of 20 characters maximum to <formatRegisterUnconfirmedUserOutput>");
 			}
 			const {
-				data: [{
-					total: usernamesMatched
-				}]
+				data: [{ total: usernamesMatched }]
 			} = await this.$query("SELECT COUNT(*) AS 'total' FROM $auth$user LEFT JOIN $auth$unconfirmed_user ON 1=1 WHERE $auth$user.name = " + SQL.escape(userDetails.name) + " OR $auth$unconfirmed_user.name = " + SQL.escape(userDetails.name) + ";");
 			if (usernamesMatched !== 0) {
 				throw new Error("Required property <name> to be unique to register a user");

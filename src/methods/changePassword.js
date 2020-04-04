@@ -1,8 +1,6 @@
 /**
  * 
- * -----
  * 
- * ##### `auth.changePassword()`
  * 
  */
 module.exports = function() {

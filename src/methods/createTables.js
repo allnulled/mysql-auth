@@ -2,7 +2,7 @@
  * 
  * -----
  * 
- * ##### `auth.createTables()`
+ * ##### `auth.createTables():Promise`
  * 
  */
 module.exports = function() {

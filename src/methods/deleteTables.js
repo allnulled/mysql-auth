@@ -2,7 +2,7 @@
  * 
  * -----
  * 
- * ##### `auth.deleteTables()`
+ * ##### `auth.deleteTables():Promise`
  * 
  */
 module.exports = function() {

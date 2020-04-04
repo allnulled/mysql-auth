@@ -2,7 +2,7 @@
  * 
  * -----
  * 
- * ##### `auth.revokePrivilegeFromUser()`
+ * ##### `auth.revokePrivilegeFromUser(wherePrivilege:Object, whereUser:Object):Promise`
  * 
  */
 module.exports = function() {

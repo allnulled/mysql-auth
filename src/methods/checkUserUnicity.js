@@ -1,8 +1,5 @@
 /**
  * 
- * -----
- * 
- * ##### `auth.checkUserUnicity()`
  * 
  */
 module.exports = function() {

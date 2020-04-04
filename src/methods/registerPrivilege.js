@@ -2,7 +2,7 @@
  * 
  * -----
  * 
- * ##### `auth.registerPrivilege()`
+ * ##### `auth.registerPrivilege(privilegeDetails:Object):Promise`
  * 
  */
 module.exports = function() {

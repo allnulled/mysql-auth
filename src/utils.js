@@ -64,7 +64,10 @@ module.exports = {
 		} else {
 			throw new Error("Parameter <whereConditions> must be an array or an object");
 		}
-		whereConditions.forEach(whereCondition => {
+		whereConditions.forEach((whereCondition, conditionIndex) => {
+			if(conditionIndex !== 0) {
+				sql += "\n     AND ";
+			}
 			if(Array.isArray(whereCondition)) {
 				if(whereCondition.length < 2) {
 					throw new Error("Parameters <whereCondition> must have 2 items minimum");
@@ -99,7 +102,7 @@ module.exports = {
 			} else if(typeof whereCondition === "object") {
 				Object.keys(whereCondition).forEach(propertySlot => {
 					const property = getPropertiesSQL(propertySlot, tableName);
-					sql += property + " = " + SQL.escape(whereCondition[prop]);
+					sql += property + " = " + SQL.escape(whereCondition[propertySlot]);
 				});
 			} else {
 				throw new Error("Required <whereCondition> to be an array or an object instead of: " + typeof whereCondition);

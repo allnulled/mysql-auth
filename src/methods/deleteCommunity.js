@@ -2,7 +2,7 @@
  * 
  * -----
  * 
- * ##### `auth.deleteCommunity()`
+ * ##### `auth.deleteCommunity(whereCommunity:Object):Promise`
  * 
  */
 module.exports = function() {

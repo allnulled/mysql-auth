@@ -8,9 +8,8 @@ if(typeof args[0] !== "object") {
 }
 
 const sessionData = args[0];
-const hasSessionToken = typeof sessionData.token === "string";
 
-if(!hasSessionToken) {
+if(typeof sessionData.token !== "string") {
 	throw new Error("Argument 1 must have <token> as string to <authenticate>");
 }
 

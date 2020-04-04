@@ -1,7 +1,7 @@
 const { expect } = require("chai");
-const MySQLAuth = require(__dirname + "/../src/index.js");
 const nodelive = require("nodelive");
 const bcrypt = require("bcrypt");
+const MySQLAuth = require(__dirname + "/../src/index.js");
 
 describe("AuthClient class", function() {
 
@@ -26,7 +26,7 @@ describe("AuthClient class", function() {
 	});
 
 	after(function(done) {
-		// authSystem.connection.end();
+		authSystem.connection.end();
 		done();
 	})
 
@@ -72,6 +72,7 @@ describe("AuthClient class", function() {
 			expect(typeof sessionData.session).to.equal("object");
 			// 4. REFRESH
 			const { data: refreshData } = await authClient.refresh({ token: sessionData.session.token });
+
 			expect(typeof refreshData.user).to.equal("object");
 			expect(Object.keys(refreshData.user)).to.deep.equal(["id","name","password","email","description","created_at","updated_at"]);
 			expect(typeof refreshData.community).to.equal("object");
@@ -174,25 +175,34 @@ describe("AuthClient class", function() {
 			expect(sessionData3.privilege[1].id).to.equal(2);
 			// 12. REVOKE PRIVILEGE FROM COMMUNITY
 			await authClient.revokePrivilegeFromCommunity({ id: 1 }, { id: 1 });
-			const { data: sessionData4 } = await authClient.authenticate({ token: sessionData3.session.token });
+			// await nodelive.editor({a:authClient});
+			const { data: sessionData4 } = await authClient.refresh({ token: sessionData3.session.token });
+			// await nodelive.editor({a:authClient});
 			expect(sessionData4.privilege.length).to.equal(1);
 			expect(sessionData4.privilege[0].id).to.equal(2);
 			// 13. REVOKE PRIVILEGE FROM USER
 			await authClient.revokePrivilegeFromUser({ id: 2 }, { id: 1 });
-			const { data: sessionData5 } = await authClient.authenticate({ token: sessionData3.session.token });
+			// await nodelive.editor({a:authClient,t:sessionData3.session.token});
+			const { data: sessionData5 } = await authClient.refresh({ token: sessionData4.session.token });
 			expect(sessionData5.privilege.length).to.equal(0);
 			// 14. REVOKE USER FROM COMMUNITY
 			await authClient.assignPrivilegeToCommunity({ id: 1 }, { id: 2 });
 			await authClient.assignUserToCommunity({ id: 1 }, { id: 2 });
-			const { data: sessionData6 } = await authClient.authenticate({ token: sessionData3.session.token });
+			const { data: sessionData6 } = await authClient.refresh({ token: sessionData5.session.token });
 			expect(sessionData6.privilege.length).to.equal(1);
 			await authClient.revokeUserFromCommunity({ id: 1 }, { id: 2 });
-			const { data: sessionData7 } = await authClient.authenticate({ token: sessionData3.session.token });
+			const { data: sessionData7 } = await authClient.refresh({ token: sessionData6.session.token });
 			expect(sessionData7.privilege.length).to.equal(0);
 			// 15. UNREGISTER USER
 			const { data: [{ total: totalOfUsers1 }] } = await authClient.system.$query("SELECT COUNT(*) AS 'total' FROM $auth$user WHERE $auth$user.id = 1;");
 			expect(totalOfUsers1).to.equal(1);
 			await authClient.unregisterUser({ id: 1 });
+			//*
+			const { data: allSessions } = await authClient.system.$query("SELECT * FROM $auth$session;");
+			const allTokens = allSessions.map(session => session.token);
+			const allTokensActive = Object.keys(authClient.system.sessionCache);
+			//dd({ allTokens, allTokensActive });
+			//*/
 			const { data: [{ total: totalOfUsers2 }] } = await authClient.system.$query("SELECT COUNT(*) AS 'total' FROM $auth$user WHERE $auth$user.id = 1;");
 			expect(totalOfUsers2).to.equal(0);
 			// 16. UNREGISTER COMMUNITY
@@ -223,6 +233,7 @@ describe("AuthClient class", function() {
 			expect(numberOfUsers3.total).to.equal(1);
 		} catch(error) {
 			console.log(error);
+			throw error;
 		}
 	});
 
@@ -243,48 +254,114 @@ describe("AuthClient class", function() {
 			expect(isPassword).to.equal(true);
 		} catch(error) {
 			console.log(error);
+			throw error;
 		}
 	});
 
-	it("checks if a user has a privilege", async () => {
+	it("checks if a user has/not one/some privilege/s", async () => {
 		try {
 			const userData = { name: "user ten", password: "password10", email: "userten@domain.com" };
 			await authClient.registerUnconfirmedUser(userData);
 			await authClient.confirmUser({ name: userData.name });
-			const { data: sessionData } = await authClient.login({ name: userData.name, password: userData.password });
+			const { data: loginData } = await authClient.login({ name: userData.name, password: userData.password });
 			await authClient.registerPrivilege({ name: "run", description: "" });
 			await authClient.registerPrivilege({ name: "jump", description: "" });
 			await authClient.registerPrivilege({ name: "feel", description: "" });
 			await authClient.registerPrivilege({ name: "see", description: "" });
 			await authClient.registerPrivilege({ name: "hear", description: "" });
 			await authClient.registerPrivilege({ name: "speak", description: "" });
-			await authClient.assignPrivilegeToUser({name: "run"}, {id: sessionData.user.id});
-			await authClient.assignPrivilegeToUser({name: "jump"}, {id: sessionData.user.id});
-			await authClient.assignPrivilegeToUser({name: "feel"}, {id: sessionData.user.id});
+			await authClient.assignPrivilegeToUser({name: "run"}, {id: loginData.user.id});
+			await authClient.assignPrivilegeToUser({name: "jump"}, {id: loginData.user.id});
+			await authClient.assignPrivilegeToUser({name: "feel"}, {id: loginData.user.id});
 			await authClient.assignPrivilegeToCommunity({name: "see"}, {id: 5});
 			await authClient.assignPrivilegeToCommunity({name: "hear"}, {id: 6});
 			await authClient.assignPrivilegeToCommunity({name: "speak"}, {id: 7});
-			await authClient.assignUserToCommunity({ id: sessionData.user.id }, { id: 5 });
-			await authClient.assignUserToCommunity({ id: sessionData.user.id }, { id: 6 });
+			await authClient.assignUserToCommunity({ id: loginData.user.id }, { id: 5 });
+			await authClient.assignUserToCommunity({ id: loginData.user.id }, { id: 6 });
+			const { data: sessionData } = await authClient.refresh({ token: loginData.session.token });
+			// 1. Tests for .CAN ~:
 			const canRun = await authClient.can(sessionData.session.token, "run");
 			const canJump = await authClient.can(sessionData.session.token, "jump");
 			const canFeel = await authClient.can(sessionData.session.token, "feel");
 			const canSee = await authClient.can(sessionData.session.token, "see");
 			const canHear = await authClient.can(sessionData.session.token, "hear");
 			const canSpeak = await authClient.can(sessionData.session.token, "speak");
-			//await nodelive.editor({ s: sessionData, a: authClient })
 			expect(canRun).to.equal(true);
 			expect(canJump).to.equal(true);
 			expect(canFeel).to.equal(true);
 			expect(canSee).to.equal(true);
 			expect(canHear).to.equal(true);
 			expect(canSpeak).to.equal(false);
-
+			// 1. Tests for .CANNOT ~:
+			const cannotRun = await authClient.cannot(sessionData.session.token, "run");
+			const cannotJump = await authClient.cannot(sessionData.session.token, "jump");
+			const cannotFeel = await authClient.cannot(sessionData.session.token, "feel");
+			const cannotSee = await authClient.cannot(sessionData.session.token, "see");
+			const cannotHear = await authClient.cannot(sessionData.session.token, "hear");
+			const cannotSpeak = await authClient.cannot(sessionData.session.token, "speak");
+			expect(cannotRun).to.equal(false);
+			expect(cannotJump).to.equal(false);
+			expect(cannotFeel).to.equal(false);
+			expect(cannotSee).to.equal(false);
+			expect(cannotHear).to.equal(false);
+			expect(cannotSpeak).to.equal(true);
+			// 3. Tests for .CANMULTIPLE ~:
+			const canMultiple1 = await authClient.canMultiple(sessionData.session.token, ["run", "jump", "feel", "see", "hear", "speak"]);
+			const canMultiple2 = await authClient.canMultiple(sessionData.session.token, ["speak"]);
+			const canMultiple3 = await authClient.canMultiple(sessionData.session.token, ["run", "jump", "feel", "see", "hear"]);
+			expect(canMultiple1).to.deep.equal([true, true, true, true, true, false]);
+			expect(canMultiple2).to.deep.equal([false]);
+			expect(canMultiple3).to.deep.equal([true, true, true, true, true]);
+			// 4. Tests for .CANNOTMULTIPLE ~:
+			const cannotMultiple1 = await authClient.cannotMultiple(sessionData.session.token, ["run", "jump", "feel", "see", "hear", "speak"]);
+			const cannotMultiple2 = await authClient.cannotMultiple(sessionData.session.token, ["speak"]);
+			const cannotMultiple3 = await authClient.cannotMultiple(sessionData.session.token, ["run", "jump", "feel", "see", "hear"]);
+			expect(cannotMultiple1).to.deep.equal([false, false, false, false, false, true]);
+			expect(cannotMultiple2).to.deep.equal([true]);
+			expect(cannotMultiple3).to.deep.equal([false, false, false, false, false]);
+			//await nodelive.editor({ s: sessionData, a: authClient })
 		} catch(error) {
+			console.log(error);
 			throw error;
 		}
 	});
 
+	it("can refresh all sessions", async function() {
+		this.timeout(100*1000);
+		try {
+			const userData = { name: "user eleven", password: "password10", email: "usereleven@domain.com" };
+			await authClient.registerUnconfirmedUser(userData);
+			await authClient.confirmUser({ name: userData.name });
+			await authClient.registerPrivilege({ name: "answer", description: "" });
+			await authClient.assignPrivilegeToUser({ name: "answer" }, { name: userData.name });
+			// await nodelive.editor();
+			const { data: sessionData } = await authClient.login({ name: userData.name, password: userData.password });
+			// await nodelive.editor();
+			const [ canAnswer, canSpeak ] = await authClient.canMultiple(sessionData.session.token, ["answer", "speak"]);
+			expect(canAnswer).to.equal(true);
+			expect(canSpeak).to.equal(false);
+			await authClient.revokePrivilegeFromUser({ name: "answer" }, { name: userData.name });
+			await authClient.assignPrivilegeToUser({ name: "speak" }, { name: userData.name });
+			const [ canAnswer2, canSpeak2 ] = await authClient.canMultiple(sessionData.session.token, ["answer", "speak"]);
+			expect(canAnswer2).to.equal(true);
+			expect(canSpeak2).to.equal(false);
+			const { data: sessionData2 } = await authClient.refresh({ token: sessionData.session.token });
+			const [ canAnswer3, canSpeak3 ] = await authClient.canMultiple(sessionData2.session.token, ["answer", "speak"]);
+			expect(canAnswer3).to.equal(false);
+			expect(canSpeak3).to.equal(true);
+			await authClient.revokePrivilegeFromUser({ name: "speak" }, { name: userData.name });
+			const [ canAnswer4, canSpeak4 ] = await authClient.canMultiple(sessionData2.session.token, ["answer", "speak"]);
+			expect(canAnswer4).to.equal(false);
+			expect(canSpeak4).to.equal(true);
+			await authClient.refreshAll();
+			const [ canAnswer5, canSpeak5 ] = await authClient.canMultiple(sessionData2.session.token, ["answer", "speak"]);
+			expect(canAnswer5).to.equal(false);
+			expect(canSpeak5).to.equal(false);
+		} catch(error) {
+			throw error;
+		}
+	});
+	
 	it.skip("(throws errors) will not register an unconfirmed user if the name already exists", async () => {
 		try {
 			await authClient.registerUnconfirmedUser({ name: "user one", password: "xxxxxxxx", email: "user_one@domain.com" });
@@ -300,9 +377,57 @@ describe("AuthClient class", function() {
 		}
 	});
 
+	it("throws when <system> is not provided to AuthClient class", function(done) {
+		const AuthClient = authClient.constructor;
+		try {
+			new AuthClient()
+			done(new Error("Error with <system> property checking"));
+		} catch(error) {
+			expect(error.message).to.equal("Property <system> is required");
+			done();
+		}
+	});
+
+	it("throws when <system> is not provided to AuthClient class", function(done) {
+		const AuthClient = authClient.constructor;
+		try {
+			new AuthClient()
+			done(new Error("Error with <system> property checking"));
+		} catch(error) {
+			expect(error.message).to.equal("Property <system> is required");
+			done();
+		}
+	});
+
+	it("throws when <system> is not provided to AuthClient class", function(done) {
+		const AuthClient = authClient.constructor;
+		try {
+			new AuthClient()
+			done(new Error("Error with <system> property checking"));
+		} catch(error) {
+			expect(error.message).to.equal("Property <system> is required");
+			done();
+		}
+	});
+
+	it("allows to avoid parameters on creation", function(done) {
+		MySQLAuth.create();
+		MySQLAuth.create({ trace: true });
+		done();
+	});
+
+	const { expect } = require("chai");
+	
+	it("all api", async function() {
+		this.timeout(1000 * 2);
+		try {
+		} catch(error) {
+			throw error;
+		}
+	});
+
 	it("deletes tables", async function() {
 		// await authClient.deleteTables();
 	});
 
 });
-

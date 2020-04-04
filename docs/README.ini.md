@@ -85,5 +85,7 @@ await auth1.assignPrivilegeToCommunity({ name: "vote" }, { name: "humans" });
 ```
 
 
-## Reference
+## API Reference
+
+These are the signatures of the methods of the `mysql-auth` API.
 

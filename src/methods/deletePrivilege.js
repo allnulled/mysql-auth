@@ -2,7 +2,7 @@
  * 
  * -----
  * 
- * ##### `auth.deletePrivilege()`
+ * ##### `auth.deletePrivilege(wherePrivilege:Object):Promise`
  * 
  */
 module.exports = function() {

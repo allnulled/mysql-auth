@@ -2,7 +2,7 @@
  * 
  * -----
  * 
- * ##### `auth.deleteUnconfirmedUser()`
+ * ##### `auth.deleteUnconfirmedUser(whereUnconfirmedUser:Object):Promise`
  * 
  */
 module.exports = function() {

@@ -2,7 +2,7 @@
  * 
  * -----
  * 
- * ##### `auth.login()`
+ * ##### `auth.login(whereUser:Object):Promise`
  * 
  */
 const bcrypt = require("bcrypt");
@@ -43,12 +43,11 @@ module.exports = function() {
 				token: utils.generateToken(),
 				secret_token: utils.generateToken()
 			};
-			await this.onQuery("login", [{
-				id: foundUser.id
-			}, sessionData]);
+			await this.onQuery("login", [{ id: foundUser.id }, sessionData]);
 			return await this.authenticate(sessionData);
 		} catch (error) {
-			this.debugError("Error on login", error);
+			this.debugError("Error on <login>:", error);
+			throw error;
 		}
 	};
 	

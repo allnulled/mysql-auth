@@ -2,7 +2,7 @@
  * 
  * -----
  * 
- * ##### `auth.updatePrivilege()`
+ * ##### `auth.updatePrivilege(wherePrivilege:Object):Promise`
  * 
  */
 module.exports = function() {

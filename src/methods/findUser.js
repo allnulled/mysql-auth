@@ -2,7 +2,7 @@
  * 
  * -----
  * 
- * ##### `auth.findUser()`
+ * ##### `auth.findUser(whereUser:Object):Promise`
  * 
  */
 module.exports = function() {

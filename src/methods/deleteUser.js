@@ -2,7 +2,7 @@
  * 
  * -----
  * 
- * ##### `auth.deleteUser()`
+ * ##### `auth.deleteUser(whereUser:Object):Promise`
  * 
  */
 module.exports = function() {

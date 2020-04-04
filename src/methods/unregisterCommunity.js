@@ -2,7 +2,7 @@
  * 
  * -----
  * 
- * ##### `auth.unregisterCommunity()`
+ * ##### `auth.unregisterCommunity(whereCommunity:Object):Promise`
  * 
  */
 module.exports = function() {
@@ -37,7 +37,8 @@ module.exports = function() {
 			}]));
 			return output;
 		} catch (error) {
-			this.debugError("Error in <unregisterCommunity>:", error);
+			this.debugError("Error on <unregisterCommunity>:", error);
+			throw error;
 		}
 	};
 	

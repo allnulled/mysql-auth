@@ -2,7 +2,7 @@
  * 
  * -----
  * 
- * ##### `auth.assignUserToCommunity()`
+ * ##### `auth.assignUserToCommunity(whereUser:Object, whereCommunity:Object):Promise`
  * 
  */
 module.exports = function() {

@@ -2,7 +2,7 @@
  * 
  * -----
  * 
- * ##### `auth.updateUser()`
+ * ##### `auth.updateUser(whereUser:Object):Promise`
  * 
  */
 module.exports = function() {

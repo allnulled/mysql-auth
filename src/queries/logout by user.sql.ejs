@@ -1,0 +1,18 @@
+<%
+if(args.length === 0) {
+	throw new Error("Argument 1 is required to <logoutByUser>");
+}
+if(typeof args[0] !== "object") {
+	throw new Error("Argument 1 must be an object to <logoutByUser>");
+}
+if(Object.keys(args[0]).length === 0) {
+	throw new Error("Argument 1 must have at least 1 property to <logoutByUser>");
+}
+
+const whereUserSQL = utils.whereToSQL(args[0], false, "$auth$user");
+%>
+
+DELETE $auth$session FROM $auth$session
+	LEFT JOIN $auth$user
+		ON $auth$session.id_user = $auth$user.id
+	WHERE <%-whereUserSQL%>;

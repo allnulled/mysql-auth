@@ -2,7 +2,7 @@
  * 
  * -----
  * 
- * ##### `auth.unregisterPrivilege()`
+ * ##### `auth.unregisterPrivilege(wherePrivilege:Object):Promise`
  * 
  */
 module.exports = function() {
@@ -39,6 +39,7 @@ module.exports = function() {
 			return output;
 		} catch (error) {
 			this.debugError("Error on <unregisterPrivilege>:", error);
+			throw error;
 		}
 	};
 	

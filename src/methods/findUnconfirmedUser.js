@@ -2,7 +2,7 @@
  * 
  * -----
  * 
- * ##### `auth.findUnconfirmedUser()`
+ * ##### `auth.findUnconfirmedUser(whereUnconfirmedUser:Object):Promise`
  * 
  */
 module.exports = function() {

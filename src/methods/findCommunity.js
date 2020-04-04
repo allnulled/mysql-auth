@@ -2,7 +2,7 @@
  * 
  * -----
  * 
- * ##### `auth.findCommunity()`
+ * ##### `auth.findCommunity(whereCommunity:Object):Promise`
  * 
  */
 module.exports = function() {

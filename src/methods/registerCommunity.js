@@ -2,7 +2,7 @@
  * 
  * -----
  * 
- * ##### `auth.registerCommunity()`
+ * ##### `auth.registerCommunity(communityDetails:Object):Promise`
  * 
  */
 module.exports = function() {

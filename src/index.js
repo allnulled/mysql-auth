@@ -8,25 +8,28 @@ const path = require("path");
 const AuthClient = require(__dirname + "/auth-client.js");
 const utils = require(__dirname + "/utils.js");
 
+/*
 global.dd = function(...args) {
 	console.log(...args)
 	console.log("----- PROGRAM DIED -----");
 	process.exit(0);
 }
+//*/
 
 /**
  * 
+ * -----
+ * 
  * ##### `const AuthSystem = require("mysql-auth")`
- * 
- * 
  * 
  */
 class AuthSystem {
 
 	/**
 	 * 
-	 * ##### `const authSystem = AuthSystem.create(...)`
+	 * -----
 	 * 
+	 * ##### `const authSystem = AuthSystem.create(...)`
 	 * 
 	 */
 	static create(...args) {
@@ -44,6 +47,8 @@ class AuthSystem {
 			sessionCache: {},
 			debug: false,
 			silence: false,
+			clients: [],
+			sharedMethods: []
 		};
 	}
 
@@ -58,8 +63,12 @@ class AuthSystem {
 		}
 	}
 
-	static get SESSION_CACHE() {
+	static get DEFAULT_SESSION_CACHE() {
 		return {};
+	}
+
+	static get DEFAULT_SHARED_METHODS() {
+		return [];
 	}
 
 	static get DEFAULT_QUERY_TEMPLATES() {
@@ -82,11 +91,14 @@ class AuthSystem {
 			"deleteUnconfirmedUser": __dirname + "/queries/delete unconfirmed user.sql.ejs",
 			"findCommunity": __dirname + "/queries/find community.sql.ejs",
 			"findPrivilege": __dirname + "/queries/find privilege.sql.ejs",
+			"findSessionByUser": __dirname + "/queries/find session by user.sql.ejs",
 			"findUser": __dirname + "/queries/find user.sql.ejs",
 			"findUnconfirmedUser": __dirname + "/queries/find unconfirmed user.sql.ejs",
 			"login": __dirname + "/queries/login.sql.ejs",
 			"logout": __dirname + "/queries/logout.sql.ejs",
+			"logoutByUser": __dirname + "/queries/logout by user.sql.ejs",
 			"refresh": __dirname + "/queries/refresh.sql.ejs",
+			"refreshAll": __dirname + "/queries/refresh all.sql.ejs",
 			"registerCommunity": __dirname + "/queries/register community.sql.ejs",
 			"registerPrivilege": __dirname + "/queries/register privilege.sql.ejs",
 			"registerUnconfirmedUser": __dirname + "/queries/register unconfirmed user.sql.ejs",
@@ -105,6 +117,7 @@ class AuthSystem {
 	static encryptPassword(password, salts, callback) {
 		return new Promise((ok, fail) => {
 			bcrypt.hash(password, salts, (error, hash) => {
+				/* istanbul ignore if  */
 				if (error) {
 					return fail(error);
 				}
@@ -117,20 +130,17 @@ class AuthSystem {
 		Object.assign(this, this.constructor.DEFAULT_OPTIONS, options);
 		this.connectionSettings = Object.assign({}, this.constructor.DEFAULT_CONNECTION_SETTINGS, options.connectionSettings || {});
 		this.queryTemplates = Object.assign({}, this.constructor.DEFAULT_QUERY_TEMPLATES, options.queryTemplates || {});
+		this.sharedMethods = ["registerMethod"].concat(this.constructor.DEFAULT_SHARED_METHODS).concat(options.sharedMethods || []);
+		this.sessionCache = Object.assign({}, this.constructor.DEFAULT_SESSION_CACHE, options.sessionCache || {});
 		this.debugError = Debug("mysql-auth:error");
-		this.trace = Debug("mysql-auth:trace");
-		this.debugFn = Debug("mysql-auth");
-		this.debugSQL = Debug("mysql");
-		if (this.debug) {
-			Debug.enable("mysql-auth,mysql-auth:error,mysql-auth:trace");
-		} else if (this.silence === false) {
-			Debug.enable("mysql-auth:error");
-		}
-		this.debugFn("Connection settings:", this.connectionSettings);
+		this.debugTrace = Debug("mysql-auth:trace");
+		this.debugSQL = Debug("mysql-auth:sql");
+		Debug.enable((this.debug ? "mysql-auth:sql," : "") + (this.trace ? "mysql-auth:trace," : "") + "mysql-auth:error");
+		this.debugTrace("Connection settings:", this.connectionSettings);
 	}
 
 	initialize() {
-		this.trace("<Initialize>");
+		this.debugTrace("<Initialize>");
 		this.connection = mysql.createPool(this.connectionSettings);
 		this.queries = Object.keys(this.queryTemplates).reduce((output, method) => {
 			const filename = this.queryTemplates[method];
@@ -166,7 +176,7 @@ class AuthSystem {
 	}
 
 	formatTemplateInput(template, parameters, settings) {
-		this.trace("<Format Parameters By Template>", template);
+		this.debugTrace("<Format Parameters By Template>", template);
 		const methodName = "format" + template.substr(0, 1).toUpperCase() + template.substr(1) + "Input";
 		if (!(methodName in this)) {
 			throw new Error("Required method AuthSystem#<" + methodName + ">");
@@ -175,7 +185,7 @@ class AuthSystem {
 	}
 
 	formatTemplateOutput(template, result, parameters, settings) {
-		this.trace("<Format Result By Template>", template);
+		this.debugTrace("<Format Result By Template>", template);
 		const methodName = "format" + template.substr(0, 1).toUpperCase() + template.substr(1) + "Output";
 		if (!(methodName in this)) {
 			throw new Error("Required method AuthSystem#<" + methodName + ">");
@@ -184,7 +194,7 @@ class AuthSystem {
 	}
 
 	createStandardTemplateParameters(parameters) {
-		this.trace("<Create Standard Template Parameters>");
+		this.debugTrace("<Create Standard Template Parameters>");
 		return {
 			authSystem: this,
 			require: require,
@@ -199,7 +209,7 @@ class AuthSystem {
 	}
 
 	$query(query) {
-		this.trace("<Query>");
+		this.debugTrace("<Query>");
 		this.debugSQL("[SQL] " + query);
 		return new Promise((ok, fail) => {
 			this.connection.query(query, (error, data, fields) => {
@@ -219,7 +229,10 @@ class AuthSystem {
 	}
 
 	getSessionCacheByToken(parameters) {
-		const [{ token }] = parameters;
+		const [{ token }, options = {}] = parameters;
+		if(options.avoidCache) {
+			return;
+		}
 		if(token in this.sessionCache) {
 			return this.sessionCache[token];
 		}
@@ -227,7 +240,7 @@ class AuthSystem {
 	}
 
 	getFromCache(template, parameters, settings) {
-		this.trace("<Got From Cache>");
+		this.debugTrace("<Got From Cache>");
 		if(template === "authenticate") {
 			return this.getSessionCacheByToken(parameters);
 		}
@@ -235,18 +248,18 @@ class AuthSystem {
 	}
 
 	async onQuery(template, parameters, settings) {
-		this.trace("<Query By Template>", template);
+		this.debugTrace("<Query By Template>", template);
 		try {
 			const queryTemplate = this.queries[template];
 			if (typeof queryTemplate !== "string") {
 				throw new Error("Query MySQLAuth#queries.<" + queryTemplate + "> is of type " + typeof(queryTemplate) + " instead of <string>");
 			}
-			const queryParameters = await this.formatTemplateInput(template, parameters, settings);
 			// get from cache, if any!
 			const hasCached = await this.getFromCache(template, parameters, settings);
 			if (typeof hasCached !== "undefined") {
 				return hasCached;
 			}
+			const queryParameters = await this.formatTemplateInput(template, parameters, settings);
 			//await nodelive.editor({ auth:this, template, queryTemplate, queryParameters });
 			let querySource;
 			try {
@@ -264,9 +277,10 @@ class AuthSystem {
 		}
 	}
 
-
-
-
+	registerMethod(name, method) {
+		this[name] = method.bind(this);
+		this.clients.forEach(client => client[name] = method.bind(this));
+	}
 }
 
 module.exports = AuthSystem;

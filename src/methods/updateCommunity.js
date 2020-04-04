@@ -2,7 +2,7 @@
  * 
  * -----
  * 
- * ##### `auth.updateCommunity()`
+ * ##### `auth.updateCommunity(whereCommunity:Object):Promise`
  * 
  */
 module.exports = function() {
