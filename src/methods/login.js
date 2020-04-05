@@ -25,9 +25,11 @@ module.exports = function() {
 				throw new Error("Login error: No <user> found by specified properties");
 			}
 			const foundUser = foundUsers[0];
-			const {
-				password
-			} = userData;
+			const { password } = userData;
+			const { data: sessionsFound } = await this.findSessionByUser({ id: foundUser.id });
+			if(sessionsFound.length > 0) {
+				return await this.authenticate({ token: sessionsFound[0].token });
+			}
 			await new Promise((ok, fail) => {
 				bcrypt.compare(password, foundUser.password, (error, isEqual) => {
 					if (error) {

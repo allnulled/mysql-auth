@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">25% </span>
+                <span class="strong">35.24% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>26/104</span>
+                <span class='fraction'>37/105</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">23.68% </span>
+                <span class="strong">28.95% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>9/38</span>
+                <span class='fraction'>11/38</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">25.93% </span>
+                <span class="strong">33.33% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>7/27</span>
+                <span class='fraction'>9/27</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">25.24% </span>
+                <span class="strong">35.58% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>26/103</span>
+                <span class='fraction'>37/104</span>
             </div>
         
             
@@ -342,7 +342,10 @@
 <a name='L283'></a><a href='#L283'>283</a>
 <a name='L284'></a><a href='#L284'>284</a>
 <a name='L285'></a><a href='#L285'>285</a>
-<a name='L286'></a><a href='#L286'>286</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L286'></a><a href='#L286'>286</a>
+<a name='L287'></a><a href='#L287'>287</a>
+<a name='L288'></a><a href='#L288'>288</a>
+<a name='L289'></a><a href='#L289'>289</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -459,6 +462,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -484,22 +488,23 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">39x</span>
+<span class="cline-any cline-yes">39x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">39x</span>
+<span class="cline-any cline-yes">39x</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">39x</span>
+<span class="cline-any cline-yes">39x</span>
+<span class="cline-any cline-yes">39x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -624,6 +629,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -734,6 +740,7 @@ class AuthSystem {
 			"revokePrivilegeFromCommunity": __dirname + "/queries/revoke privilege from community.sql.ejs",
 			"revokePrivilegeFromUser": __dirname + "/queries/revoke privilege from user.sql.ejs",
 			"revokeUserFromCommunity": __dirname + "/queries/revoke user from community.sql.ejs",
+			"saveInHistory": __dirname + "/queries/save in history.sql.ejs",
 			"unregisterCommunity": __dirname + "/queries/unregister community.sql.ejs",
 			"unregisterPrivilege": __dirname + "/queries/unregister privilege.sql.ejs",
 			"unregisterUser": __dirname + "/queries/unregister user.sql.ejs",
@@ -759,32 +766,33 @@ class AuthSystem {
 		Object.assign(this, this.constructor.DEFAULT_OPTIONS, options);
 		this.connectionSettings = Object.assign({}, this.constructor.DEFAULT_CONNECTION_SETTINGS, options.connectionSettings || <span class="branch-1 cbranch-no" title="branch not covered" >{})</span>;
 		this.queryTemplates = Object.assign({}, this.constructor.DEFAULT_QUERY_TEMPLATES, options.queryTemplates || {});
-		this.sharedMethods = [].concat(this.constructor.DEFAULT_SHARED_METHODS).concat(options.sharedMethods || []);
+		this.sharedMethods = ["registerMethod"].concat(this.constructor.DEFAULT_SHARED_METHODS).concat(options.sharedMethods || []);
 		this.sessionCache = Object.assign({}, this.constructor.DEFAULT_SESSION_CACHE, options.sessionCache || {});
 		this.debugError = Debug("mysql-auth:error");
 		this.debugTrace = Debug("mysql-auth:trace");
 		this.debugSQL = Debug("mysql-auth:sql");
 		Debug.enable((this.debug ? "mysql-auth:sql," : <span class="branch-1 cbranch-no" title="branch not covered" >"")</span> + (this.trace ? <span class="branch-0 cbranch-no" title="branch not covered" >"mysql-auth:trace," </span>: "") + "mysql-auth:error");
-		this.trace("Connection settings:", this.connectionSettings);
+		this.debugTrace("Connection settings:", this.connectionSettings);
 	}
 &nbsp;
-<span class="fstat-no" title="function not covered" >	in</span>itialize() {
-<span class="cstat-no" title="statement not covered" >		this.trace("&lt;Initialize&gt;");</span>
-<span class="cstat-no" title="statement not covered" >		this.connection = mysql.createPool(this.connectionSettings);</span>
-<span class="cstat-no" title="statement not covered" >		this.queries = Object.keys(this.queryTemplates).reduce(<span class="fstat-no" title="function not covered" >(o</span>utput, method) =&gt; {</span>
-			const filename = <span class="cstat-no" title="statement not covered" >this.queryTemplates[method];</span>
-<span class="cstat-no" title="statement not covered" >			if (typeof filename !== "string") {</span>
+	initialize() {
+		this.debugTrace("&lt;Initialize&gt;");
+		this.connection = mysql.createPool(this.connectionSettings);
+		this.queries = Object.keys(this.queryTemplates).reduce((output, method) =&gt; {
+			const filename = this.queryTemplates[method];
+			<span class="missing-if-branch" title="if path not taken" >I</span>if (typeof filename !== "string") {
 <span class="cstat-no" title="statement not covered" >				throw new Error("")</span>
 <span class="cstat-no" title="statement not covered" >				throw new Error("Property AuthSystem#queryTemplates.&lt;" + method + "&gt; should exist");</span>
 			}
-			const filepath = <span class="cstat-no" title="statement not covered" >path.resolve(filename);</span>
-<span class="cstat-no" title="statement not covered" >			if (!fs.existsSync(filepath)) {</span>
+			const filepath = path.resolve(filename);
+			<span class="missing-if-branch" title="if path not taken" >I</span>if (!fs.existsSync(filepath)) {
 <span class="cstat-no" title="statement not covered" >				throw new Error("Property AuthSystem#queryTemplates.&lt;" + method + "&gt; should be an existing file");</span>
 			}
-			const contents = <span class="cstat-no" title="statement not covered" >fs.readFileSync(filepath).toString();</span>
-<span class="cstat-no" title="statement not covered" >			output[method] = contents;</span>
-<span class="cstat-no" title="statement not covered" >			return output;</span>
+			const contents = fs.readFileSync(filepath).toString();
+			output[method] = contents;
+			return output;
 		}, {});
+		require(__dirname + "/history.js").call(this);
 <span class="cstat-no" title="statement not covered" >		fs.readdirSync(__dirname + "/methods").forEach(<span class="fstat-no" title="function not covered" >fi</span>le =&gt; {</span>
 			const filepath = <span class="cstat-no" title="statement not covered" >path.resolve(__dirname + "/methods/" + file);</span>
 			const method = <span class="cstat-no" title="statement not covered" >require(filepath);</span>
@@ -805,7 +813,7 @@ class AuthSystem {
 	}
 &nbsp;
 <span class="fstat-no" title="function not covered" >	fo</span>rmatTemplateInput(template, parameters, settings) {
-<span class="cstat-no" title="statement not covered" >		this.trace("&lt;Format Parameters By Template&gt;", template);</span>
+<span class="cstat-no" title="statement not covered" >		this.debugTrace("&lt;Format Parameters By Template&gt;", template);</span>
 		const methodName = <span class="cstat-no" title="statement not covered" >"format" + template.substr(0, 1).toUpperCase() + template.substr(1) + "Input";</span>
 <span class="cstat-no" title="statement not covered" >		if (!(methodName in this)) {</span>
 <span class="cstat-no" title="statement not covered" >			throw new Error("Required method AuthSystem#&lt;" + methodName + "&gt;");</span>
@@ -814,7 +822,7 @@ class AuthSystem {
 	}
 &nbsp;
 <span class="fstat-no" title="function not covered" >	fo</span>rmatTemplateOutput(template, result, parameters, settings) {
-<span class="cstat-no" title="statement not covered" >		this.trace("&lt;Format Result By Template&gt;", template);</span>
+<span class="cstat-no" title="statement not covered" >		this.debugTrace("&lt;Format Result By Template&gt;", template);</span>
 		const methodName = <span class="cstat-no" title="statement not covered" >"format" + template.substr(0, 1).toUpperCase() + template.substr(1) + "Output";</span>
 <span class="cstat-no" title="statement not covered" >		if (!(methodName in this)) {</span>
 <span class="cstat-no" title="statement not covered" >			throw new Error("Required method AuthSystem#&lt;" + methodName + "&gt;");</span>
@@ -823,7 +831,7 @@ class AuthSystem {
 	}
 &nbsp;
 <span class="fstat-no" title="function not covered" >	cr</span>eateStandardTemplateParameters(parameters) {
-<span class="cstat-no" title="statement not covered" >		this.trace("&lt;Create Standard Template Parameters&gt;");</span>
+<span class="cstat-no" title="statement not covered" >		this.debugTrace("&lt;Create Standard Template Parameters&gt;");</span>
 <span class="cstat-no" title="statement not covered" >		return {</span>
 			authSystem: this,
 			require: require,
@@ -838,7 +846,7 @@ class AuthSystem {
 	}
 &nbsp;
 <span class="fstat-no" title="function not covered" >	$q</span>uery(query) {
-<span class="cstat-no" title="statement not covered" >		this.trace("&lt;Query&gt;");</span>
+<span class="cstat-no" title="statement not covered" >		this.debugTrace("&lt;Query&gt;");</span>
 <span class="cstat-no" title="statement not covered" >		this.debugSQL("[SQL] " + query);</span>
 <span class="cstat-no" title="statement not covered" >		return new Promise(<span class="fstat-no" title="function not covered" >(o</span>k, fail) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >			this.connection.query(query, <span class="fstat-no" title="function not covered" >(e</span>rror, data, fields) =&gt; {</span>
@@ -869,7 +877,7 @@ class AuthSystem {
 	}
 &nbsp;
 <span class="fstat-no" title="function not covered" >	ge</span>tFromCache(template, parameters, settings) {
-<span class="cstat-no" title="statement not covered" >		this.trace("&lt;Got From Cache&gt;");</span>
+<span class="cstat-no" title="statement not covered" >		this.debugTrace("&lt;Got From Cache&gt;");</span>
 <span class="cstat-no" title="statement not covered" >		if(template === "authenticate") {</span>
 <span class="cstat-no" title="statement not covered" >			return this.getSessionCacheByToken(parameters);</span>
 		}
@@ -877,7 +885,7 @@ class AuthSystem {
 	}
 &nbsp;
 <span class="fstat-no" title="function not covered" >	as</span>ync onQuery(template, parameters, settings) {
-<span class="cstat-no" title="statement not covered" >		this.trace("&lt;Query By Template&gt;", template);</span>
+<span class="cstat-no" title="statement not covered" >		this.debugTrace("&lt;Query By Template&gt;", template);</span>
 <span class="cstat-no" title="statement not covered" >		try {</span>
 			const queryTemplate = <span class="cstat-no" title="statement not covered" >this.queries[template];</span>
 <span class="cstat-no" title="statement not covered" >			if (typeof queryTemplate !== "string") {</span>
@@ -910,6 +918,7 @@ class AuthSystem {
 <span class="cstat-no" title="statement not covered" >		this[name] = method.bind(this);</span>
 <span class="cstat-no" title="statement not covered" >		this.clients.forEach(<span class="fstat-no" title="function not covered" >cl</span>ient =&gt; <span class="cstat-no" title="statement not covered" >client[name] = method.bind(this))</span>;</span>
 	}
+&nbsp;
 }
 &nbsp;
 module.exports = AuthSystem;</pre></td></tr></table></pre>
@@ -919,7 +928,7 @@ module.exports = AuthSystem;</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Sat Apr 04 2020 13:56:49 GMT+0200 (GMT+02:00)
+                at Sun Apr 05 2020 11:46:51 GMT+0200 (GMT+02:00)
             </div>
         </div>
         <script src="prettify.js"></script>

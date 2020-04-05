@@ -17,6 +17,7 @@ module.exports = function() {
 			if(sessions.length === 0) {
 				throw new Error("No session found to <logoutByUser>");
 			}
+			await this.saveInHistory("$auth$session", { id: sessions[0].id });
 			const logoutParameters = [userDetails, { token: sessions[0].token }];
 			return await this.onQuery("logoutByUser", logoutParameters);
 		} catch(error) {

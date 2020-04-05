@@ -75,3 +75,81 @@ CREATE TABLE IF NOT EXISTS `$auth$session` (
   updated_at DATETIME DEFAULT NOW() ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (id_user) REFERENCES `$auth$user`(id)
 );
+
+##################### History table #########################
+
+CREATE TABLE IF NOT EXISTS `$hist$$auth$unconfirmed_user`(
+  id INT,
+  name VARCHAR(64),
+  password VARCHAR(64),
+  email VARCHAR(255),
+  description VARCHAR(510),
+  deleted_at DATETIME DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS `$hist$$auth$user` (
+  id INT,
+  name VARCHAR(64),
+  password VARCHAR(64),
+  email VARCHAR(255),
+  description VARCHAR(510),
+  created_at DATETIME,
+  updated_at DATETIME,
+  deleted_at DATETIME DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS `$hist$$auth$community` (
+  id INT,
+  name VARCHAR(64),
+  description VARCHAR(510),
+  created_at DATETIME,
+  updated_at DATETIME,
+  deleted_at DATETIME DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS `$hist$$auth$privilege` (
+  id INT,
+  name VARCHAR(64),
+  description VARCHAR(510),
+  created_at DATETIME,
+  updated_at DATETIME,
+  deleted_at DATETIME DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS `$hist$$auth$user_and_community` (
+  id INT,
+  id_user INT,
+  id_community INT,
+  created_at DATETIME,
+  updated_at DATETIME,
+  deleted_at DATETIME DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS `$hist$$auth$user_and_privilege` (
+  id INT,
+  id_user INT,
+  id_privilege INT,
+  created_at DATETIME,
+  updated_at DATETIME,
+  deleted_at DATETIME DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS `$hist$$auth$community_and_privilege` (
+  id INT,
+  id_community INT,
+  id_privilege INT,
+  created_at DATETIME,
+  updated_at DATETIME,
+  deleted_at DATETIME DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS `$hist$$auth$session` (
+  id INT,
+  id_user INT,
+  token VARCHAR(1024),
+  secret_token VARCHAR(1024),
+  data TEXT,
+  created_at DATETIME,
+  updated_at DATETIME,
+  deleted_at DATETIME DEFAULT NOW()
+);

@@ -1,0 +1,32 @@
+<%
+
+if(args.length === 0) {
+	throw new Error("Argument 1 must be an object to <findUserAndPrivilege>");
+}
+if(typeof args[0] !== "object" && typeof args[1] !== "object") {
+	throw new Error("Argument 1 or 2 must be an object to <findUserAndPrivilege>");
+}
+
+const whereUserSQL = utils.whereToSQL(args[0] || {}, false, "$auth$user", false);
+const wherePrivilegeSQL = utils.whereToSQL(args[1] || {}, false, "$auth$privilege", false);
+
+let whereUserAndPrivilegeSQL = "";
+if(whereUserSQL !== "") {
+	whereUserAndPrivilegeSQL += " AND " + whereUserSQL;
+}
+if(wherePrivilegeSQL !== "") {
+	whereUserAndPrivilegeSQL += " AND " + wherePrivilegeSQL;
+}
+if(whereUserAndPrivilegeSQL === "") {
+	throw new Error("No <whereConditions> found on <findUserAndPrivilege>");
+}
+
+%>
+
+SELECT $auth$user_and_privilege.* 
+	FROM $auth$user_and_privilege 
+	LEFT JOIN $auth$user
+		ON $auth$user_and_privilege.id_user = $auth$user.id
+	LEFT JOIN $auth$privilege
+		ON $auth$user_and_privilege.id_privilege = $auth$privilege.id
+	WHERE 1 = 1 <%- whereUserAndPrivilegeSQL %>;

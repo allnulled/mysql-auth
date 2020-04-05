@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">59.26% </span>
+                <span class="strong">7.41% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>16/27</span>
+                <span class='fraction'>2/27</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">42.86% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>6/14</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>2/2</span>
+                <span class='fraction'>1/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">60% </span>
+                <span class="strong">8% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>15/25</span>
+                <span class='fraction'>2/25</span>
             </div>
         
             
@@ -55,7 +55,7 @@
             Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -125,35 +125,35 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">46x</span>
-<span class="cline-any cline-yes">46x</span>
-<span class="cline-any cline-yes">46x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">46x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">46x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">46x</span>
-<span class="cline-any cline-yes">46x</span>
-<span class="cline-any cline-yes">46x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">46x</span>
-<span class="cline-any cline-yes">128x</span>
-<span class="cline-any cline-yes">128x</span>
-<span class="cline-any cline-yes">34x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -178,20 +178,20 @@ module.exports = function() {
 //		return this.createStandardTemplateParameters({ args });
 //	};
 	
-	this.can = async (token, privilege, defaultPolicy, conflictPolicy) =&gt; {
-		try {
-			<span class="missing-if-branch" title="else path not taken" >E</span>if(typeof privilege === "string") {
-				privilege = { name: privilege };
+	this.can = <span class="fstat-no" title="function not covered" >as</span>ync (token, privilege, defaultPolicy, conflictPolicy) =&gt; {
+<span class="cstat-no" title="statement not covered" >		try {</span>
+<span class="cstat-no" title="statement not covered" >			if(typeof privilege === "string") {</span>
+<span class="cstat-no" title="statement not covered" >				privilege = { name: privilege };</span>
 			}
-			<span class="missing-if-branch" title="if path not taken" >I</span>if(typeof privilege !== "object") {
+<span class="cstat-no" title="statement not covered" >			if(typeof privilege !== "object") {</span>
 <span class="cstat-no" title="statement not covered" >				throw new Error("Parameter &lt;privilege&gt; must be an object to &lt;can&gt;");</span>
 			}
-			<span class="missing-if-branch" title="if path not taken" >I</span>if(!("name" in privilege)) {
+<span class="cstat-no" title="statement not covered" >			if(!("name" in privilege)) {</span>
 <span class="cstat-no" title="statement not covered" >				throw new Error("Parameter &lt;privilege&gt; must have property &lt;name&gt; as string to &lt;can&gt;");</span>
 			}
-			const { data: sessionData } = await this.authenticate({ token });
-			const all = sessionData.privilege;
-			<span class="missing-if-branch" title="if path not taken" >I</span>if(["ENABLE","FORBID"].indexOf(privilege.name.substr(0, 6)) === 0) {
+			const { data: sessionData } = <span class="cstat-no" title="statement not covered" >await this.authenticate({ token });</span>
+			const all = <span class="cstat-no" title="statement not covered" >sessionData.privilege;</span>
+<span class="cstat-no" title="statement not covered" >			if(["ENABLE","FORBID"].indexOf(privilege.name.substr(0, 6)) === 0) {</span>
 				const oppositePrivilege = <span class="cstat-no" title="statement not covered" >(defaultPolicy ? "FORBID " : "ENABLE ") + privilege.name;</span>
 <span class="cstat-no" title="statement not covered" >				for(let index = <span class="cstat-no" title="statement not covered" >0;</span> index &lt; all.length; index++) {</span>
 					let item = <span class="cstat-no" title="statement not covered" >all[index];</span>
@@ -201,13 +201,13 @@ module.exports = function() {
 				}
 <span class="cstat-no" title="statement not covered" >				return defaultPolicy === "ENABLE";</span>
 			} else {
-				for(let index = 0; index &lt; all.length; index++) {
-					let item = all[index];
-					if (item.name === privilege.name) {
-						return true;
+<span class="cstat-no" title="statement not covered" >				for(let index = <span class="cstat-no" title="statement not covered" >0;</span> index &lt; all.length; index++) {</span>
+					let item = <span class="cstat-no" title="statement not covered" >all[index];</span>
+<span class="cstat-no" title="statement not covered" >					if (item.name === privilege.name) {</span>
+<span class="cstat-no" title="statement not covered" >						return true;</span>
 					}
 				}
-				return defaultPolicy === "ENABLE";
+<span class="cstat-no" title="statement not covered" >				return defaultPolicy === "ENABLE";</span>
 			}
 		} catch(error) {
 <span class="cstat-no" title="statement not covered" >			this.debugError("Error on &lt;can&gt;:", error);</span>
@@ -226,7 +226,7 @@ module.exports = function() {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Sat Apr 04 2020 14:23:47 GMT+0200 (GMT+02:00)
+                at Sun Apr 05 2020 14:10:38 GMT+0200 (GMT+02:00)
             </div>
         </div>
         <script src="../../prettify.js"></script>

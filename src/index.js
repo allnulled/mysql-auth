@@ -8,7 +8,7 @@ const path = require("path");
 const AuthClient = require(__dirname + "/auth-client.js");
 const utils = require(__dirname + "/utils.js");
 
-/*
+//*
 global.dd = function(...args) {
 	console.log(...args)
 	console.log("----- PROGRAM DIED -----");
@@ -46,7 +46,7 @@ class AuthSystem {
 			queryTemplates: {},
 			sessionCache: {},
 			debug: false,
-			silence: false,
+			trace: false,
 			clients: [],
 			sharedMethods: []
 		};
@@ -91,8 +91,12 @@ class AuthSystem {
 			"deleteUnconfirmedUser": __dirname + "/queries/delete unconfirmed user.sql.ejs",
 			"findCommunity": __dirname + "/queries/find community.sql.ejs",
 			"findPrivilege": __dirname + "/queries/find privilege.sql.ejs",
+			"findSession": __dirname + "/queries/find session.sql.ejs",
 			"findSessionByUser": __dirname + "/queries/find session by user.sql.ejs",
 			"findUser": __dirname + "/queries/find user.sql.ejs",
+			"findUserAndCommunity": __dirname + "/queries/find user and community.sql.ejs",
+			"findUserAndPrivilege": __dirname + "/queries/find user and privilege.sql.ejs",
+			"findCommunityAndPrivilege": __dirname + "/queries/find community and privilege.sql.ejs",
 			"findUnconfirmedUser": __dirname + "/queries/find unconfirmed user.sql.ejs",
 			"login": __dirname + "/queries/login.sql.ejs",
 			"logout": __dirname + "/queries/logout.sql.ejs",
@@ -105,6 +109,7 @@ class AuthSystem {
 			"revokePrivilegeFromCommunity": __dirname + "/queries/revoke privilege from community.sql.ejs",
 			"revokePrivilegeFromUser": __dirname + "/queries/revoke privilege from user.sql.ejs",
 			"revokeUserFromCommunity": __dirname + "/queries/revoke user from community.sql.ejs",
+			"saveInHistory": __dirname + "/queries/save in history.sql.ejs",
 			"unregisterCommunity": __dirname + "/queries/unregister community.sql.ejs",
 			"unregisterPrivilege": __dirname + "/queries/unregister privilege.sql.ejs",
 			"unregisterUser": __dirname + "/queries/unregister user.sql.ejs",
@@ -252,7 +257,7 @@ class AuthSystem {
 		try {
 			const queryTemplate = this.queries[template];
 			if (typeof queryTemplate !== "string") {
-				throw new Error("Query MySQLAuth#queries.<" + queryTemplate + "> is of type " + typeof(queryTemplate) + " instead of <string>");
+				throw new Error("Query MySQLAuth#queries.<" + queryTemplate + "> is of type " + typeof(queryTemplate) + " instead of <string> for template <" + template + ">");
 			}
 			// get from cache, if any!
 			const hasCached = await this.getFromCache(template, parameters, settings);
@@ -281,6 +286,7 @@ class AuthSystem {
 		this[name] = method.bind(this);
 		this.clients.forEach(client => client[name] = method.bind(this));
 	}
+
 }
 
 module.exports = AuthSystem;

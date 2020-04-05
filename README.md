@@ -85,7 +85,9 @@ await auth1.assignPrivilegeToCommunity({ name: "vote" }, { name: "humans" });
 ```
 
 
-## Reference
+## API Reference
+
+These are the signatures of the methods of the `mysql-auth` API.
 
 
 
@@ -112,13 +114,6 @@ await auth1.assignPrivilegeToCommunity({ name: "vote" }, { name: "humans" });
 
 -----
 
-##### `auth.assignPrivilegeToCommunity(wherePrivilege:Object, whereCommunity:Object):Promise`
-
-
-
-
------
-
 ##### `auth.assignUserToCommunity(whereUser:Object, whereCommunity:Object):Promise`
 
 
@@ -126,7 +121,7 @@ await auth1.assignPrivilegeToCommunity({ name: "vote" }, { name: "humans" });
 
 -----
 
-##### `auth.can(token:String, privilege:Object, defaultPolicy:Boolean):Promise`
+##### `auth.assignPrivilegeToCommunity(wherePrivilege:Object, whereCommunity:Object):Promise`
 
 
 
@@ -134,6 +129,13 @@ await auth1.assignPrivilegeToCommunity({ name: "vote" }, { name: "humans" });
 -----
 
 ##### `auth.authenticate(whereSession:Object, settings:Object):Promise`
+
+
+
+
+-----
+
+##### `auth.can(token:String, privilege:Object, defaultPolicy:Boolean):Promise`
 
 
 
@@ -226,6 +228,13 @@ await auth1.assignPrivilegeToCommunity({ name: "vote" }, { name: "humans" });
 
 -----
 
+##### `auth.findCommunityAndPrivilege(whereCommunity:Object, wherePrivilege:Object):Promise`
+
+
+
+
+-----
+
 ##### `auth.findPrivilege(wherePrivilege:Object):Promise`
 
 
@@ -240,6 +249,13 @@ await auth1.assignPrivilegeToCommunity({ name: "vote" }, { name: "humans" });
 
 -----
 
+##### `auth.findSession(whereUser:Object):Promise`
+
+
+
+
+-----
+
 ##### `auth.findUnconfirmedUser(whereUnconfirmedUser:Object):Promise`
 
 
@@ -248,6 +264,20 @@ await auth1.assignPrivilegeToCommunity({ name: "vote" }, { name: "humans" });
 -----
 
 ##### `auth.findUser(whereUser:Object):Promise`
+
+
+
+
+-----
+
+##### `auth.findUserAndCommunity(whereUser:Object, whereCommunity:Object):Promise`
+
+
+
+
+-----
+
+##### `auth.findUserAndPrivilege(whereUser:Object, wherePrivilege:Object):Promise`
 
 
 

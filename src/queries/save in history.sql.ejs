@@ -1,0 +1,26 @@
+<%
+
+if(args.length === 0) {
+	throw new Error("Argument 1 is required to <saveInHistory>");
+}
+if(typeof args[0] !== "string") {
+	throw new Error("Argument 1 must be a string to <saveInHistory>");
+}
+if(typeof args[1] !== "object") {
+	throw new Error("Argument 2 must be an object to <saveInHistory>");
+}
+if(!Array.isArray(args[1])) {
+	args[1] = [].concat(args[1]);
+}
+
+const [ table, items ] = args;
+const whereItemsSQL = utils.whereToSQL(items, false, table);
+
+%>
+
+INSERT INTO $hist$<%-table%> ( <%-utils.getFieldsForTable(table).map(column => SQL.escapeId(column)).join(", ")%> )
+(
+	SELECT <%-utils.getFieldsForTable(table).map(column => SQL.escapeId(table) + "." + SQL.escapeId(column)).join(", ")%>
+	FROM <%-SQL.escapeId(table)%>
+	WHERE <%- whereItemsSQL %>
+);

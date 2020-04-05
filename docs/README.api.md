@@ -22,13 +22,6 @@
 
 -----
 
-##### `auth.assignPrivilegeToCommunity(wherePrivilege:Object, whereCommunity:Object):Promise`
-
-
-
-
------
-
 ##### `auth.assignUserToCommunity(whereUser:Object, whereCommunity:Object):Promise`
 
 
@@ -36,7 +29,7 @@
 
 -----
 
-##### `auth.can(token:String, privilege:Object, defaultPolicy:Boolean):Promise`
+##### `auth.assignPrivilegeToCommunity(wherePrivilege:Object, whereCommunity:Object):Promise`
 
 
 
@@ -44,6 +37,13 @@
 -----
 
 ##### `auth.authenticate(whereSession:Object, settings:Object):Promise`
+
+
+
+
+-----
+
+##### `auth.can(token:String, privilege:Object, defaultPolicy:Boolean):Promise`
 
 
 
@@ -136,6 +136,13 @@
 
 -----
 
+##### `auth.findCommunityAndPrivilege(whereCommunity:Object, wherePrivilege:Object):Promise`
+
+
+
+
+-----
+
 ##### `auth.findPrivilege(wherePrivilege:Object):Promise`
 
 
@@ -150,6 +157,13 @@
 
 -----
 
+##### `auth.findSession(whereUser:Object):Promise`
+
+
+
+
+-----
+
 ##### `auth.findUnconfirmedUser(whereUnconfirmedUser:Object):Promise`
 
 
@@ -158,6 +172,20 @@
 -----
 
 ##### `auth.findUser(whereUser:Object):Promise`
+
+
+
+
+-----
+
+##### `auth.findUserAndCommunity(whereUser:Object, whereCommunity:Object):Promise`
+
+
+
+
+-----
+
+##### `auth.findUserAndPrivilege(whereUser:Object, wherePrivilege:Object):Promise`
 
 
 

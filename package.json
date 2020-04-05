@@ -4,7 +4,7 @@
   "description": "Authentication and authorization framework for Node.js and MySQL.",
   "main": "src/index.js",
   "scripts": {
-    "dev": "nodemon -w ./src -w ./src/queries -w ./test --ext '.js,.ejs' -x 'npm run cover'",
+    "dev": "nodemon -w ./src -w ./src/queries -w ./test --ext '.js,.ejs' -x 'npm run test'",
     "build": "npm run docs && sudo npm link && npm shrinkwrap",
     "upload": "git add . && git commit && git push",
     "docs": "javadoc -i 'src/**/*.js' -o docs/README.api.md -f markdown && concat docs/README.ini.md docs/README.api.md docs/README.end.md -o README.md",
@@ -24,6 +24,7 @@
     "debug": "^4.1.1",
     "ejs": "^3.0.1",
     "mysql": "^2.18.1",
+    "mysql-history": "0.0.1",
     "sqlstring": "^2.3.1"
   },
   "devDependencies": {

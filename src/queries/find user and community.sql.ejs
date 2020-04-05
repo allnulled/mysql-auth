@@ -1,0 +1,32 @@
+<%
+
+if(args.length === 0) {
+	throw new Error("Argument 1 must be an object to <findUserAndCommunity>");
+}
+if(typeof args[0] !== "object" && typeof args[1] !== "object") {
+	throw new Error("Argument 1 or 2 must be an object to <findUserAndCommunity>");
+}
+
+const whereUserSQL = utils.whereToSQL(args[0], false, "$auth$user", false);
+const whereCommunitySQL = utils.whereToSQL(args[1], false, "$auth$community", false);
+
+let whereUserAndCommunitySQL = "";
+if(whereCommunitySQL) {
+	whereUserAndCommunitySQL += " AND " + whereCommunitySQL;
+}
+if(whereUserSQL) {
+	whereUserAndCommunitySQL += " AND " + whereUserSQL;
+}
+if(whereUserAndCommunitySQL === "") {
+	throw new Error("No <whereConditions> found on <findUserAndCommunity>");
+}
+
+%>
+
+SELECT $auth$user_and_community.* 
+	FROM $auth$user_and_community 
+	LEFT JOIN $auth$user
+		ON $auth$user_and_community.id_user = $auth$user.id
+	LEFT JOIN $auth$community
+		ON $auth$user_and_community.id_community = $auth$community.id
+	WHERE 1 = 1 <%- whereUserAndCommunitySQL %>;

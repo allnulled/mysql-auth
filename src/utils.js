@@ -51,7 +51,7 @@ module.exports = {
 		return objs;
 	},
 
-	whereToSQL(whereConditionsParameter = [], prefixAnd = false, tableName = false) {
+	whereToSQL(whereConditionsParameter = [], prefixAnd = false, tableName = false, defaultValueWhenNoRows) {
 		let sql = "";
 		if(prefixAnd) {
 			sql += " AND ";
@@ -63,6 +63,13 @@ module.exports = {
 			whereConditions = Object.keys(whereConditions).map(property => [].concat([property]).concat(whereConditions[property]));
 		} else {
 			throw new Error("Parameter <whereConditions> must be an array or an object");
+		}
+		if(whereConditions.length === 0) {
+			if(typeof defaultValueWhenNoRows !== "undefined") {
+				return defaultValueWhenNoRows;
+			} else {
+				throw new Error("No <whereConditions> provided to <whereToSQL>");
+			}
 		}
 		whereConditions.forEach((whereCondition, conditionIndex) => {
 			if(conditionIndex !== 0) {
@@ -100,8 +107,11 @@ module.exports = {
 					throw new Error("Parameters <whereCondition> must have 3 items maximum");
 				}
 			} else if(typeof whereCondition === "object") {
-				Object.keys(whereCondition).forEach(propertySlot => {
+				Object.keys(whereCondition).forEach((propertySlot, propertyIndex) => {
 					const property = getPropertiesSQL(propertySlot, tableName);
+					if(propertyIndex !== 0) {
+						sql += " AND ";
+					}
 					sql += property + " = " + SQL.escape(whereCondition[propertySlot]);
 				});
 			} else {
@@ -110,4 +120,78 @@ module.exports = {
 		});
 		return sql;
 	},
+
+	getFieldsForTable(table) {
+
+		if(table === "$auth$unconfirmed_user") {
+			return [
+				"id",
+				"name",
+				"password",
+				"email",
+				"description",
+			];
+		} else if(table === "$auth$user") {
+			return [
+				"id",
+				"name",
+				"password",
+				"email",
+				"description",
+				"created_at",
+				"updated_at"
+			];
+		} else if(table === "$auth$community") {
+			return [
+				"id",
+				"name",
+				"description",
+				"created_at",
+				"updated_at",
+			];
+		} else if(table === "$auth$privilege") {
+			return [
+				"id",
+				"name",
+				"description",
+				"created_at",
+				"updated_at",
+			];
+		} else if(table === "$auth$user_and_community") {
+			return [
+				"id",
+				"id_user",
+				"id_community",
+				"created_at",
+				"updated_at"
+			];
+		} else if(table === "$auth$user_and_privilege") {
+			return [
+				"id",
+				"id_user",
+				"id_privilege",
+				"created_at",
+				"updated_at"
+			];
+		} else if(table === "$auth$community_and_privilege") {
+			return [
+				"id",
+				"id_community",
+				"id_privilege",
+				"created_at",
+				"updated_at",
+			];
+		} else if(table === "$auth$session") {
+			return [
+				"id",
+				"id_user",
+				"token",
+				"secret_token",
+				"data",
+				"created_at",
+				"updated_at",
+			];
+		}
+	}
+
 };

@@ -7,19 +7,8 @@
  */
 module.exports = function() {
 	
-	this.formatFindPrivilegeInput = async (args, settings) => {
-		try {
-			const [privilegeDetails] = args;
-			if(typeof privilegeDetails !== "object") {
-				throw new Error("Argument 1 must be an object to <formatFindPrivilegeInput>")
-			}
-			return this.createStandardTemplateParameters({
-				args: [Object.assign({}, privilegeDetails)]
-			});
-		} catch (error) {
-			this.debugError("Error on <formatFindPrivilegeInput>:", error);
-			throw error;
-		}
+	this.formatFindPrivilegeInput = (args, settings) => {
+		return this.createStandardTemplateParameters({ args });
 	};
 	
 	this.findPrivilege = (...args) => {

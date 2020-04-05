@@ -11,6 +11,7 @@ describe("AuthClient class", function() {
 	before(function(done) {
 		authSystem = MySQLAuth.create({
 			debug: true,
+			trace: false,
 			connectionSettings: {
 				user: "test",
 				password: "test",
@@ -362,14 +363,17 @@ describe("AuthClient class", function() {
 		}
 	});
 	
-	it.skip("(throws errors) will not register an unconfirmed user if the name already exists", async () => {
+	it("(throws errors) will not register an unconfirmed user if the name already exists", async () => {
 		try {
 			await authClient.registerUnconfirmedUser({ name: "user one", password: "xxxxxxxx", email: "user_one@domain.com" });
+			await authClient.confirmUser({ name: "user one", password: "xxxxxxxx", email: "user_one@domain.com" });
 			await authClient.registerUnconfirmedUser({ name: "user two", password: "xxxxxxxx", email: "user_two@domain.com" });
 			await authClient.registerUnconfirmedUser({ name: "user three", password: "xxxxxxxx", email: "user_three@domain.com" });
 			try {
+				console.log("\n\n\nThe following error is part of the test...............................................................");
 				await authClient.registerUnconfirmedUser({ name: "user one", password: "xxxxxxxx", email: "user_one@domain.com" });
 			} catch(error) {
+				console.log("...............................................................The previous error is part of the test\n\n\n");
 				expect(error.message).to.equal("Required property <name> to be unique to register a user");
 			}
 		} catch(error) {
@@ -412,11 +416,99 @@ describe("AuthClient class", function() {
 
 	it("allows to avoid parameters on creation", function(done) {
 		MySQLAuth.create();
-		MySQLAuth.create({ trace: true });
+		MySQLAuth.create({ trace: false });
 		done();
 	});
 
-	const { expect } = require("chai");
+	it("saves deleted users in history table", async function() {
+		try {
+			const { data: [{ count }] } = await authClient.system.$query("SELECT COUNT(*) AS 'count' FROM $hist$$auth$user;");
+			await authClient.registerUnconfirmedUser({ name: "user twenty", password: "password20", email: "user20@domain.com", description: "" });
+			await authClient.confirmUser({ name: "user twenty" })
+			await authClient.deleteUser({ name: "user twenty" });
+			const { data: [{ count: count2 }] } = await authClient.system.$query("SELECT COUNT(*) AS 'count' FROM $hist$$auth$user;");
+			expect(count2).to.equal(count + 1);
+		} catch(error) {
+			throw error;
+		}
+	});
+
+	it("saves deleted communities in history table", async function() {
+		try {
+			const { data: [{ count }] } = await authClient.system.$query("SELECT COUNT(*) AS 'count' FROM $hist$$auth$community;");
+			await authClient.registerCommunity({ name: "community twenty", description: "" });
+			await authClient.deleteCommunity({ name: "community twenty" });
+			const { data: [{ count: count2 }] } = await authClient.system.$query("SELECT COUNT(*) AS 'count' FROM $hist$$auth$community;");
+			expect(count2).to.equal(count + 1);
+		} catch(error) {
+			throw error;
+		}
+	});
+
+	it("saves deleted privileges in history table", async function() {
+		try {
+			const { data: [{ count }] } = await authClient.system.$query("SELECT COUNT(*) AS 'count' FROM $hist$$auth$privilege;");
+			await authClient.registerPrivilege({ name: "privilege twenty", description: "" });
+			await authClient.deletePrivilege({ name: "privilege twenty" });
+			const { data: [{ count: count2 }] } = await authClient.system.$query("SELECT COUNT(*) AS 'count' FROM $hist$$auth$privilege;");
+			expect(count2).to.equal(count + 1);
+		} catch(error) {
+			throw error;
+		}
+	});
+
+	it("saves logouts (sessions) in history table", async function() {
+		try {
+			const { data: [{ count }] } = await authClient.system.$query("SELECT COUNT(*) AS 'count' FROM $hist$$auth$session;");
+			const { data: sessionData } = await authClient.login({ name: "user ten", password: "password10" });
+			await authClient.logout({ token: sessionData.session.token });
+			const { data: [{ count: count2 }] } = await authClient.system.$query("SELECT COUNT(*) AS 'count' FROM $hist$$auth$session;");
+			expect(count2).to.equal(count + 1);
+		} catch(error) {
+			throw error;
+		}
+	});
+
+	it("saves revokation of community from user into history table", async function() {
+		try {
+			// @TODO....
+			await authClient.registerUnconfirmedUser({ name: "user ix", password: "password.ix", email: "userix@domain.com", description: "" });
+			await authClient.confirmUser({ name: "user ix" });
+			await authClient.registerCommunity({ name: "community 1", description: "" });
+			await authClient.assignUserToCommunity({ name: "user ix" }, { name: "community 1" });
+			const { data: [{ count }] } = await authClient.system.$query("SELECT COUNT(*) AS 'count' FROM $hist$$auth$user_and_community;");
+			await authClient.revokeUserFromCommunity({ name: "user ix" }, { name: "community 1" });
+			const { data: [{ count: count2 }] } = await authClient.system.$query("SELECT COUNT(*) AS 'count' FROM $hist$$auth$user_and_community;");
+			expect(count2).to.equal(count + 1);
+		} catch(error) {
+			throw error;
+		}
+	});
+
+	it("saves revokation of privilege from user into history table", async function() {
+		try {
+			const { data: [{ count }] } = await authClient.system.$query("SELECT COUNT(*) AS 'count' FROM $hist$$auth$user_and_privilege;");
+			await authClient.assignPrivilegeToUser({ name: "speak" }, { name: "user ix" });
+			await authClient.revokePrivilegeFromUser({ name: "speak" }, { name: "user ix" });
+			const { data: [{ count: count2 }] } = await authClient.system.$query("SELECT COUNT(*) AS 'count' FROM $hist$$auth$user_and_privilege;");
+			expect(count2).to.equal(count + 1);
+		} catch(error) {
+			throw error;
+		}
+	});
+
+	it("saves revokation of privilege from community into history table", async function() {
+		try {
+			const { data: [{ count }] } = await authClient.system.$query("SELECT COUNT(*) AS 'count' FROM $hist$$auth$community_and_privilege;");
+			await authClient.registerCommunity({ name: "community ix", description: "" });
+			await authClient.assignPrivilegeToCommunity({ name: "speak" }, { name: "community ix" });
+			await authClient.revokePrivilegeFromCommunity({ name: "speak" }, { name: "community ix" });
+			const { data: [{ count: count2 }] } = await authClient.system.$query("SELECT COUNT(*) AS 'count' FROM $hist$$auth$community_and_privilege;");
+			expect(count2).to.equal(count + 1);
+		} catch(error) {
+			throw error;
+		}
+	});
 	
 	it("all api", async function() {
 		this.timeout(1000 * 2);

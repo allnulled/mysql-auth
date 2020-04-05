@@ -1,0 +1,32 @@
+<%
+
+if(args.length === 0) {
+	throw new Error("Argument 1 must be an object to <findCommunityAndPrivilege>");
+}
+if(typeof args[0] !== "object" && typeof args[1] !== "object") {
+	throw new Error("Argument 1 or 2 must be an object to <findCommunityAndPrivilege>");
+}
+
+const whereCommunitySQL = utils.whereToSQL(args[0] || {}, false, "$auth$community", false);
+const wherePrivilegeSQL = utils.whereToSQL(args[1] || {}, false, "$auth$privilege", false);
+
+let whereCommunityAndPrivilegeSQL = "";
+if(whereCommunitySQL) {
+	whereCommunityAndPrivilegeSQL += " AND " + whereCommunitySQL;
+}
+if(wherePrivilegeSQL) {
+	whereCommunityAndPrivilegeSQL += " AND " + wherePrivilegeSQL;
+}
+if(whereCommunityAndPrivilegeSQL === "") {
+	throw new Error("No <whereConditions> found on <findCommunityAndPrivilege>");
+}
+
+%>
+
+SELECT $auth$community_and_privilege.* 
+	FROM $auth$community_and_privilege
+	LEFT JOIN $auth$community
+		ON $auth$community_and_privilege.id_community = $auth$community.id
+	LEFT JOIN $auth$privilege
+		ON $auth$community_and_privilege.id_privilege = $auth$privilege.id
+	WHERE 1 = 1 <%- whereCommunityAndPrivilegeSQL %>;

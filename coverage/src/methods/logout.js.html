@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">44.44% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>11/11</span>
+                <span class='fraction'>8/18</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">0% </span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">50% </span>
-                <span class="quiet">Branches</span>
-                <span class='fraction'>1/2</span>
-            </div>
-        
-            
-            <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>4/4</span>
+                <span class='fraction'>2/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">44.44% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>11/11</span>
+                <span class='fraction'>8/18</span>
             </div>
         
             
@@ -55,7 +55,7 @@
             Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -83,7 +83,17 @@
 <a name='L24'></a><a href='#L24'>24</a>
 <a name='L25'></a><a href='#L25'>25</a>
 <a name='L26'></a><a href='#L26'>26</a>
-<a name='L27'></a><a href='#L27'>27</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L27'></a><a href='#L27'>27</a>
+<a name='L28'></a><a href='#L28'>28</a>
+<a name='L29'></a><a href='#L29'>29</a>
+<a name='L30'></a><a href='#L30'>30</a>
+<a name='L31'></a><a href='#L31'>31</a>
+<a name='L32'></a><a href='#L32'>32</a>
+<a name='L33'></a><a href='#L33'>33</a>
+<a name='L34'></a><a href='#L34'>34</a>
+<a name='L35'></a><a href='#L35'>35</a>
+<a name='L36'></a><a href='#L36'>36</a>
+<a name='L37'></a><a href='#L37'>37</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -93,20 +103,30 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/**
@@ -118,21 +138,31 @@
  */
 module.exports = function() {
 	
-	this.formatLogoutInput = (args, settings) =&gt; {
-		return this.createStandardTemplateParameters({ args });
+	this.formatLogoutInput = <span class="fstat-no" title="function not covered" >(a</span>rgs, settings) =&gt; {
+<span class="cstat-no" title="statement not covered" >		return this.createStandardTemplateParameters({ args });</span>
 	};
 	
-	this.logout = (...args) =&gt; {
-		return this.onQuery("logout", args);
-	};
-	
-	this.formatLogoutOutput = (result, parameters, args, settings) =&gt; {
-		const { data: { affectedRows } } = result;
-		<span class="missing-if-branch" title="else path not taken" >E</span>if(affectedRows &gt; 0) {
-			const [{ token }] = parameters;
-			delete this.sessionCache[token];
+	this.logout = async (sessionDetails) =&gt; {
+		try {
+			const { data: sessions } = await this.findSession(sessionDetails);
+<span class="cstat-no" title="statement not covered" >			if(sessions.length === 0) {</span>
+<span class="cstat-no" title="statement not covered" >				throw new Error("No session found to &lt;logout&gt;");</span>
+			}
+<span class="cstat-no" title="statement not covered" >			await this.saveInHistory("$auth$session", { id: sessions[0].id });</span>
+<span class="cstat-no" title="statement not covered" >			return await this.onQuery("logout", { token: sessions[0].token });</span>
+		} catch(error) {
+			this.debugError(error);
+			throw error;
 		}
-		return result;
+	}
+	
+	this.formatLogoutOutput = <span class="fstat-no" title="function not covered" >(r</span>esult, parameters, args, settings) =&gt; {
+		const { data: { affectedRows } } = <span class="cstat-no" title="statement not covered" >result;</span>
+<span class="cstat-no" title="statement not covered" >		if(affectedRows &gt; 0) {</span>
+			const [{ token }] = <span class="cstat-no" title="statement not covered" >parameters;</span>
+<span class="cstat-no" title="statement not covered" >			delete this.sessionCache[token];</span>
+		}
+<span class="cstat-no" title="statement not covered" >		return result;</span>
 	};
 &nbsp;
 };</pre></td></tr></table></pre>
@@ -142,7 +172,7 @@ module.exports = function() {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Sat Apr 04 2020 14:23:47 GMT+0200 (GMT+02:00)
+                at Sun Apr 05 2020 14:10:38 GMT+0200 (GMT+02:00)
             </div>
         </div>
         <script src="../../prettify.js"></script>

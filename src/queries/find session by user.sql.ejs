@@ -11,7 +11,7 @@ const whereUserSQL = utils.whereToSQL(args[0], false, "$auth$user");
 
 %>
 
-SELECT * FROM $auth$session
+SELECT $auth$session.* FROM $auth$session
 	LEFT JOIN $auth$user
 		ON $auth$user.id = $auth$session.id_user
 	WHERE <%- whereUserSQL %>;

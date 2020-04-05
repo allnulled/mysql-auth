@@ -30,12 +30,10 @@ module.exports = function() {
 				throw new Error("Property <id> of argument 1 must be a valid ID");
 			}
 			let output = [];
-			output.push(await this.onQuery("unregisterPrivilege", [{
-				id
-			}]));
-			output.push(await this.onQuery("deletePrivilege", [{
-				id
-			}]));
+			const unregisteredPrivilege = await this.onQuery("unregisterPrivilege", [{ id }]);
+			const deletedPrivilege = await this.onQuery("deletePrivilege", [{ id }]);
+			output.push(unregisteredPrivilege);
+			output.push(deletedPrivilege);
 			return output;
 		} catch (error) {
 			this.debugError("Error on <unregisterPrivilege>:", error);

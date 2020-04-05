@@ -1,8 +1,10 @@
 <%
+
 if(args.length === 0) {
 	throw new Error("Argument 1 is required to <logout>");
 }
 if(typeof args[0] !== "object") {
+	dd(args);
 	throw new Error("Argument 1 must be an object to <logout>");
 }
 if(typeof args[0].token !== "string") {

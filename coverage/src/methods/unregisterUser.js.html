@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">69.57% </span>
+                <span class="strong">17.39% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>16/23</span>
+                <span class='fraction'>4/23</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">33.33% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>2/6</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">25% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>4/4</span>
+                <span class='fraction'>1/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">69.57% </span>
+                <span class="strong">17.39% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>16/23</span>
+                <span class='fraction'>4/23</span>
             </div>
         
             
@@ -55,7 +55,7 @@
             Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -110,37 +110,37 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/**
@@ -152,38 +152,38 @@
  */
 module.exports = function() {
 	
-	this.formatUnregisterUserInput = (args, settings) =&gt; {
-		return this.createStandardTemplateParameters({ args });
+	this.formatUnregisterUserInput = <span class="fstat-no" title="function not covered" >(a</span>rgs, settings) =&gt; {
+<span class="cstat-no" title="statement not covered" >		return this.createStandardTemplateParameters({ args });</span>
 	};
 	
-	this.unregisterUser = async (userDetails) =&gt; {
-		try {
-			let id = undefined;
-			<span class="missing-if-branch" title="if path not taken" >I</span>if (!("id" in userDetails)) {
+	this.unregisterUser = <span class="fstat-no" title="function not covered" >as</span>ync (userDetails) =&gt; {
+<span class="cstat-no" title="statement not covered" >		try {</span>
+			let id = <span class="cstat-no" title="statement not covered" >undefined;</span>
+<span class="cstat-no" title="statement not covered" >			if (!("id" in userDetails)) {</span>
 				const { data: matched } = <span class="cstat-no" title="statement not covered" >await this.findUser(userDetails);</span>
 <span class="cstat-no" title="statement not covered" >				if (matched.length === 0) {</span>
 <span class="cstat-no" title="statement not covered" >					throw new Error("Required 1 match minimum to &lt;unregisterUser&gt;");</span>
 				}
 <span class="cstat-no" title="statement not covered" >				id = matched[0].id;</span>
 			} else {
-				id = userDetails.id;
+<span class="cstat-no" title="statement not covered" >				id = userDetails.id;</span>
 			}
-			<span class="missing-if-branch" title="if path not taken" >I</span>if (typeof id === "undefined") {
+<span class="cstat-no" title="statement not covered" >			if (typeof id === "undefined") {</span>
 <span class="cstat-no" title="statement not covered" >				throw new Error("Property &lt;id&gt; of argument 1 must be a valid ID");</span>
 			}
-			let output = [];
-			const logoutResult = await this.logoutByUser({ id });
-			const unregisterResult = await this.onQuery("unregisterUser", [{ id }]);
-			const deleteResult = await this.deleteUser({ id });
-			return { logoutResult, unregisterResult, deleteResult};
+			let output = <span class="cstat-no" title="statement not covered" >[];</span>
+			const logoutResult = <span class="cstat-no" title="statement not covered" >await this.logoutByUser({ id });</span>
+			const unregisterResult = <span class="cstat-no" title="statement not covered" >await this.onQuery("unregisterUser", [{ id }]);</span>
+			const deleteResult = <span class="cstat-no" title="statement not covered" >await this.deleteUser({ id });</span>
+<span class="cstat-no" title="statement not covered" >			return { logoutResult, unregisterResult, deleteResult};</span>
 		} catch (error) {
 <span class="cstat-no" title="statement not covered" >			this.debugError("Error on &lt;unregisterUser&gt;:", error);</span>
 <span class="cstat-no" title="statement not covered" >			throw error;</span>
 		}
 	};
 	
-	this.formatUnregisterUserOutput = (result, parameters, args, settings) =&gt; {
-		return result;
+	this.formatUnregisterUserOutput = <span class="fstat-no" title="function not covered" >(r</span>esult, parameters, args, settings) =&gt; {
+<span class="cstat-no" title="statement not covered" >		return result;</span>
 	};
 &nbsp;
 };</pre></td></tr></table></pre>
@@ -193,7 +193,7 @@ module.exports = function() {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Sat Apr 04 2020 14:23:47 GMT+0200 (GMT+02:00)
+                at Sun Apr 05 2020 14:10:38 GMT+0200 (GMT+02:00)
             </div>
         </div>
         <script src="../../prettify.js"></script>

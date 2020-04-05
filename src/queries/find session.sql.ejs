@@ -1,0 +1,15 @@
+<%
+
+if(typeof args !== "object") {
+	throw new Error("Argument 1 must be an object to <findSession>");
+}
+if(Object.keys(args[0]).length === 0) {
+	throw new Error("Argument 1 must have 1 property minimum to <findSession>");
+}
+
+const whereSessionSQL = utils.whereToSQL(args[0], false, "$auth$session");
+
+%>
+
+SELECT $auth$session.* FROM $auth$session
+	WHERE <%- whereSessionSQL %>;
