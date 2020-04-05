@@ -24,7 +24,6 @@
     "debug": "^4.1.1",
     "ejs": "^3.0.1",
     "mysql": "^2.18.1",
-    "mysql-history": "0.0.1",
     "sqlstring": "^2.3.1"
   },
   "devDependencies": {

@@ -15,6 +15,13 @@
 
 -----
 
+##### `auth.assignPrivilegeToCommunity(wherePrivilege:Object, whereCommunity:Object):Promise`
+
+
+
+
+-----
+
 ##### `auth.assignPrivilegeToUser(wherePrivilege:Object, whereUser:Object):Promise`
 
 
@@ -23,13 +30,6 @@
 -----
 
 ##### `auth.assignUserToCommunity(whereUser:Object, whereCommunity:Object):Promise`
-
-
-
-
------
-
-##### `auth.assignPrivilegeToCommunity(wherePrivilege:Object, whereCommunity:Object):Promise`
 
 
 
@@ -87,14 +87,14 @@
 
 -----
 
-##### `auth.createTables():Promise`
+##### `auth.deleteCommunity(whereCommunity:Object):Promise`
 
 
 
 
 -----
 
-##### `auth.deleteCommunity(whereCommunity:Object):Promise`
+##### `auth.createTables():Promise`
 
 
 
@@ -108,13 +108,6 @@
 
 -----
 
-##### `auth.deleteTables():Promise`
-
-
-
-
------
-
 ##### `auth.deleteUnconfirmedUser(whereUnconfirmedUser:Object):Promise`
 
 
@@ -122,7 +115,7 @@
 
 -----
 
-##### `auth.deleteUser(whereUser:Object):Promise`
+##### `auth.deleteTables():Promise`
 
 
 
@@ -130,6 +123,13 @@
 -----
 
 ##### `auth.findCommunity(whereCommunity:Object):Promise`
+
+
+
+
+-----
+
+##### `auth.deleteUser(whereUser:Object):Promise`
 
 
 
@@ -150,14 +150,14 @@
 
 -----
 
-##### `auth.findSessionByUser(whereUser:Object):Promise`
+##### `auth.findSession(whereUser:Object):Promise`
 
 
 
 
 -----
 
-##### `auth.findSession(whereUser:Object):Promise`
+##### `auth.findSessionByUser(whereUser:Object):Promise`
 
 
 

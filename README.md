@@ -107,6 +107,13 @@ These are the signatures of the methods of the `mysql-auth` API.
 
 -----
 
+##### `auth.assignPrivilegeToCommunity(wherePrivilege:Object, whereCommunity:Object):Promise`
+
+
+
+
+-----
+
 ##### `auth.assignPrivilegeToUser(wherePrivilege:Object, whereUser:Object):Promise`
 
 
@@ -115,13 +122,6 @@ These are the signatures of the methods of the `mysql-auth` API.
 -----
 
 ##### `auth.assignUserToCommunity(whereUser:Object, whereCommunity:Object):Promise`
-
-
-
-
------
-
-##### `auth.assignPrivilegeToCommunity(wherePrivilege:Object, whereCommunity:Object):Promise`
 
 
 
@@ -179,14 +179,14 @@ These are the signatures of the methods of the `mysql-auth` API.
 
 -----
 
-##### `auth.createTables():Promise`
+##### `auth.deleteCommunity(whereCommunity:Object):Promise`
 
 
 
 
 -----
 
-##### `auth.deleteCommunity(whereCommunity:Object):Promise`
+##### `auth.createTables():Promise`
 
 
 
@@ -200,13 +200,6 @@ These are the signatures of the methods of the `mysql-auth` API.
 
 -----
 
-##### `auth.deleteTables():Promise`
-
-
-
-
------
-
 ##### `auth.deleteUnconfirmedUser(whereUnconfirmedUser:Object):Promise`
 
 
@@ -214,7 +207,7 @@ These are the signatures of the methods of the `mysql-auth` API.
 
 -----
 
-##### `auth.deleteUser(whereUser:Object):Promise`
+##### `auth.deleteTables():Promise`
 
 
 
@@ -222,6 +215,13 @@ These are the signatures of the methods of the `mysql-auth` API.
 -----
 
 ##### `auth.findCommunity(whereCommunity:Object):Promise`
+
+
+
+
+-----
+
+##### `auth.deleteUser(whereUser:Object):Promise`
 
 
 
@@ -242,14 +242,14 @@ These are the signatures of the methods of the `mysql-auth` API.
 
 -----
 
-##### `auth.findSessionByUser(whereUser:Object):Promise`
+##### `auth.findSession(whereUser:Object):Promise`
 
 
 
 
 -----
 
-##### `auth.findSession(whereUser:Object):Promise`
+##### `auth.findSessionByUser(whereUser:Object):Promise`
 
 
 
