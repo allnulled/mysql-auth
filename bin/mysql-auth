@@ -1,0 +1,90 @@
+#!/usr/bin/env node
+
+const path = require("path");
+const pkg = require(__dirname + "/../package.json");
+const args = require("yargs")
+	.version(pkg.version)
+	.option("command", {
+		type: "string",
+		default: "create",
+		demmandOption: true,
+		describe: "create or delete (tables)",
+	})
+	.option("user", {
+		type: "string",
+		default: undefined,
+		describe: "db user",
+	})
+	.option("password", {
+		type: "string",
+		default: undefined,
+		describe: "db user password",
+	})
+	.option("host", {
+		type: "string",
+		default: "127.0.0.1",
+		describe: "db host",
+	})
+	.option("port", {
+		type: "number",
+		default: 3306,
+		describe: "db port",
+	})
+	.option("database", {
+		type: "string",
+		default: undefined,
+		describe: "db name",
+	})
+	.option("configurations", {
+		type: "string",
+		default: undefined,
+		describe: "db connection configurations file",
+	})
+	.option("post-callback", {
+		type: "string",
+		default: undefined,
+		describe: "file executed after command",
+	})
+	.option("error-callback", {
+		type: "string",
+		default: undefined,
+		describe: "file executed on errors",
+	})
+	.argv;
+
+const command = args.command;
+const connectionSettings = args.configurations ? require(path.resolve(args.configurations)) : {
+	user: args.user,
+	password: args.password,
+	host: args.host,
+	port: args.port,
+	database: args.database,
+};
+const MySQLAuth = require(__dirname + "/../" + pkg.main);
+const auth = MySQLAuth.create({ connectionSettings });
+const postCallback = () => {
+	if(args.postCallback) {
+		require(args.postCallback)(auth, args);
+	} else {
+		auth.connection.end();
+		console.log(`[mysql-auth:${args.command}] Successfully done.`);
+	}
+}
+const errorCallback = (error) => {
+	if(args.errorCallback) {
+		require(args.errorCallback)(error, auth, args);
+	} else {
+		console.log(`[mysql-auth:${args.command}] Error on <mysql-auth> CLI:`, error);
+		auth.connection.end();
+	}
+}
+
+auth.initialize();
+
+if(args.command === "create") {
+	auth.createTables().then(postCallback).catch(errorCallback);
+} else if(args.command === "delete") {
+	auth.deleteTables().then(postCallback).catch(errorCallback);
+} else {
+	throw new Error("Command option must be: <create> or <delete>");
+}

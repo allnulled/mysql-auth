@@ -2,6 +2,14 @@ const { expect } = require("chai");
 const nodelive = require("nodelive");
 const bcrypt = require("bcrypt");
 const MySQLAuth = require(__dirname + "/../src/index.js");
+const exec = require("execute-command-sync");
+const CONNECTION_SETTINGS = {
+	user: "test",
+	password: "test",
+	database: "database3",
+	host: "127.0.0.1",
+	port: 3306,
+};
 
 describe("AuthClient class", function() {
 
@@ -12,13 +20,7 @@ describe("AuthClient class", function() {
 		authSystem = MySQLAuth.create({
 			debug: true,
 			trace: false,
-			connectionSettings: {
-				user: "test",
-				password: "test",
-				database: "database3",
-				host: "127.0.0.1",
-				port: 3306,
-			}
+			connectionSettings: CONNECTION_SETTINGS
 		}).initialize();
 		authClient = authSystem.createClient();
 		authClient2 = authSystem.createClient();
@@ -510,9 +512,22 @@ describe("AuthClient class", function() {
 		}
 	});
 	
-	it("all api", async function() {
-		this.timeout(1000 * 2);
+	it("CLI works too", async function() {
 		try {
+			const { data: [{ usersPrev }] } = await authClient.system.$query("SELECT COUNT(*) AS 'users' FROM $auth$user;");
+			const { data: [{ communitiesPrev }] } = await authClient.system.$query("SELECT COUNT(*) AS 'communities' FROM $auth$community;");
+			const { data: [{ privilegesPrev }] } = await authClient.system.$query("SELECT COUNT(*) AS 'privileges' FROM $auth$privilege;");
+			expect(usersPrev).to.not.equal(0);
+			expect(communitiesPrev).to.not.equal(0);
+			expect(privilegesPrev).to.not.equal(0);
+			exec(`./bin/mysql-auth --command delete --user ${CONNECTION_SETTINGS.user} --password ${CONNECTION_SETTINGS.password} --database ${CONNECTION_SETTINGS.database} --host ${CONNECTION_SETTINGS.host} --port ${CONNECTION_SETTINGS.port}`, { cwd: __dirname + "/.." });
+			exec(`./bin/mysql-auth --command create --user ${CONNECTION_SETTINGS.user} --password ${CONNECTION_SETTINGS.password} --database ${CONNECTION_SETTINGS.database} --host ${CONNECTION_SETTINGS.host} --port ${CONNECTION_SETTINGS.port}`, { cwd: __dirname + "/.." });
+			const { data: [{ users }] } = await authClient.system.$query("SELECT COUNT(*) AS 'users' FROM $auth$user;");
+			const { data: [{ communities }] } = await authClient.system.$query("SELECT COUNT(*) AS 'communities' FROM $auth$community;");
+			const { data: [{ privileges }] } = await authClient.system.$query("SELECT COUNT(*) AS 'privileges' FROM $auth$privilege;");
+			expect(users).to.equal(0);
+			expect(communities).to.equal(0);
+			expect(privileges).to.equal(0);
 		} catch(error) {
 			throw error;
 		}

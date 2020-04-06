@@ -49,8 +49,16 @@ These are some of the advantages of `mysql-auth`:
 
 ### CLI usage
 
+*Note: CLI is only to create and delete the tables that will manage the auth*
+
 ```sh
-...
+mysql-auth 
+   --command create     # or <delete>
+   --host 127.0.0.1     # db host
+   --port 3306          # db port
+   --database test      # db name
+   --user test          # db user
+   --password test      # db password
 ```
 
 ### API usage

@@ -1,7 +1,10 @@
 {
   "name": "mysql-auth",
   "version": "0.0.1",
-  "description": "Authentication and authorization framework for Node.js and MySQL.",
+  "description": "Authentication and authorization framework for Node.js and MySQL",
+  "bin": {
+    "mysql-auth": "./bin/mysql-auth"
+  },
   "main": "src/index.js",
   "scripts": {
     "dev": "nodemon -w ./src -w ./src/queries -w ./test --ext '.js,.ejs' -x 'npm run test'",
@@ -14,8 +17,14 @@
   "keywords": [
     "authentication",
     "authorization",
+    "users",
+    "communities",
+    "privileges",
+    "sessions",
+    "mysql",
     "database",
-    "mysql"
+    "system",
+    "promise"
   ],
   "author": "allnulled",
   "license": "WTFPL",
@@ -29,6 +38,7 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "concat": "^1.0.3",
+    "execute-command-sync": "^1.0.2",
     "javadoc": "^2.0.0",
     "mocha": "^7.1.1",
     "nodelive": "^1.0.6",

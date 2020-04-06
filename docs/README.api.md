@@ -1,6 +1,13 @@
 
 -----
 
+##### `auth.assignPrivilegeToCommunity(wherePrivilege:Object, whereCommunity:Object):Promise`
+
+
+
+
+-----
+
 ##### `const AuthSystem = require("mysql-auth")`
 
 
@@ -9,13 +16,6 @@
 -----
 
 ##### `const authSystem = AuthSystem.create(...)`
-
-
-
-
------
-
-##### `auth.assignPrivilegeToCommunity(wherePrivilege:Object, whereCommunity:Object):Promise`
 
 
 
@@ -87,14 +87,14 @@
 
 -----
 
-##### `auth.deleteCommunity(whereCommunity:Object):Promise`
+##### `auth.createTables():Promise`
 
 
 
 
 -----
 
-##### `auth.createTables():Promise`
+##### `auth.deleteCommunity(whereCommunity:Object):Promise`
 
 
 
@@ -108,13 +108,6 @@
 
 -----
 
-##### `auth.deleteUnconfirmedUser(whereUnconfirmedUser:Object):Promise`
-
-
-
-
------
-
 ##### `auth.deleteTables():Promise`
 
 
@@ -122,7 +115,7 @@
 
 -----
 
-##### `auth.findCommunity(whereCommunity:Object):Promise`
+##### `auth.deleteUnconfirmedUser(whereUnconfirmedUser:Object):Promise`
 
 
 
@@ -130,6 +123,13 @@
 -----
 
 ##### `auth.deleteUser(whereUser:Object):Promise`
+
+
+
+
+-----
+
+##### `auth.findCommunity(whereCommunity:Object):Promise`
 
 
 
@@ -241,13 +241,6 @@
 
 -----
 
-##### `auth.registerUnconfirmedUser(userDetails:Object):Promise`
-
-
-
-
------
-
 ##### `auth.revokePrivilegeFromCommunity(wherePrivilege:Object, whereCommunity:Object):Promise`
 
 
@@ -256,6 +249,13 @@
 -----
 
 ##### `auth.revokePrivilegeFromUser(wherePrivilege:Object, whereUser:Object):Promise`
+
+
+
+
+-----
+
+##### `auth.registerUnconfirmedUser(userDetails:Object):Promise`
 
 
 
