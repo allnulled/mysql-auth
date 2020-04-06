@@ -1,13 +1,6 @@
 
 -----
 
-##### `auth.assignPrivilegeToCommunity(wherePrivilege:Object, whereCommunity:Object):Promise`
-
-
-
-
------
-
 ##### `const AuthSystem = require("mysql-auth")`
 
 
@@ -16,6 +9,13 @@
 -----
 
 ##### `const authSystem = AuthSystem.create(...)`
+
+
+
+
+-----
+
+##### `auth.assignPrivilegeToCommunity(wherePrivilege:Object, whereCommunity:Object):Promise`
 
 
 
@@ -51,13 +51,6 @@
 -----
 
 ##### `auth.canMultiple(token:String, canArgsList:Array<Object>):Promise`
-
-
-
-
------
-
-##### `auth.cannot(token:String, privilege:Object, defaultPolicy:Boolean):Promise`
 
 
 
@@ -241,6 +234,13 @@
 
 -----
 
+##### `auth.registerUnconfirmedUser(userDetails:Object):Promise`
+
+
+
+
+-----
+
 ##### `auth.revokePrivilegeFromCommunity(wherePrivilege:Object, whereCommunity:Object):Promise`
 
 
@@ -249,13 +249,6 @@
 -----
 
 ##### `auth.revokePrivilegeFromUser(wherePrivilege:Object, whereUser:Object):Promise`
-
-
-
-
------
-
-##### `auth.registerUnconfirmedUser(userDetails:Object):Promise`
 
 
 
@@ -298,6 +291,13 @@
 -----
 
 ##### `auth.updatePrivilege(wherePrivilege:Object):Promise`
+
+
+
+
+-----
+
+##### `auth.cannot(token:String, privilege:Object, defaultPolicy:Boolean):Promise`
 
 
 

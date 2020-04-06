@@ -29,7 +29,6 @@ These are some of the advantages of `mysql-auth`:
    - [✔] Caches the most queried table `session`
    - [✔] Flexible parametrization of API
    - [✔] Historical data automatically stored in different[ly prefixed] tables
-   - [✔] Good coverage marks
    - [✔] There is not an enterprise version of this software
    - [✔] Free license [(WTFPL)](https://es.wikipedia.org/wiki/WTFPL)
 
@@ -42,7 +41,8 @@ These are some of the advantages of `mysql-auth`:
    - [✔] Sessions autogenerate their `token` and `secret_token`
    - [✔] Cache is refreshed only when required
    - [✔] Cache is an in-memory map
-   - [✔] Database connection is made by a pool of connections
+   - [✔] Database connection is made by a pool of connections (and it must be closed manually from API)
+   - [✔] 
 
 
 ## Usage
@@ -68,32 +68,106 @@ mysql-auth
 ```js
 const MySQLAuthSystem = require("mysql-auth");
 // 1. Create an auth system (this is to manage cache centralizedly):
-const authSystem = MySQLAuthSystem.create();
-// 2. Create clients of this auth system:
-const auth1 = authSystem.createClient();
-const auth2 = authSystem.createClient();
-const auth3 = authSystem.createClient();
+const auth = MySQLAuthSystem.create({
+   connectionSettings: {
+      host: ...,
+      port: ...,
+      database: ...,
+      user: ...,
+      password: ...,
+   },
+   debug: true, // this will log all SQL queries made by the framework
+   trace: false // this will log by console everytime a method of the API is called
+});
 ```
 
 ##### Play with the API
 
 ```js
 // 1. register unconfirmed user:
-await auth1.registerUnconfirmedUser({ name: "user1", password: "1", email: "user1@email.com" });
+await auth.registerUnconfirmedUser({ name: "user1", password: "1", email: "user1@email.com" });
 // 2. confirm user:
-await auth1.confirmUser({ name: "user1" });
+await auth.confirmUser({ name: "user1" });
 // 3. login user:
-const { data } = await auth1.login({ name: "user1", password: "1" });
+const { data } = await auth.login({ name: "user1", password: "1" });
 // 4. assign privilege to user:
-await auth1.assignPrivilegeToUser({ name: "speak" }, { name: "user1" });
+await auth.assignPrivilegeToUser({ name: "speak" }, { name: "user1" });
 // 5. assign community to user:
-await auth1.assignCommunityToUser({ name: "community 1" }, { name: "user1" });
+await auth.assignCommunityToUser({ name: "community 1" }, { name: "user1" });
 // 6. assign privilege to community:
-await auth1.assignPrivilegeToCommunity({ name: "vote" }, { name: "humans" });
+await auth.assignPrivilegeToCommunity({ name: "vote" }, { name: "humans" });
+// ...
 ```
 
 
 ## API Reference
+
+### API database schema
+
+The API database schema of the `mysql-auth` package is created by a SQL query located at:
+
+   - [https://raw.githubusercontent.com/allnulled/mysql-auth/master/src/queries/create%20tables.sql.ejs](https://raw.githubusercontent.com/allnulled/mysql-auth/master/src/queries/create%20tables.sql.ejs)
+
+Check it to have a better understanding of how the database is altered to have **authentication** and **authorization**.
+
+### API methods list
+
+```js
+Auth = require("mysql-auth");
+auth = Auth.create({
+   connectionSettings: {
+      host: "127.0.0.1",
+      port: 3306,
+      database: "test",
+      user: "test",
+      password: "test"
+   },
+   debug: false,
+   trace: false,
+})
+auth.assignPrivilegeToUser(wherePrivilege, whereUser)
+auth.assignUserToCommunity(whereUser, whereCommunity)
+auth.authenticate(whereSession, settings)
+auth.can(token, privilege, defaultPolicy)
+auth.canMultiple(token, canArgsList<Object>)
+auth.cannot(token, privilege, defaultPolicy)
+auth.cannotMultiple(token, canArgsList<Object>)
+auth.confirmUser(user)
+auth.createTables()
+auth.deleteCommunity(whereCommunity)
+auth.deletePrivilege(wherePrivilege)
+auth.deleteTables()
+auth.deleteUnconfirmedUser(whereUnconfirmedUser)
+auth.deleteUser(whereUser)
+auth.findCommunity(whereCommunity)
+auth.findCommunityAndPrivilege(whereCommunity, wherePrivilege)
+auth.findPrivilege(wherePrivilege)
+auth.findSession(whereUser)
+auth.findSessionByUser(whereUser)
+auth.findUnconfirmedUser(whereUnconfirmedUser)
+auth.findUser(whereUser)
+auth.findUserAndCommunity(whereUser, whereCommunity)
+auth.findUserAndPrivilege(whereUser, wherePrivilege)
+auth.login(whereUser)
+auth.logout(whereSession)
+auth.logoutByUser(whereUser)
+auth.refresh(whereSession)
+auth.refreshAll()
+auth.registerCommunity(communityDetails)
+auth.registerPrivilege(privilegeDetails)
+auth.revokePrivilegeFromCommunity(wherePrivilege, whereCommunity)
+auth.revokePrivilegeFromUser(wherePrivilege, whereUser)
+auth.registerUnconfirmedUser(userDetails)
+auth.revokeUserFromCommunity(whereUser, whereCommunity)
+auth.unregisterCommunity(whereCommunity)
+auth.unregisterPrivilege(wherePrivilege)
+auth.unregisterUser(whereUser)
+auth.updateCommunity(whereCommunity)
+auth.updatePrivilege(wherePrivilege)
+auth.updateUser(whereUser)
+```
+
+### API signatures
 
 These are the signatures of the methods of the `mysql-auth` API.
 
