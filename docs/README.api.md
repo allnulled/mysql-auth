@@ -15,6 +15,13 @@
 
 -----
 
+##### `auth.assignPrivilegeToCommunity(wherePrivilege:Object, whereCommunity:Object):Promise`
+
+
+
+
+-----
+
 ##### `auth.assignPrivilegeToUser(wherePrivilege:Object, whereUser:Object):Promise`
 
 
@@ -23,13 +30,6 @@
 -----
 
 ##### `auth.assignUserToCommunity(whereUser:Object, whereCommunity:Object):Promise`
-
-
-
-
------
-
-##### `auth.assignPrivilegeToCommunity(wherePrivilege:Object, whereCommunity:Object):Promise`
 
 
 
@@ -50,13 +50,6 @@
 
 -----
 
-##### `auth.canMultiple(token:String, canArgsList:Array<Object|String>):Promise`
-
-
-
-
------
-
 ##### `auth.cannot(token:String, privilege:Object|String, defaultPolicy:Boolean):Promise`
 
 
@@ -65,6 +58,13 @@
 -----
 
 ##### `auth.cannotMultiple(token:String, canArgsList:Array<Object|String>):Promise`
+
+
+
+
+-----
+
+##### `auth.canMultiple(token:String, canArgsList:Array<Object|String>):Promise`
 
 
 
@@ -122,14 +122,14 @@
 
 -----
 
-##### `auth.findCommunity(whereCommunity:Object):Promise`
+##### `auth.deleteUser(whereUser:Object):Promise`
 
 
 
 
 -----
 
-##### `auth.deleteUser(whereUser:Object):Promise`
+##### `auth.findCommunity(whereCommunity:Object):Promise`
 
 
 
@@ -150,13 +150,6 @@
 
 -----
 
-##### `auth.findUnconfirmedUser(whereUnconfirmedUser:Object):Promise`
-
-
-
-
------
-
 ##### `auth.findSession(whereUser:Object):Promise`
 
 
@@ -165,6 +158,13 @@
 -----
 
 ##### `auth.findSessionByUser(whereUser:Object):Promise`
+
+
+
+
+-----
+
+##### `auth.findUnconfirmedUser(whereUnconfirmedUser:Object):Promise`
 
 
 
@@ -206,14 +206,14 @@
 
 -----
 
-##### `auth.logoutByUser(whereUser:Object):Promise`
+##### `auth.refresh(whereSession:Object):Promise`
 
 
 
 
 -----
 
-##### `auth.refresh(whereSession:Object):Promise`
+##### `auth.logoutByUser(whereUser:Object):Promise`
 
 
 
