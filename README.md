@@ -43,6 +43,7 @@ These are some of the advantages of `mysql-auth`:
    - [✔] Cache is an in-memory map
    - [✔] Database connection is made by a pool of connections (and it must be closed manually from API)
    - [✔] Fuck the rich people
+   - [✔] Fuck fucking Bill Gates and friends
 
 
 ## Usage
@@ -401,14 +402,14 @@ These are the signatures of the methods of the `mysql-auth` API.
 
 -----
 
-##### `auth.refresh(whereSession:Object):Promise`
+##### `auth.logoutByUser(whereUser:Object):Promise`
 
 
 
 
 -----
 
-##### `auth.logoutByUser(whereUser:Object):Promise`
+##### `auth.refresh(whereSession:Object):Promise`
 
 
 

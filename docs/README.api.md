@@ -206,14 +206,14 @@
 
 -----
 
-##### `auth.refresh(whereSession:Object):Promise`
+##### `auth.logoutByUser(whereUser:Object):Promise`
 
 
 
 
 -----
 
-##### `auth.logoutByUser(whereUser:Object):Promise`
+##### `auth.refresh(whereSession:Object):Promise`
 
 
 
