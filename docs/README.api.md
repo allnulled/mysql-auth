@@ -50,6 +50,13 @@
 
 -----
 
+##### `auth.canMultiple(token:String, canArgsList:Array<Object|String>):Promise`
+
+
+
+
+-----
+
 ##### `auth.cannot(token:String, privilege:Object|String, defaultPolicy:Boolean):Promise`
 
 
@@ -58,13 +65,6 @@
 -----
 
 ##### `auth.cannotMultiple(token:String, canArgsList:Array<Object|String>):Promise`
-
-
-
-
------
-
-##### `auth.canMultiple(token:String, canArgsList:Array<Object|String>):Promise`
 
 
 

@@ -42,7 +42,7 @@ These are some of the advantages of `mysql-auth`:
    - [✔] Cache is refreshed only when required
    - [✔] Cache is an in-memory map
    - [✔] Database connection is made by a pool of connections (and it must be closed manually from API)
-   - [✔] 
+   - [✔] Fuck the rich people
 
 
 ## Usage
@@ -245,6 +245,13 @@ These are the signatures of the methods of the `mysql-auth` API.
 
 -----
 
+##### `auth.canMultiple(token:String, canArgsList:Array<Object|String>):Promise`
+
+
+
+
+-----
+
 ##### `auth.cannot(token:String, privilege:Object|String, defaultPolicy:Boolean):Promise`
 
 
@@ -253,13 +260,6 @@ These are the signatures of the methods of the `mysql-auth` API.
 -----
 
 ##### `auth.cannotMultiple(token:String, canArgsList:Array<Object|String>):Promise`
-
-
-
-
------
-
-##### `auth.canMultiple(token:String, canArgsList:Array<Object|String>):Promise`
 
 
 
