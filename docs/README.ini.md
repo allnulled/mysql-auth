@@ -171,7 +171,7 @@ auth.updateUser(whereUser)
 
 The `whereToSQL` is located in the `utils.js` file, here:
 
-    - [https://github.com/allnulled/mysql-auth/blob/master/src/utils.js](https://github.com/allnulled/mysql-auth/blob/master/src/utils.js)
+ - [https://github.com/allnulled/mysql-auth/blob/master/src/utils.js](https://github.com/allnulled/mysql-auth/blob/master/src/utils.js)
 
 This method is the one that transforms our `where*` parameters into real SQL code.
 
@@ -185,7 +185,7 @@ The name of the table, in some contexts, can be omitted (in most of the contexts
 
 For more information about hwo you can use it, you can check the tests files, here:
 
-    - [https://github.com/allnulled/mysql-auth/tree/master/test](https://github.com/allnulled/mysql-auth/tree/master/test)
+ - [https://github.com/allnulled/mysql-auth/tree/master/test](https://github.com/allnulled/mysql-auth/tree/master/test)
 
 
 ### API signatures
