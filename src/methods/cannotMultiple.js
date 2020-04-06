@@ -2,7 +2,7 @@
  * 
  * -----
  * 
- * ##### `auth.cannotMultiple(token:String, canArgsList:Array<Object>):Promise`
+ * ##### `auth.cannotMultiple(token:String, canArgsList:Array<Object|String>):Promise`
  * 
  */
 module.exports = function() {

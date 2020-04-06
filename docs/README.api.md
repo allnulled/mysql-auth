@@ -22,6 +22,13 @@
 
 -----
 
+##### `auth.authenticate(whereSession:Object, settings:Object):Promise`
+
+
+
+
+-----
+
 ##### `auth.assignPrivilegeToUser(wherePrivilege:Object, whereUser:Object):Promise`
 
 
@@ -36,33 +43,33 @@
 
 -----
 
-##### `auth.authenticate(whereSession:Object, settings:Object):Promise`
+##### `auth.can(token:String, privilege:Object|String, defaultPolicy:Boolean):Promise`
 
 
 
 
 -----
 
-##### `auth.can(token:String, privilege:Object, defaultPolicy:Boolean):Promise`
+##### `auth.canMultiple(token:String, canArgsList:Array<Object|String>):Promise`
 
 
 
 
 -----
 
-##### `auth.canMultiple(token:String, canArgsList:Array<Object>):Promise`
+##### `auth.cannotMultiple(token:String, canArgsList:Array<Object|String>):Promise`
+
+
+
+
+
 
 
 
 
 -----
 
-##### `auth.cannotMultiple(token:String, canArgsList:Array<Object>):Promise`
-
-
-
-
-
+##### `auth.cannot(token:String, privilege:Object|String, defaultPolicy:Boolean):Promise`
 
 
 
@@ -291,13 +298,6 @@
 -----
 
 ##### `auth.updatePrivilege(wherePrivilege:Object):Promise`
-
-
-
-
------
-
-##### `auth.cannot(token:String, privilege:Object, defaultPolicy:Boolean):Promise`
 
 
 

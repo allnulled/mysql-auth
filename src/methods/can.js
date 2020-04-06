@@ -2,7 +2,7 @@
  * 
  * -----
  * 
- * ##### `auth.can(token:String, privilege:Object, defaultPolicy:Boolean):Promise`
+ * ##### `auth.can(token:String, privilege:Object|String, defaultPolicy:Boolean):Promise`
  * 
  */
 module.exports = function() {

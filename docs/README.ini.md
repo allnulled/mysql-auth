@@ -167,6 +167,27 @@ auth.updatePrivilege(wherePrivilege)
 auth.updateUser(whereUser)
 ```
 
+### API `where*` parameters
+
+The `whereToSQL` is located in the `utils.js` file, here:
+
+    - [https://github.com/allnulled/mysql-auth/blob/master/src/utils.js](https://github.com/allnulled/mysql-auth/blob/master/src/utils.js)
+
+This method is the one that transforms our `where*` parameters into real SQL code.
+
+It accepts `Object` or `Array`.
+
+When it is an `Object`, it uses operator `=` for all the properties.
+
+When it is an `Array`, it can use other operator apart from `=` to bind the properties.
+
+The name of the table, in some contexts, can be omitted (in most of the contexts), as the function can be provided with a default table name. However, it is up to one to override this default value. This can be easily achieved by putting a `.` in the property name to separate the table and the column names.
+
+For more information about hwo you can use it, you can check the tests files, here:
+
+    - [https://github.com/allnulled/mysql-auth/tree/master/test](https://github.com/allnulled/mysql-auth/tree/master/test)
+
+
 ### API signatures
 
 These are the signatures of the methods of the `mysql-auth` API.
