@@ -22,14 +22,7 @@
 
 -----
 
-##### `auth.authenticate(whereSession:Object, settings:Object):Promise`
-
-
-
-
------
-
-##### `auth.can(token:String, privilege:Object|String, defaultPolicy:Boolean):Promise`
+##### `auth.assignPrivilegeToUser(wherePrivilege:Object, whereUser:Object):Promise`
 
 
 
@@ -43,7 +36,14 @@
 
 -----
 
-##### `auth.assignPrivilegeToUser(wherePrivilege:Object, whereUser:Object):Promise`
+##### `auth.authenticate(whereSession:Object, settings:Object):Promise`
+
+
+
+
+-----
+
+##### `auth.can(token:String, privilege:Object|String, defaultPolicy:Boolean):Promise`
 
 
 
@@ -94,13 +94,6 @@
 
 -----
 
-##### `auth.deleteCommunity(whereCommunity:Object):Promise`
-
-
-
-
------
-
 ##### `auth.deletePrivilege(wherePrivilege:Object):Promise`
 
 
@@ -109,6 +102,13 @@
 -----
 
 ##### `auth.deleteTables():Promise`
+
+
+
+
+-----
+
+##### `auth.deleteCommunity(whereCommunity:Object):Promise`
 
 
 
@@ -213,14 +213,14 @@
 
 -----
 
-##### `auth.refreshAll():Promise`
+##### `auth.refresh(whereSession:Object):Promise`
 
 
 
 
 -----
 
-##### `auth.refresh(whereSession:Object):Promise`
+##### `auth.refreshAll():Promise`
 
 
 
@@ -241,13 +241,6 @@
 
 -----
 
-##### `auth.registerUnconfirmedUser(userDetails:Object):Promise`
-
-
-
-
------
-
 ##### `auth.revokePrivilegeFromCommunity(wherePrivilege:Object, whereCommunity:Object):Promise`
 
 
@@ -256,6 +249,13 @@
 -----
 
 ##### `auth.revokePrivilegeFromUser(wherePrivilege:Object, whereUser:Object):Promise`
+
+
+
+
+-----
+
+##### `auth.registerUnconfirmedUser(userDetails:Object):Promise`
 
 
 
