@@ -1,13 +1,6 @@
 
 -----
 
-##### `auth.assignPrivilegeToUser(wherePrivilege:Object, whereUser:Object):Promise`
-
-
-
-
------
-
 ##### `const AuthSystem = require("mysql-auth")`
 
 
@@ -22,6 +15,13 @@
 
 -----
 
+##### `auth.assignPrivilegeToCommunity(wherePrivilege:Object, whereCommunity:Object):Promise`
+
+
+
+
+-----
+
 ##### `auth.assignUserToCommunity(whereUser:Object, whereCommunity:Object):Promise`
 
 
@@ -29,7 +29,7 @@
 
 -----
 
-##### `auth.assignPrivilegeToCommunity(wherePrivilege:Object, whereCommunity:Object):Promise`
+##### `auth.assignPrivilegeToUser(wherePrivilege:Object, whereUser:Object):Promise`
 
 
 
@@ -50,14 +50,14 @@
 
 -----
 
-##### `auth.cannot(token:String, privilege:Object|String, defaultPolicy:Boolean):Promise`
+##### `auth.canMultiple(token:String, canArgsList:Array<Object|String>):Promise`
 
 
 
 
 -----
 
-##### `auth.canMultiple(token:String, canArgsList:Array<Object|String>):Promise`
+##### `auth.cannot(token:String, privilege:Object|String, defaultPolicy:Boolean):Promise`
 
 
 
@@ -87,14 +87,14 @@
 
 -----
 
-##### `auth.createTables():Promise`
+##### `auth.deleteCommunity(whereCommunity:Object):Promise`
 
 
 
 
 -----
 
-##### `auth.deleteCommunity(whereCommunity:Object):Promise`
+##### `auth.createTables():Promise`
 
 
 
@@ -136,13 +136,6 @@
 
 -----
 
-##### `auth.findPrivilege(wherePrivilege:Object):Promise`
-
-
-
-
------
-
 ##### `auth.findCommunityAndPrivilege(whereCommunity:Object, wherePrivilege:Object):Promise`
 
 
@@ -150,7 +143,7 @@
 
 -----
 
-##### `auth.findSession(whereUser:Object):Promise`
+##### `auth.findPrivilege(wherePrivilege:Object):Promise`
 
 
 
@@ -158,6 +151,13 @@
 -----
 
 ##### `auth.findSessionByUser(whereUser:Object):Promise`
+
+
+
+
+-----
+
+##### `auth.findSession(whereUser:Object):Promise`
 
 
 

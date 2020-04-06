@@ -184,7 +184,7 @@ When it is an `Array`, it can use other operator apart from `=` to bind the prop
 
 The name of the table, in some contexts, can be omitted (in most of the contexts), as the function can be provided with a default table name. However, it is up to one to override this default value. This can be easily achieved by putting a `.` in the property name to separate the table and the column names.
 
-For more information about hwo you can use it, you can check the tests files, here:
+For more information about how you can use it, you can check the tests files, here:
 
  - [https://github.com/allnulled/mysql-auth/tree/master/test](https://github.com/allnulled/mysql-auth/tree/master/test)
 
@@ -192,13 +192,6 @@ For more information about hwo you can use it, you can check the tests files, he
 ### API signatures
 
 These are the signatures of the methods of the `mysql-auth` API.
-
-
-
------
-
-##### `auth.assignPrivilegeToUser(wherePrivilege:Object, whereUser:Object):Promise`
-
 
 
 
@@ -218,6 +211,13 @@ These are the signatures of the methods of the `mysql-auth` API.
 
 -----
 
+##### `auth.assignPrivilegeToCommunity(wherePrivilege:Object, whereCommunity:Object):Promise`
+
+
+
+
+-----
+
 ##### `auth.assignUserToCommunity(whereUser:Object, whereCommunity:Object):Promise`
 
 
@@ -225,7 +225,7 @@ These are the signatures of the methods of the `mysql-auth` API.
 
 -----
 
-##### `auth.assignPrivilegeToCommunity(wherePrivilege:Object, whereCommunity:Object):Promise`
+##### `auth.assignPrivilegeToUser(wherePrivilege:Object, whereUser:Object):Promise`
 
 
 
@@ -246,14 +246,14 @@ These are the signatures of the methods of the `mysql-auth` API.
 
 -----
 
-##### `auth.cannot(token:String, privilege:Object|String, defaultPolicy:Boolean):Promise`
+##### `auth.canMultiple(token:String, canArgsList:Array<Object|String>):Promise`
 
 
 
 
 -----
 
-##### `auth.canMultiple(token:String, canArgsList:Array<Object|String>):Promise`
+##### `auth.cannot(token:String, privilege:Object|String, defaultPolicy:Boolean):Promise`
 
 
 
@@ -283,14 +283,14 @@ These are the signatures of the methods of the `mysql-auth` API.
 
 -----
 
-##### `auth.createTables():Promise`
+##### `auth.deleteCommunity(whereCommunity:Object):Promise`
 
 
 
 
 -----
 
-##### `auth.deleteCommunity(whereCommunity:Object):Promise`
+##### `auth.createTables():Promise`
 
 
 
@@ -332,13 +332,6 @@ These are the signatures of the methods of the `mysql-auth` API.
 
 -----
 
-##### `auth.findPrivilege(wherePrivilege:Object):Promise`
-
-
-
-
------
-
 ##### `auth.findCommunityAndPrivilege(whereCommunity:Object, wherePrivilege:Object):Promise`
 
 
@@ -346,7 +339,7 @@ These are the signatures of the methods of the `mysql-auth` API.
 
 -----
 
-##### `auth.findSession(whereUser:Object):Promise`
+##### `auth.findPrivilege(wherePrivilege:Object):Promise`
 
 
 
@@ -354,6 +347,13 @@ These are the signatures of the methods of the `mysql-auth` API.
 -----
 
 ##### `auth.findSessionByUser(whereUser:Object):Promise`
+
+
+
+
+-----
+
+##### `auth.findSession(whereUser:Object):Promise`
 
 
 
