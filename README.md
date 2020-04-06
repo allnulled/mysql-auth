@@ -197,20 +197,6 @@ These are the signatures of the methods of the `mysql-auth` API.
 
 -----
 
-##### `const AuthSystem = require("mysql-auth")`
-
-
-
-
------
-
-##### `const authSystem = AuthSystem.create(...)`
-
-
-
-
------
-
 ##### `auth.assignPrivilegeToCommunity(wherePrivilege:Object, whereCommunity:Object):Promise`
 
 
@@ -225,13 +211,6 @@ These are the signatures of the methods of the `mysql-auth` API.
 
 -----
 
-##### `auth.assignUserToCommunity(whereUser:Object, whereCommunity:Object):Promise`
-
-
-
-
------
-
 ##### `auth.authenticate(whereSession:Object, settings:Object):Promise`
 
 
@@ -239,7 +218,28 @@ These are the signatures of the methods of the `mysql-auth` API.
 
 -----
 
+##### `auth.assignUserToCommunity(whereUser:Object, whereCommunity:Object):Promise`
+
+
+
+
+-----
+
 ##### `auth.can(token:String, privilege:Object|String, defaultPolicy:Boolean):Promise`
+
+
+
+
+-----
+
+##### `const AuthSystem = require("mysql-auth")`
+
+
+
+
+-----
+
+##### `const authSystem = AuthSystem.create(...)`
 
 
 
@@ -276,13 +276,6 @@ These are the signatures of the methods of the `mysql-auth` API.
 
 -----
 
-##### `auth.confirmUser(user:Object):Promise`
-
-
-
-
------
-
 ##### `auth.createTables():Promise`
 
 
@@ -304,13 +297,6 @@ These are the signatures of the methods of the `mysql-auth` API.
 
 -----
 
-##### `auth.deleteTables():Promise`
-
-
-
-
------
-
 ##### `auth.deleteUnconfirmedUser(whereUnconfirmedUser:Object):Promise`
 
 
@@ -318,7 +304,21 @@ These are the signatures of the methods of the `mysql-auth` API.
 
 -----
 
+##### `auth.deleteTables():Promise`
+
+
+
+
+-----
+
 ##### `auth.deleteUser(whereUser:Object):Promise`
+
+
+
+
+-----
+
+##### `auth.confirmUser(user:Object):Promise`
 
 
 
@@ -504,6 +504,9 @@ These are the signatures of the methods of the `mysql-auth` API.
 
 
 
+
+
+The signatures are not yet documented. If anyone asks for them, I can document them. Otherwise, this is enough for me.
 
 
 ## License

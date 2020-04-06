@@ -1,20 +1,6 @@
 
 -----
 
-##### `const AuthSystem = require("mysql-auth")`
-
-
-
-
------
-
-##### `const authSystem = AuthSystem.create(...)`
-
-
-
-
------
-
 ##### `auth.assignPrivilegeToCommunity(wherePrivilege:Object, whereCommunity:Object):Promise`
 
 
@@ -29,13 +15,6 @@
 
 -----
 
-##### `auth.assignUserToCommunity(whereUser:Object, whereCommunity:Object):Promise`
-
-
-
-
------
-
 ##### `auth.authenticate(whereSession:Object, settings:Object):Promise`
 
 
@@ -43,7 +22,28 @@
 
 -----
 
+##### `auth.assignUserToCommunity(whereUser:Object, whereCommunity:Object):Promise`
+
+
+
+
+-----
+
 ##### `auth.can(token:String, privilege:Object|String, defaultPolicy:Boolean):Promise`
+
+
+
+
+-----
+
+##### `const AuthSystem = require("mysql-auth")`
+
+
+
+
+-----
+
+##### `const authSystem = AuthSystem.create(...)`
 
 
 
@@ -80,13 +80,6 @@
 
 -----
 
-##### `auth.confirmUser(user:Object):Promise`
-
-
-
-
------
-
 ##### `auth.createTables():Promise`
 
 
@@ -108,13 +101,6 @@
 
 -----
 
-##### `auth.deleteTables():Promise`
-
-
-
-
------
-
 ##### `auth.deleteUnconfirmedUser(whereUnconfirmedUser:Object):Promise`
 
 
@@ -122,7 +108,21 @@
 
 -----
 
+##### `auth.deleteTables():Promise`
+
+
+
+
+-----
+
 ##### `auth.deleteUser(whereUser:Object):Promise`
+
+
+
+
+-----
+
+##### `auth.confirmUser(user:Object):Promise`
 
 
 
