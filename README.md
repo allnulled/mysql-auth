@@ -171,7 +171,7 @@ auth.updateUser(whereUser)
 
 The `whereToSQL` is located in the `utils.js` file, here:
 
-    - [https://github.com/allnulled/mysql-auth/blob/master/src/utils.js](https://github.com/allnulled/mysql-auth/blob/master/src/utils.js)
+ - [https://github.com/allnulled/mysql-auth/blob/master/src/utils.js](https://github.com/allnulled/mysql-auth/blob/master/src/utils.js)
 
 This method is the one that transforms our `where*` parameters into real SQL code.
 
@@ -185,7 +185,7 @@ The name of the table, in some contexts, can be omitted (in most of the contexts
 
 For more information about hwo you can use it, you can check the tests files, here:
 
-    - [https://github.com/allnulled/mysql-auth/tree/master/test](https://github.com/allnulled/mysql-auth/tree/master/test)
+ - [https://github.com/allnulled/mysql-auth/tree/master/test](https://github.com/allnulled/mysql-auth/tree/master/test)
 
 
 ### API signatures
@@ -210,20 +210,6 @@ These are the signatures of the methods of the `mysql-auth` API.
 
 -----
 
-##### `auth.assignPrivilegeToCommunity(wherePrivilege:Object, whereCommunity:Object):Promise`
-
-
-
-
------
-
-##### `auth.authenticate(whereSession:Object, settings:Object):Promise`
-
-
-
-
------
-
 ##### `auth.assignPrivilegeToUser(wherePrivilege:Object, whereUser:Object):Promise`
 
 
@@ -232,6 +218,20 @@ These are the signatures of the methods of the `mysql-auth` API.
 -----
 
 ##### `auth.assignUserToCommunity(whereUser:Object, whereCommunity:Object):Promise`
+
+
+
+
+-----
+
+##### `auth.assignPrivilegeToCommunity(wherePrivilege:Object, whereCommunity:Object):Promise`
+
+
+
+
+-----
+
+##### `auth.authenticate(whereSession:Object, settings:Object):Promise`
 
 
 
@@ -252,19 +252,19 @@ These are the signatures of the methods of the `mysql-auth` API.
 
 -----
 
-##### `auth.cannotMultiple(token:String, canArgsList:Array<Object|String>):Promise`
-
-
-
-
-
+##### `auth.cannot(token:String, privilege:Object|String, defaultPolicy:Boolean):Promise`
 
 
 
 
 -----
 
-##### `auth.cannot(token:String, privilege:Object|String, defaultPolicy:Boolean):Promise`
+##### `auth.cannotMultiple(token:String, canArgsList:Array<Object|String>):Promise`
+
+
+
+
+
 
 
 
@@ -317,14 +317,14 @@ These are the signatures of the methods of the `mysql-auth` API.
 
 -----
 
-##### `auth.deleteUser(whereUser:Object):Promise`
+##### `auth.findCommunity(whereCommunity:Object):Promise`
 
 
 
 
 -----
 
-##### `auth.findCommunity(whereCommunity:Object):Promise`
+##### `auth.deleteUser(whereUser:Object):Promise`
 
 
 
@@ -345,6 +345,13 @@ These are the signatures of the methods of the `mysql-auth` API.
 
 -----
 
+##### `auth.findUnconfirmedUser(whereUnconfirmedUser:Object):Promise`
+
+
+
+
+-----
+
 ##### `auth.findSession(whereUser:Object):Promise`
 
 
@@ -353,13 +360,6 @@ These are the signatures of the methods of the `mysql-auth` API.
 -----
 
 ##### `auth.findSessionByUser(whereUser:Object):Promise`
-
-
-
-
------
-
-##### `auth.findUnconfirmedUser(whereUnconfirmedUser:Object):Promise`
 
 
 
