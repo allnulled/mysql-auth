@@ -22,20 +22,6 @@
 
 -----
 
-##### `auth.assignUserToCommunity(whereUser:Object, whereCommunity:Object):Promise`
-
-
-
-
------
-
-##### `auth.assignPrivilegeToUser(wherePrivilege:Object, whereUser:Object):Promise`
-
-
-
-
------
-
 ##### `auth.authenticate(whereSession:Object, settings:Object):Promise`
 
 
@@ -44,6 +30,20 @@
 -----
 
 ##### `auth.can(token:String, privilege:Object|String, defaultPolicy:Boolean):Promise`
+
+
+
+
+-----
+
+##### `auth.assignUserToCommunity(whereUser:Object, whereCommunity:Object):Promise`
+
+
+
+
+-----
+
+##### `auth.assignPrivilegeToUser(wherePrivilege:Object, whereUser:Object):Promise`
 
 
 
@@ -87,14 +87,14 @@
 
 -----
 
-##### `auth.deleteCommunity(whereCommunity:Object):Promise`
+##### `auth.createTables():Promise`
 
 
 
 
 -----
 
-##### `auth.createTables():Promise`
+##### `auth.deleteCommunity(whereCommunity:Object):Promise`
 
 
 
@@ -150,14 +150,14 @@
 
 -----
 
-##### `auth.findSessionByUser(whereUser:Object):Promise`
+##### `auth.findSession(whereUser:Object):Promise`
 
 
 
 
 -----
 
-##### `auth.findSession(whereUser:Object):Promise`
+##### `auth.findSessionByUser(whereUser:Object):Promise`
 
 
 
@@ -213,14 +213,14 @@
 
 -----
 
-##### `auth.refresh(whereSession:Object):Promise`
+##### `auth.refreshAll():Promise`
 
 
 
 
 -----
 
-##### `auth.refreshAll():Promise`
+##### `auth.refresh(whereSession:Object):Promise`
 
 
 

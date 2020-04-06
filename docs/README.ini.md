@@ -85,17 +85,11 @@ const auth = MySQLAuthSystem.create({
 ##### Play with the API
 
 ```js
-// 1. register unconfirmed user:
 await auth.registerUnconfirmedUser({ name: "user1", password: "1", email: "user1@email.com" });
-// 2. confirm user:
 await auth.confirmUser({ name: "user1" });
-// 3. login user:
 const { data } = await auth.login({ name: "user1", password: "1" });
-// 4. assign privilege to user:
 await auth.assignPrivilegeToUser({ name: "speak" }, { name: "user1" });
-// 5. assign community to user:
 await auth.assignCommunityToUser({ name: "community 1" }, { name: "user1" });
-// 6. assign privilege to community:
 await auth.assignPrivilegeToCommunity({ name: "vote" }, { name: "humans" });
 // ...
 ```
