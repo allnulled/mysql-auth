@@ -1,35 +1,7 @@
 
 -----
 
-##### `auth.assignPrivilegeToCommunity(wherePrivilege:Object, whereCommunity:Object):Promise`
-
-
-
-
------
-
 ##### `auth.assignPrivilegeToUser(wherePrivilege:Object, whereUser:Object):Promise`
-
-
-
-
------
-
-##### `auth.authenticate(whereSession:Object, settings:Object):Promise`
-
-
-
-
------
-
-##### `auth.assignUserToCommunity(whereUser:Object, whereCommunity:Object):Promise`
-
-
-
-
------
-
-##### `auth.can(token:String, privilege:Object|String, defaultPolicy:Boolean):Promise`
 
 
 
@@ -50,7 +22,28 @@
 
 -----
 
-##### `auth.canMultiple(token:String, canArgsList:Array<Object|String>):Promise`
+##### `auth.assignUserToCommunity(whereUser:Object, whereCommunity:Object):Promise`
+
+
+
+
+-----
+
+##### `auth.assignPrivilegeToCommunity(wherePrivilege:Object, whereCommunity:Object):Promise`
+
+
+
+
+-----
+
+##### `auth.authenticate(whereSession:Object, settings:Object):Promise`
+
+
+
+
+-----
+
+##### `auth.can(token:String, privilege:Object|String, defaultPolicy:Boolean):Promise`
 
 
 
@@ -58,6 +51,13 @@
 -----
 
 ##### `auth.cannot(token:String, privilege:Object|String, defaultPolicy:Boolean):Promise`
+
+
+
+
+-----
+
+##### `auth.canMultiple(token:String, canArgsList:Array<Object|String>):Promise`
 
 
 
@@ -74,6 +74,13 @@
 
 
 
+
+
+
+
+-----
+
+##### `auth.confirmUser(user:Object):Promise`
 
 
 
@@ -101,14 +108,14 @@
 
 -----
 
-##### `auth.deleteUnconfirmedUser(whereUnconfirmedUser:Object):Promise`
+##### `auth.deleteTables():Promise`
 
 
 
 
 -----
 
-##### `auth.deleteTables():Promise`
+##### `auth.deleteUnconfirmedUser(whereUnconfirmedUser:Object):Promise`
 
 
 
@@ -122,13 +129,6 @@
 
 -----
 
-##### `auth.confirmUser(user:Object):Promise`
-
-
-
-
------
-
 ##### `auth.findCommunity(whereCommunity:Object):Promise`
 
 
@@ -136,14 +136,14 @@
 
 -----
 
-##### `auth.findCommunityAndPrivilege(whereCommunity:Object, wherePrivilege:Object):Promise`
+##### `auth.findPrivilege(wherePrivilege:Object):Promise`
 
 
 
 
 -----
 
-##### `auth.findPrivilege(wherePrivilege:Object):Promise`
+##### `auth.findCommunityAndPrivilege(whereCommunity:Object, wherePrivilege:Object):Promise`
 
 
 
