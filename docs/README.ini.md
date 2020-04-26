@@ -42,8 +42,6 @@ These are some of the advantages of `mysql-auth`:
    - [✔] Cache is refreshed only when required
    - [✔] Cache is an in-memory map
    - [✔] Database connection is made by a pool of connections (and it must be closed manually from API)
-   - [✔] Fuck the rich people
-   - [✔] Fuck fucking Bill Gates and friends
 
 
 ## Usage

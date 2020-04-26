@@ -42,8 +42,6 @@ These are some of the advantages of `mysql-auth`:
    - [✔] Cache is refreshed only when required
    - [✔] Cache is an in-memory map
    - [✔] Database connection is made by a pool of connections (and it must be closed manually from API)
-   - [✔] Fuck the rich people
-   - [✔] Fuck fucking Bill Gates and friends
 
 
 ## Usage
@@ -191,13 +189,6 @@ These are the signatures of the methods of the `mysql-auth` API.
 
 -----
 
-##### `auth.assignPrivilegeToCommunity(wherePrivilege:Object, whereCommunity:Object):Promise`
-
-
-
-
------
-
 ##### `const AuthSystem = require("mysql-auth")`
 
 
@@ -206,6 +197,14 @@ These are the signatures of the methods of the `mysql-auth` API.
 -----
 
 ##### `const authSystem = AuthSystem.create(...)`
+
+
+
+
+
+-----
+
+##### `auth.assignPrivilegeToCommunity(wherePrivilege:Object, whereCommunity:Object):Promise`
 
 
 
@@ -226,6 +225,13 @@ These are the signatures of the methods of the `mysql-auth` API.
 
 -----
 
+##### `auth.can(token:String, privilege:Object|String, defaultPolicy:Boolean):Promise`
+
+
+
+
+-----
+
 ##### `auth.authenticate(whereSession:Object, settings:Object):Promise`
 
 
@@ -234,13 +240,6 @@ These are the signatures of the methods of the `mysql-auth` API.
 -----
 
 ##### `auth.canMultiple(token:String, canArgsList:Array<Object|String>):Promise`
-
-
-
-
------
-
-##### `auth.can(token:String, privilege:Object|String, defaultPolicy:Boolean):Promise`
 
 
 
@@ -264,13 +263,13 @@ These are the signatures of the methods of the `mysql-auth` API.
 
 
 
-
-
-
-
 -----
 
 ##### `auth.confirmUser(user:Object):Promise`
+
+
+
+
 
 
 
@@ -298,13 +297,6 @@ These are the signatures of the methods of the `mysql-auth` API.
 
 -----
 
-##### `auth.deleteUnconfirmedUser(whereUnconfirmedUser:Object):Promise`
-
-
-
-
------
-
 ##### `auth.deleteTables():Promise`
 
 
@@ -320,6 +312,13 @@ These are the signatures of the methods of the `mysql-auth` API.
 -----
 
 ##### `auth.findCommunity(whereCommunity:Object):Promise`
+
+
+
+
+-----
+
+##### `auth.deleteUnconfirmedUser(whereUnconfirmedUser:Object):Promise`
 
 
 
@@ -417,14 +416,14 @@ These are the signatures of the methods of the `mysql-auth` API.
 
 -----
 
-##### `auth.registerPrivilege(privilegeDetails:Object):Promise`
+##### `auth.registerCommunity(communityDetails:Object):Promise`
 
 
 
 
 -----
 
-##### `auth.registerCommunity(communityDetails:Object):Promise`
+##### `auth.registerPrivilege(privilegeDetails:Object):Promise`
 
 
 
