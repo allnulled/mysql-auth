@@ -21,7 +21,7 @@ describe("AuthClient class", function() {
 			debug: true,
 			trace: false,
 			connectionSettings: CONNECTION_SETTINGS
-		}).initialize();
+		});
 		authClient = authSystem.createClient();
 		authClient2 = authSystem.createClient();
 		authClient3 = authSystem.createClient();

@@ -31,6 +31,7 @@ class AuthSystem {
 	 * 
 	 * ##### `const authSystem = AuthSystem.create(...)`
 	 * 
+	 * 
 	 */
 	static create(...args) {
 		return new this(...args);
@@ -142,6 +143,7 @@ class AuthSystem {
 		this.debugSQL = Debug("mysql-auth:sql");
 		Debug.enable((this.debug ? "mysql-auth:sql," : "") + (this.trace ? "mysql-auth:trace," : "") + "mysql-auth:error");
 		this.debugTrace("Connection settings:", this.connectionSettings);
+		this.initialize();
 	}
 
 	initialize() {
