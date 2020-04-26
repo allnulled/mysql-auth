@@ -1,6 +1,6 @@
 {
   "name": "mysql-auth",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Authentication and authorization framework for Node.js and MySQL",
   "bin": {
     "mysql-auth": "./bin/mysql-auth"
