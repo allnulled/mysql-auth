@@ -8,7 +8,7 @@ const path = require("path");
 const AuthClient = require(__dirname + "/auth-client.js");
 const utils = require(__dirname + "/utils.js");
 
-//*
+/*
 global.dd = function(...args) {
 	console.log(...args)
 	console.log("----- PROGRAM DIED -----");
