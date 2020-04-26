@@ -95,16 +95,29 @@ await auth.assignPrivilegeToCommunity({ name: "vote" }, { name: "humans" });
 
 ## Overview and philosophy
 
-You have a basic onthologies in your database that will manage, strictly, everything attached to authentication or authorization.
+You have a basic set of onthologies in your database.
 
-Take into account that:
+These onthologies will manage, strictly, the core of an authentication and authorization basic system.
 
-   - these onthologies are namespaced with a fixed prefix: `$auth$`.
-   - each of these onthologies have its correlative **history table** (which is automatically synchronized by the API), namespaced with a fixed prefix: `$hist$$auth$`. This is because, under the hood, we are using the `mysql-history` library, which formats all its tables with `$hist${{ name of the target table }}`)
+### Prefixes
 
-These classes of object in your database are the following table/columns:
+These onthologies are namespaced with a fixed prefix: `$auth$`.
+
+### Historical data
+
+These onthologies also have its correlative **history table** (which is automatically synchronized by the API).
+
+The historical tables are namespaced with a fixed prefix: `$hist$$auth$`.
+
+Under the hood, we are using the `mysql-history` library.
+
+This library, `mysql-history` formats (again, prefixes) all its tables like:
+
+  - `$hist${{ name of the target table }}`
 
 ### Primary onthologies
+
+These are the primary tables of the auth system:
 
    - **user** (`$auth$user`)
    - **unconfirmed_user** (`$auth$unconfirmed_user`)
@@ -113,6 +126,8 @@ These classes of object in your database are the following table/columns:
    - **session** (`$auth$session`)
 
 ### Connector onthologies
+
+These are the connector tables of the auth system:
 
    - **user and community** (`$auth$user_and_community`): each row tells that **X user belongs to Y community**
    - **user and privilege** (`$auth$user_and_privilege`): each row tells that **X user has Y privilege**
@@ -143,8 +158,11 @@ These properties are specific of the table **session**:
    - **secret token**
    - **data**
 
-As most of these properties have no secrets, one can start playing with the API.
+### The creational script 
 
+The script that creates the tables is here:
+
+[`https://github.com/allnulled/mysql-auth/blob/master/src/queries/create tables.sql.ejs`](https://github.com/allnulled/mysql-auth/blob/master/src/queries/create%20tables.sql.ejs)
 
 
 ## API Reference
