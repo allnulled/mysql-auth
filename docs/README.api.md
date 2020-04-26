@@ -30,6 +30,13 @@
 
 -----
 
+##### `auth.assignUserToCommunity(whereUser:Object, whereCommunity:Object):Promise`
+
+
+
+
+-----
+
 ##### `auth.authenticate(whereSession:Object, settings:Object):Promise`
 
 
@@ -44,7 +51,7 @@
 
 -----
 
-##### `auth.assignUserToCommunity(whereUser:Object, whereCommunity:Object):Promise`
+##### `auth.canMultiple(token:String, canArgsList:Array<Object|String>):Promise`
 
 
 
@@ -52,13 +59,6 @@
 -----
 
 ##### `auth.cannot(token:String, privilege:Object|String, defaultPolicy:Boolean):Promise`
-
-
-
-
------
-
-##### `auth.canMultiple(token:String, canArgsList:Array<Object|String>):Promise`
 
 
 

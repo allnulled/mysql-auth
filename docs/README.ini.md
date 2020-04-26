@@ -167,13 +167,10 @@ The script that creates the tables is here:
 
 ## API Reference
 
-### API database schema
+The API represents the set of classes, methods, and their signatures.
 
-The API database schema of the `mysql-auth` package is created by a SQL query located at:
-
-   - [https://raw.githubusercontent.com/allnulled/mysql-auth/master/src/queries/create%20tables.sql.ejs](https://raw.githubusercontent.com/allnulled/mysql-auth/master/src/queries/create%20tables.sql.ejs)
-
-Check it to have a better understanding of how the database is altered to have **authentication** and **authorization**.
+This contracts in the input and output of these functions are the core API that is left to the developer to implement,
+on this own way, the API.
 
 ### API methods list
 
