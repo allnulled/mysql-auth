@@ -294,14 +294,14 @@ These are the signatures of the methods of the `mysql-auth` API.
 
 -----
 
-##### `auth.authenticate(whereSession:Object, settings:Object):Promise`
+##### `auth.can(token:String, privilege:Object|String, defaultPolicy:Boolean):Promise`
 
 
 
 
 -----
 
-##### `auth.can(token:String, privilege:Object|String, defaultPolicy:Boolean):Promise`
+##### `auth.authenticate(whereSession:Object, settings:Object):Promise`
 
 
 
@@ -541,13 +541,6 @@ These are the signatures of the methods of the `mysql-auth` API.
 
 -----
 
-##### `auth.unregisterUser(whereUser:Object):Promise`
-
-
-
-
------
-
 ##### `auth.updateCommunity(whereCommunity:Object):Promise`
 
 
@@ -556,6 +549,13 @@ These are the signatures of the methods of the `mysql-auth` API.
 -----
 
 ##### `auth.updatePrivilege(wherePrivilege:Object):Promise`
+
+
+
+
+-----
+
+##### `auth.unregisterUser(whereUser:Object):Promise`
 
 
 

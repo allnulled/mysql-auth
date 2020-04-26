@@ -37,14 +37,14 @@
 
 -----
 
-##### `auth.authenticate(whereSession:Object, settings:Object):Promise`
+##### `auth.can(token:String, privilege:Object|String, defaultPolicy:Boolean):Promise`
 
 
 
 
 -----
 
-##### `auth.can(token:String, privilege:Object|String, defaultPolicy:Boolean):Promise`
+##### `auth.authenticate(whereSession:Object, settings:Object):Promise`
 
 
 
@@ -284,13 +284,6 @@
 
 -----
 
-##### `auth.unregisterUser(whereUser:Object):Promise`
-
-
-
-
------
-
 ##### `auth.updateCommunity(whereCommunity:Object):Promise`
 
 
@@ -299,6 +292,13 @@
 -----
 
 ##### `auth.updatePrivilege(wherePrivilege:Object):Promise`
+
+
+
+
+-----
+
+##### `auth.unregisterUser(whereUser:Object):Promise`
 
 
 
