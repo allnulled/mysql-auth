@@ -43,7 +43,6 @@ These are some of the advantages of `mysql-auth`:
    - [✔] Cache is an in-memory map
    - [✔] Database connection is made by a pool of connections (and it must be closed manually from API)
 
-
 ## Usage
 
 ### CLI usage
@@ -66,7 +65,7 @@ mysql-auth
 
 ```js
 const MySQLAuthSystem = require("mysql-auth");
-// 1. Create an auth system (this is to manage cache centralizedly):
+
 const auth = MySQLAuthSystem.create({
    connectionSettings: {
       host: ...,
@@ -91,6 +90,61 @@ await auth.assignCommunityToUser({ name: "community 1" }, { name: "user1" });
 await auth.assignPrivilegeToCommunity({ name: "vote" }, { name: "humans" });
 // ...
 ```
+
+
+
+## Overview and philosophy
+
+You have a basic onthologies in your database that will manage, strictly, everything attached to authentication or authorization.
+
+Take into account that:
+
+   - these onthologies are namespaced with a fixed prefix: `$auth$`.
+   - each of these onthologies have its correlative **history table** (which is automatically synchronized by the API), namespaced with a fixed prefix: `$hist$$auth$`. This is because, under the hood, we are using the `mysql-history` library, which formats all its tables with `$hist${{ name of the target table }}`)
+
+These classes of object in your database are the following table/columns:
+
+### Primary onthologies
+
+   - **user** (`$auth$user`)
+   - **unconfirmed_user** (`$auth$unconfirmed_user`)
+   - **community** (`$auth$community`)
+   - **privilege** (`$auth$privilege`)
+   - **session** (`$auth$session`)
+
+### Connector onthologies
+
+   - **user and community** (`$auth$user_and_community`): each row tells that **X user belongs to Y community**
+   - **user and privilege** (`$auth$user_and_privilege`): each row tells that **X user has Y privilege**
+   - **community and privilege** (`$auth$community_and_privilege`): each row tells that **X community has Y privilege**
+
+### Properties of: user, community and privilege
+
+All primary onthologies share these properties:
+
+   - **id** (always **primary key**)
+   - **name** (always **unique**)
+   - **description**
+   - **created at**
+   - **updated at**
+
+### Properties of: user
+
+These properties are specific of the tables **user** and **unconfirmed user**:
+
+   - **password** (automatically **encrypted**)
+   - **email** (**unique**)
+
+### Properties of: session
+
+These properties are specific of the table **session**:
+
+   - **token**
+   - **secret token**
+   - **data**
+
+As most of these properties have no secrets, one can start playing with the API.
+
 
 
 ## API Reference
